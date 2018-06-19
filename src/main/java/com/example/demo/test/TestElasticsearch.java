@@ -86,6 +86,7 @@ public class TestElasticsearch {
     @SuppressWarnings({ "resource", "unchecked" })
     @Before
     public void getConnect() throws UnknownHostException {
+        System.out.print("asasassaas");
         client = new PreBuiltTransportClient(Settings.EMPTY).addTransportAddresses(
                 new InetSocketTransportAddress(InetAddress.getByName(HOST),PORT));
         logger.info("连接信息:" + client.toString());
