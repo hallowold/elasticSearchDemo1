@@ -266,6 +266,7 @@ public class TestElasticsearch {
 
         Terms terms = searchResponse.getAggregations().get("group_age");
         List<? extends Terms.Bucket> buckets = terms.getBuckets();
+        System.out.println("1111111");
         for(Terms.Bucket bt : buckets)
         {
             System.out.println("key: " + bt.getKey() + ", count: " + bt.getDocCount());
