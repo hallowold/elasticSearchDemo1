@@ -39,9 +39,6 @@ public class UserServiceImpl implements UserService {
 		boolean ifSuccess = false;
 		try {
 			Long l = userDao.findMaxId();
-			System.out.println(l);
-			System.out.println(l);
-			System.out.println(l);
 			this.findByLoginName(user.getLoginName());
 		} catch (Demo1Exception ex) {
 			//捕获到查不到值的异常才是期望结果，此时继续新增逻辑，并在成功后将返回值改为true

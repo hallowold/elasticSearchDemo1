@@ -272,7 +272,7 @@ public class TestElasticsearch {
      *
      * 有所不同的是，bucket中除了搜索到的聚合信息外，还可以同时获得符合条件的源信息(分组状态)
      * @Title: searchTest2
-     * @author sunt
+     * @author liuqitian
      * @date 2018年6月20日
      * @return void
      */
