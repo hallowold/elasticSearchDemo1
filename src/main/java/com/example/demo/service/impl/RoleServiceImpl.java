@@ -3,6 +3,8 @@ package com.example.demo.service.impl;
 import java.util.List;
 import java.util.Map;
 
+import com.example.demo.dao.RightDAO;
+import com.example.demo.entity.Right;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,12 +28,16 @@ public class RoleServiceImpl implements RoleService {
 
 	@Autowired
 	private RoleDAO roleDao;
+
+	@Autowired
+	private RightDAO rightDao;
 	
 	@Autowired
 	private RoleRightDAO roleRightDao;
 
 	/**
 	 * 新增角色
+     *  此处定义1号角色为系统管理员角色
 	 * 
 	 * @param 	data 	角色实体与权限id数组
 	 * @return 	boolean
@@ -40,18 +46,20 @@ public class RoleServiceImpl implements RoleService {
 	public void addRole(Map<String, Object> data) throws Exception{
 		Role role = (Role) data.get("role");
 		Long[] ids = (Long[]) data.get("rightIds");
+		//若系统管理员角色已经存在，则不允许继续创建系统管理员角色
 		if(role.getId() == 1l || "系统管理员".equals(role.getName()) &&
 				roleDao.findById(1l).get() != null) {
 			throw new Demo1Exception("admin");
 		}
-		//分别计算role和roleright的主键
-		Long newRoleRightID = roleRightDao.count() + 1;
 		//存储角色
 		roleDao.save(role);
+        //计算roleright的总数来生成id，该方法不好，暂用
+        Long newRoleRightCount = roleRightDao.count();
 		//存储roleright关系
 		if(ids != null && ids.length != 0) {
 			for(int num = 0; num < ids.length; num++) {
-				roleRightDao.save(new RoleRight(newRoleRightID + 1, role.getId(), ids[num]));
+                newRoleRightCount ++ ;
+                roleRightDao.save(new RoleRight(newRoleRightCount, role, rightDao.findById(ids[num]).get()));
 			}
 		}
 	}
@@ -66,18 +74,20 @@ public class RoleServiceImpl implements RoleService {
 	public void updateRole(Map<String, Object> data) throws Exception{
 		Role role = (Role) data.get("role");
 		Long[] ids = (Long[]) data.get("rightIds");
+		//不允许对系统管理员角色进行任何修改
 		if(role.getId() == 1l || "系统管理员".equals(role.getName())) {
 			throw new Demo1Exception("admin");
 		}
-		//计算roleright的主键
-		Long newRoleRightID = roleRightDao.count() + 1;
 		//存储角色
 		roleDao.save(role);
 		//删除该角色的所有roleright关系并重新记录
 		roleRightDao.deleteByRoleIdIn(new Long[] {role.getId()});
+        //计算roleright的总数来生成id，该方法不好，暂用
+        Long newRoleRightCount = roleRightDao.count();
 		if(ids != null && ids.length != 0) {
 			for(int num = 0; num < ids.length; num++) {
-				roleRightDao.save(new RoleRight(newRoleRightID + 1, role.getId(), ids[num]));
+                newRoleRightCount ++ ;
+				roleRightDao.save(new RoleRight(newRoleRightCount, role, rightDao.findById(ids[num]).get()));
 			}
 		}
 	}

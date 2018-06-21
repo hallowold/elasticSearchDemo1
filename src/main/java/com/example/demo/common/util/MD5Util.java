@@ -7,7 +7,7 @@ import java.security.SecureRandom;
 import java.util.Arrays;
  
 /**
- * 加密算法，节选自https://github.com/MarkMobile/spring-restful-authorization
+ * 不可解的MD5加密算法，节选自https://github.com/MarkMobile/spring-restful-authorization
  * @author liuqitian	
  * @date 2018年6月13日 
  *
@@ -90,7 +90,8 @@ public class MD5Util {
         }  
     }  
       
-    /** 
+    /**
+     * 加密时使用此方法
      * 获得md5之后的16进制字符  +盐值加密
      * @param passwd 用户输入密码字符 
      * @return String md5加密后密码字符 

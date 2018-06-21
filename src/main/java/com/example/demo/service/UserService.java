@@ -1,5 +1,7 @@
 package com.example.demo.service;
 
+import java.io.UnsupportedEncodingException;
+import java.security.NoSuchAlgorithmException;
 import java.util.List;
 
 import com.example.demo.entity.User;
@@ -25,7 +27,7 @@ public interface UserService {
 	 * @param 	user	用户实体
 	 * @return	boolean
 	 */
-	void updateUser(User user);
+	void updateUser(User user) throws UnsupportedEncodingException, NoSuchAlgorithmException;
 	
 	/**
 	 * 删除用户

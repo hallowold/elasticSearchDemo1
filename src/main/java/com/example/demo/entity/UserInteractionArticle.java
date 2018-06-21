@@ -20,27 +20,23 @@ public class UserInteractionArticle  implements Serializable {
 	@Id
 	private Long id;
 	
-	//用户id
-	private Long userId;
-
-	//文章id
-	private Long articleId;
-	
 	//互动类型，1为赞，0为踩
 	private Long mode;
-	
+
+	//用户
 	private User user;
-	
+
+	//文章
 	private Article article;
 	
-	public UserInteractionArticle() {};
-	
-	public UserInteractionArticle(Long id, Long userId, Long articleId, Long mode) {
+	public UserInteractionArticle() {}
+
+	public UserInteractionArticle(Long id, User user, Article article, Long mode) {
 		this.id = id;
-		this.userId = userId;
-		this.articleId = articleId;
+		this.user = user;
+		this.article = article;
 		this.mode = mode;
-	};
+	}
 
 	public Long getId() {
 		return id;
@@ -48,22 +44,6 @@ public class UserInteractionArticle  implements Serializable {
 
 	public void setId(Long id) {
 		this.id = id;
-	}
-
-	public Long getUserId() {
-		return userId;
-	}
-
-	public void setUserId(Long userId) {
-		this.userId = userId;
-	}
-
-	public Long getArticleId() {
-		return articleId;
-	}
-
-	public void setArticleId(Long articleId) {
-		this.articleId = articleId;
 	}
 
 	public Long getMode() {

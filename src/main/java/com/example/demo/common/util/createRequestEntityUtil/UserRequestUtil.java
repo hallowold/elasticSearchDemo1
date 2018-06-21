@@ -47,8 +47,8 @@ public class UserRequestUtil {
 			if(request.getGender() != null) {
 				info.setGender(request.getGender());
 			}
-			if(request.getRoleId() != null) {
-				info.setRoleId(request.getRoleId());
+			if(request.getRole() != null) {
+				info.setRole(request.getRole());
 			}
 			if(request.getCreateDate() != null) {
 				info.setCreateDate(request.getCreateDate());
@@ -104,8 +104,8 @@ public class UserRequestUtil {
 			if(request.getGender() != null) {
 				info.setGender(request.getGender());
 			}
-			if(request.getRoleId() != null) {
-				info.setRoleId(request.getRoleId());
+			if(request.getRole() != null) {
+				info.setRole(request.getRole());
 			}
 			if(request.getCreateDate() != null) {
 				info.setCreateDate(request.getCreateDate());

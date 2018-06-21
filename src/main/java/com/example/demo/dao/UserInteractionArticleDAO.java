@@ -48,6 +48,26 @@ public interface UserInteractionArticleDAO extends ElasticsearchRepository<UserI
 	 * @return	Long	删除信息条数
 	 */
 	Long deleteByIdIn(Long[] ids);
+
+	/**
+	 * @Auther: liuqitian
+	 * @Date: 2018/6/21 12:03
+	 * @Version: V1.0
+	 * @Param: [ids]
+	 * @return: java.lang.Long  删除信息条数
+	 * @Description: 通过用户ids批量删除
+	 */
+	Long deleteByUserIdIn(Long[] ids);
+
+	/**
+	 * @Auther: liuqitian
+	 * @Date: 2018/6/21 12:04
+	 * @Version: V1.0
+	 * @Param: [ids]
+	 * @return: java.lang.Long  删除信息条数
+	 * @Description: 通过文章ids批量删除
+	 */
+	Long deleteByArticleIdIn(Long[] ids);
 	
 	/**
 	 * 通过文章id和角色id查找信息

@@ -28,7 +28,7 @@ import io.swagger.annotations.ApiOperation;
 @RestController
 @RequestMapping("/loginout")
 public class LogInOutController {
-	
+
 	/*
 	 * 注入用户服务类
 	 */

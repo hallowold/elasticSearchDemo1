@@ -1,5 +1,9 @@
 package com.example.demo.controller;
 
+import com.example.demo.common.UserSessionInfo;
+import com.example.demo.common.util.DateUtil;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -30,6 +34,8 @@ import io.swagger.annotations.ApiParam;
 @RestController
 @RequestMapping("/role")
 public class RoleController extends BaseController{
+
+    private static final Log LOGGER = LogFactory.getLog(RoleController.class);
 	
 	/*
 	 * 注入角色服务类
@@ -52,12 +58,14 @@ public class RoleController extends BaseController{
     		return ResponseUtil.createResponseDataHasNoRight();
     	}
     	roleService.addRole(RoleRequestUtil.createRoleByCreateRequest(role));
+        LOGGER.info("执行新增角色信息操作，操作用户为[" + UserSessionInfo.getBackgroundUserInfo().getLoginName()
+                + "],系统时间为[" + DateUtil.getCurrentDateStr() + "]");
         return ResponseUtil.createResponseData(true, "新增成功", null, 200);
     }
     
     /**
      * 删除接口
-     * @param user
+     * @param ids
      * @return
      */
     @ApiOperation(value="批量删除角色信息", notes = "批量删除角色信息")
@@ -70,12 +78,14 @@ public class RoleController extends BaseController{
     		return ResponseUtil.createResponseDataHasNoRight();
     	}
     	roleService.deleteRole(ids);
+        LOGGER.info("执行删除角色信息操作，操作用户为[" + UserSessionInfo.getBackgroundUserInfo().getLoginName()
+                + "],系统时间为[" + DateUtil.getCurrentDateStr() + "]");
     	return ResponseUtil.createResponseData(true, "删除成功", null, 200);
     }
     
     /**
      * 修改接口
-     * @param user
+     * @param role
      * @return
      */
     @ApiOperation(value="修改角色信息", notes = "修改角色信息")
@@ -88,6 +98,8 @@ public class RoleController extends BaseController{
     		return ResponseUtil.createResponseDataHasNoRight();
     	}
     	roleService.updateRole(RoleRequestUtil.createRoleByUpdateRequest(role));
+        LOGGER.info("执行修改角色信息操作，操作用户为[" + UserSessionInfo.getBackgroundUserInfo().getLoginName()
+                + "],系统时间为[" + DateUtil.getCurrentDateStr() + "]");
     	return ResponseUtil.createResponseData(true, "修改成功", null, 200);
     }
     
@@ -102,6 +114,8 @@ public class RoleController extends BaseController{
     		return ResponseUtil.createResponseDataNeedLogIn();
     	}
     	Iterable<Role> results = roleService.findAllRole();
+        LOGGER.info("执行获取所有角色信息操作，操作用户为[" + UserSessionInfo.getBackgroundUserInfo().getLoginName()
+                + "],系统时间为[" + DateUtil.getCurrentDateStr() + "]");
     	return ResponseUtil.createResponseData(true, "查询", results, 200);
     }
     
@@ -119,6 +133,8 @@ public class RoleController extends BaseController{
     		return ResponseUtil.createResponseDataNeedLogIn();
     	}
     	Iterable<Role> results = roleService.fuzzyFindByName(name);
+        LOGGER.info("执行查询角色信息操作，操作用户为[" + UserSessionInfo.getBackgroundUserInfo().getLoginName()
+                + "],系统时间为[" + DateUtil.getCurrentDateStr() + "]");
     	return ResponseUtil.createResponseData(true, "查询", results, 200);
     }
     
@@ -135,6 +151,8 @@ public class RoleController extends BaseController{
     		return ResponseUtil.createResponseDataNeedLogIn();
     	}
     	Role result = roleService.findById(id);
+        LOGGER.info("执行根据id获取角色信息操作，操作用户为[" + UserSessionInfo.getBackgroundUserInfo().getLoginName()
+                + "],系统时间为[" + DateUtil.getCurrentDateStr() + "]");
     	return ResponseUtil.createResponseData(true, "查询", result, 200);
     }
     

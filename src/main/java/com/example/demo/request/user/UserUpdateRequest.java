@@ -1,5 +1,7 @@
 package com.example.demo.request.user;
 
+import com.example.demo.entity.Role;
+
 import java.util.Date;
 
 /**
@@ -33,9 +35,9 @@ public class UserUpdateRequest {
 	
 	//最后修改日期
 	private Date lastChangeDate;
-	
-	//角色id	
-	private Long roleId;
+
+	//角色
+	private Role role;
 
 	public Long getId() {
 		return id;
@@ -101,12 +103,11 @@ public class UserUpdateRequest {
 		this.lastChangeDate = lastChangeDate;
 	}
 
-	public Long getRoleId() {
-		return roleId;
+	public Role getRole() {
+		return role;
 	}
 
-	public void setRoleId(Long roleId) {
-		this.roleId = roleId;
+	public void setRole(Role role) {
+		this.role = role;
 	}
-	
 }

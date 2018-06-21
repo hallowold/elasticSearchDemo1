@@ -20,7 +20,7 @@ public class RoleRequestUtil {
 	/**
 	 * 将RoleCreateRequest转化为Map<String, Object>
 	 * 		"role"对应角色实体，"rightIds"对应权限id数组
-	 * @param 	RightCreateRequest
+	 * @param 	RoleCreateRequest
 	 * @return	Map<String, Object>
 	 */
 	public static Map<String, Object> createRoleByCreateRequest(RoleCreateRequest request) {
@@ -66,7 +66,7 @@ public class RoleRequestUtil {
 	
 	/**
 	 * 将RoleUpdateRequest转化为Map<String, Object>
-	 * @param 	RightUpdateRequest
+	 * @param 	RoleUpdateRequest
 	 * @return	Map<String, Object>
 	 */
 	public static Map<String, Object> createRoleByUpdateRequest(RoleUpdateRequest request) {

@@ -87,6 +87,30 @@ public class UserInteractionArticleServiceImpl implements UserInteractionArticle
 		} 
 		return results;
 	}
+
+	/**
+	 * @Auther: liuqitian
+	 * @Date: 2018/6/21 12:06
+	 * @Version: V1.0
+	 * @Param: [ids]
+	 * @return: java.lang.Long  删除信息条数
+	 * @Description: 通过用户ids批量删除
+	 */
+	public Long deleteByUserIds(Long[] ids) {
+		return userInteractionArticleDao.deleteByUserIdIn(ids);
+	}
+
+	/**
+	 * @Auther: liuqitian
+	 * @Date: 2018/6/21 12:06
+	 * @Version: V1.0
+	 * @Param: [ids]
+	 * @return: java.lang.Long  删除信息条数
+	 * @Description: 通过文章ids批量删除
+	 */
+	public Long deleteByArticleIds(Long[] ids) {
+		return userInteractionArticleDao.deleteByArticleIdIn(ids);
+	}
 	
 	/**
 	 * 通过文章id和模式，统计符合要求的信息条数

@@ -1,5 +1,7 @@
 package com.example.demo.request.user;
 
+import com.example.demo.entity.Role;
+
 import java.util.Date;
 
 /**
@@ -31,8 +33,8 @@ public class UserCreateRequest {
 	//创建日期
 	private Date createDate;
 	
-	//角色id	
-	private Long roleId;
+	//角色
+	private Role role;
 	
 	public Long getId() {
 		return id;
@@ -90,12 +92,11 @@ public class UserCreateRequest {
 		this.createDate = createDate;
 	}
 
-	public Long getRoleId() {
-		return roleId;
+	public Role getRole() {
+		return role;
 	}
 
-	public void setRoleId(Long roleId) {
-		this.roleId = roleId;
+	public void setRole(Role role) {
+		this.role = role;
 	}
-	
 }

@@ -1,8 +1,11 @@
 package com.example.demo.common.util.createRequestEntityUtil;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
+import com.example.demo.common.UserSessionInfo;
+import com.example.demo.common.util.DateUtil;
 import com.example.demo.entity.Article;
 import com.example.demo.request.article.ArticleCreateRequest;
 import com.example.demo.request.article.ArticleUpdateRequest;
@@ -29,12 +32,8 @@ public class ArticleRequestUtil {
 			if(request.getName() != null) {
 				info.setName(request.getName());
 			}
-			if(request.getAuthorId() != null) {
-				info.setAuthorId(request.getAuthorId());
-			}
-			if(request.getCreateDate() != null) {
-				info.setCreateDate(request.getCreateDate());
-			}
+			info.setAuthor(UserSessionInfo.getBackgroundUserInfo());
+			info.setCreateDate(new Date());
 		}
 		return info;
 	}
@@ -73,9 +72,7 @@ public class ArticleRequestUtil {
 			if(request.getName() != null) {
 				info.setName(request.getName());
 			}
-			if(request.getAuthorId() != null) {
-				info.setAuthorId(request.getAuthorId());
-			}
+			info.setAuthor(UserSessionInfo.getBackgroundUserInfo());
 			if(request.getCreateDate() != null) {
 				info.setCreateDate(request.getCreateDate());
 			}

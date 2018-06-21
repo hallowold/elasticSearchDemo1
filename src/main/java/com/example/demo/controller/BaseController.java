@@ -39,7 +39,7 @@ public class BaseController {
 	 * @throws Demo1Exception
 	 */
 	public boolean checkIfHasRight(ModuleNameEnum moduleNameEnum) throws Demo1Exception {
-		return rightService.ifHasRight(UserSessionInfo.getBackgroundUserInfo().getRoleId(), moduleNameEnum);
+		return rightService.ifHasRight(UserSessionInfo.getBackgroundUserInfo().getRole().getId(), moduleNameEnum);
 	}
 
 }

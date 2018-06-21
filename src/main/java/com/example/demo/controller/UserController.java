@@ -1,8 +1,13 @@
 package com.example.demo.controller;
 
 
+import java.io.UnsupportedEncodingException;
+import java.security.NoSuchAlgorithmException;
 import java.util.List;
 
+import com.example.demo.common.util.DateUtil;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -34,6 +39,8 @@ import io.swagger.annotations.ApiParam;
 @RestController
 @RequestMapping("/user")
 public class UserController extends BaseController {
+
+    private static final Log LOGGER = LogFactory.getLog(UserController.class);
 	
 	/*
 	 * 注入用户服务类
@@ -58,6 +65,8 @@ public class UserController extends BaseController {
     	}
     	boolean ifSuccess = false;
     	ifSuccess = userService.addUser(UserRequestUtil.createUserByCreateRequest(user));
+        LOGGER.info("执行新增用户信息操作，操作用户为[" + UserSessionInfo.getBackgroundUserInfo().getLoginName()
+                + "],系统时间为[" + DateUtil.getCurrentDateStr() + "]");
     	res = ResponseUtil.createResponseDataCheckIfExsit(ifSuccess, "登录名");
         return res;
     }
@@ -78,6 +87,8 @@ public class UserController extends BaseController {
     		return ResponseUtil.createResponseDataHasNoRight();
     	}
     	userService.deleteUser(ids);
+        LOGGER.info("执行删除用户信息操作，操作用户为[" + UserSessionInfo.getBackgroundUserInfo().getLoginName()
+                + "],系统时间为[" + DateUtil.getCurrentDateStr() + "]");
     	return ResponseUtil.createResponseData(true, "删除成功", null, 200);
     }
     
@@ -89,7 +100,7 @@ public class UserController extends BaseController {
      */
     @ApiOperation(value="修改用户信息", notes = "修改用户信息")
     @RequestMapping(value = "/user",method = RequestMethod.PUT)  
-    public ResponseData updateUser(@RequestBody UserUpdateRequest user) throws Demo1Exception{
+    public ResponseData updateUser(@RequestBody UserUpdateRequest user) throws Demo1Exception, UnsupportedEncodingException, NoSuchAlgorithmException {
     	if(!this.checkIfHasBackgroundUser()) {
     		return ResponseUtil.createResponseDataNeedLogIn();
     	}
@@ -97,6 +108,8 @@ public class UserController extends BaseController {
     		return ResponseUtil.createResponseDataHasNoRight();
     	}
     	userService.updateUser(UserRequestUtil.createUserByUpdateRequest(user));
+        LOGGER.info("执行修改用户信息操作，操作用户为[" + UserSessionInfo.getBackgroundUserInfo().getLoginName()
+                + "],系统时间为[" + DateUtil.getCurrentDateStr() + "]");
     	return ResponseUtil.createResponseData(true, "修改成功", null, 200);
     }
     
@@ -112,6 +125,8 @@ public class UserController extends BaseController {
     	}
     	Iterable<User> results = userService.findAllUser();
     	UserSessionInfo.getBackgroundUserInfo();
+        LOGGER.info("执行获取所有用户信息操作，操作用户为[" + UserSessionInfo.getBackgroundUserInfo().getLoginName()
+                + "],系统时间为[" + DateUtil.getCurrentDateStr() + "]");
     	return ResponseUtil.createResponseData(true, "查询", results, 200);
     }
     
@@ -128,6 +143,8 @@ public class UserController extends BaseController {
     		return ResponseUtil.createResponseDataNeedLogIn();
     	}
     	User result = userService.findById(id);
+        LOGGER.info("执行通过id获取用户信息操作，操作用户为[" + UserSessionInfo.getBackgroundUserInfo().getLoginName()
+                + "],系统时间为[" + DateUtil.getCurrentDateStr() + "]");
     	return ResponseUtil.createResponseData(true, "查询", result, 200);
     }
     
@@ -144,6 +161,8 @@ public class UserController extends BaseController {
     		return ResponseUtil.createResponseDataNeedLogIn();
     	}
     	List<User> result = userService.fuzzyFindByLoginName(loginName);
+        LOGGER.info("执行查询用户信息操作，操作用户为[" + UserSessionInfo.getBackgroundUserInfo().getLoginName()
+                + "],系统时间为[" + DateUtil.getCurrentDateStr() + "]");
     	return ResponseUtil.createResponseData(true, "查询", result, 200);
     }
     

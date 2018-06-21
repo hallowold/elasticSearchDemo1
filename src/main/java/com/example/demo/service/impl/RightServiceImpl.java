@@ -163,13 +163,13 @@ public class RightServiceImpl implements RightService {
 		Right temp = this.findByName(moduleNameEnum.getModuleName());
 		if(temp != null && temp.getId() != null) {
 			for(RoleRight rr : relationList) {
-				if(rr.getRightId() == temp.getId()) {
+				if(rr.getRight().getId() == temp.getId()) {
 					ifHasRight = true;
 					break;
 				}
 			}
 		} else {
-			//此处实际应为right数据丢失问题导致，但系统模块要让自己人去查
+			//此处实际应为right数据丢失问题导致，但是系统模块不能让客户操作，告知服务人员处理
 			throw new Demo1Exception("逻辑错误");
 		}
 		return ifHasRight;

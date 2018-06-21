@@ -1,5 +1,7 @@
 package com.example.demo.request.article;
 
+import com.example.demo.entity.User;
+
 import java.util.Date;
 
 /**
@@ -15,12 +17,6 @@ public class ArticleCreateRequest {
 	
 	//文章名
 	private String name;
-	
-	//作者id
-	private Long authorId; 
-	
-	//创建时间
-	private Date createDate;
 
 	public Long getId() {
 		return id;
@@ -36,22 +32,6 @@ public class ArticleCreateRequest {
 
 	public void setName(String name) {
 		this.name = name;
-	}
-
-	public Long getAuthorId() {
-		return authorId;
-	}
-
-	public void setAuthorId(Long authorId) {
-		this.authorId = authorId;
-	}
-
-	public Date getCreateDate() {
-		return createDate;
-	}
-
-	public void setCreateDate(Date createDate) {
-		this.createDate = createDate;
 	}
 
 }

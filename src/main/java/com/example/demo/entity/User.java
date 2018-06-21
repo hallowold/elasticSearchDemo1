@@ -42,8 +42,8 @@ public class User implements Serializable {
 	//最后修改日期
 	private Date lastChangeDate;
 	
-	//角色id	
-	private Long roleId;
+	//角色
+	private Role role;
 
 	//备用字符串字段
 	private String exString;
@@ -91,12 +91,12 @@ public class User implements Serializable {
 		this.mobile = mobile;
 	}
 
-	public Long getRoleId() {
-		return roleId;
+	public Role getRole() {
+		return role;
 	}
 
-	public void setRoleId(Long roleId) {
-		this.roleId = roleId;
+	public void setRole(Role role) {
+		this.role = role;
 	}
 
 	public String getGender() {

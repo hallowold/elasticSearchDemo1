@@ -56,7 +56,7 @@ public class RightRequestUtil {
 	
 	/**
 	 * 将RightUpdateRequest转化为Right
-	 * @param 	RightCreateRequest
+	 * @param 	RightUpdateRequest
 	 * @return	Right
 	 */
 	public static Right createRightByUpdateRequest(RightUpdateRequest request) {

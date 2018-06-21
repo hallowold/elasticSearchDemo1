@@ -1,6 +1,21 @@
 package com.example.demo.common.util;
 
+import com.example.demo.entity.UserInteractionArticle;
+import com.example.demo.response.BucketResponse;
 import com.example.demo.response.ResponseData;
+import org.elasticsearch.search.aggregations.Aggregation;
+import org.elasticsearch.search.aggregations.bucket.terms.Terms;
+import org.elasticsearch.search.aggregations.metrics.NumericMetricsAggregation;
+import org.elasticsearch.search.aggregations.metrics.avg.Avg;
+import org.elasticsearch.search.aggregations.metrics.cardinality.Cardinality;
+import org.elasticsearch.search.aggregations.metrics.geobounds.GeoBounds;
+import org.elasticsearch.search.aggregations.metrics.max.Max;
+import org.elasticsearch.search.aggregations.metrics.min.Min;
+import org.springframework.data.elasticsearch.core.aggregation.AggregatedPage;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * response工具类
@@ -78,5 +93,34 @@ public class ResponseUtil {
 	public static ResponseData createResponseDataHasNoRight() {
 		return new ResponseData(false, null, "您没有此模块的操作权限", 500);
 	}
-	
+
+    /**
+     * 使用bucket进行查询时，因为格式问题json无法直接进行解析，需要做一次中转处理。
+     *  key名对应的为分组标记，docCount对应的为组内信息个数，
+     *      剩余字段在其他value中使用key-value形式进行抓取，key为writeableName对应value，value为value对应的value
+     * @Version 1.0
+     * @date 20180620
+     * @param account   操作类返回结果集
+     * @param key       本次操作使用的分组字段标记名(即bucket名)
+     * @return  BucketResponse  bucket对象封装类
+     */
+	public static BucketResponse createBucketResponse(AggregatedPage<UserInteractionArticle> account, String key) {
+		BucketResponse br = new BucketResponse();
+
+		Terms terms = account.getAggregations().get(key);
+		List<? extends Terms.Bucket> buckets = terms.getBuckets();
+		for(Terms.Bucket bt : buckets)
+		{
+			Map<String, Object> tempMap = new HashMap<>();
+			Map<String, Aggregation> map =  bt.getAggregations().getAsMap();
+
+			tempMap.putAll(map);
+			if(bt.isFragment())
+			tempMap.put("docCount", bt.getDocCount());
+            tempMap.put(key, bt.getKey());
+			br.getAggs().add(tempMap);
+		}
+
+		return br;
+	}
 }

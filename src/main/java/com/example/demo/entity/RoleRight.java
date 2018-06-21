@@ -20,18 +20,18 @@ public class RoleRight implements Serializable {
 	@Id
 	private Long id;
 	
-	//角色id
-	private Long roleId;
-	
-	//权限id
-	private Long rightId;
-	
+	//角色
+	private Role role;
+
+	//权限
+	private Right right;
+
 	public RoleRight() {}
 	
-	public RoleRight(Long id, Long roleId, Long rightId) {
+	public RoleRight(Long id, Role role, Right right) {
 		this.id = id;
-		this.roleId = roleId;
-		this.rightId = rightId;
+		this.role = role;
+		this.right = right;
 	}
 
 	public Long getId() {
@@ -42,20 +42,19 @@ public class RoleRight implements Serializable {
 		this.id = id;
 	}
 
-	public Long getRoleId() {
-		return roleId;
+	public Role getRole() {
+		return role;
 	}
 
-	public void setRoleId(Long roleId) {
-		this.roleId = roleId;
+	public void setRole(Role role) {
+		this.role = role;
 	}
 
-	public Long getRightId() {
-		return rightId;
+	public Right getRight() {
+		return right;
 	}
 
-	public void setRightId(Long rightId) {
-		this.rightId = rightId;
+	public void setRight(Right right) {
+		this.right = right;
 	}
-	
 }

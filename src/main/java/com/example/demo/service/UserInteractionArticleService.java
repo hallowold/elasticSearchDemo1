@@ -49,6 +49,26 @@ public interface UserInteractionArticleService {
 	 * @throws 	Demo1Exception
 	 */
 	Iterable<UserInteractionArticle> findByArticleIdAndMode(Long articleId, Long mode) throws Demo1Exception;
+
+	/**
+	 * @Auther: liuqitian
+	 * @Date: 2018/6/21 12:06
+	 * @Version: V1.0
+	 * @Param: [ids]
+	 * @return: java.lang.Long  删除信息条数
+	 * @Description: 通过用户ids批量删除
+	 */
+	Long deleteByUserIds(Long[] ids);
+
+	/**
+	 * @Auther: liuqitian
+	 * @Date: 2018/6/21 12:06
+	 * @Version: V1.0
+	 * @Param: [ids]
+	 * @return: java.lang.Long  删除信息条数
+	 * @Description: 通过文章ids批量删除
+	 */
+	Long deleteByArticleIds(Long[] ids);
 	
 	/**
 	 * 通过文章id和模式，统计符合要求的信息条数

@@ -1,5 +1,7 @@
 package com.example.demo.service.impl;
 
+import java.io.UnsupportedEncodingException;
+import java.security.NoSuchAlgorithmException;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -64,9 +66,9 @@ public class UserServiceImpl implements UserService {
 	 * @return 	boolean
 	 */
 	@Transactional
-	public void updateUser(User user) {
+	public void updateUser(User user) throws UnsupportedEncodingException, NoSuchAlgorithmException {
 		//密码需要加密
-		user.setPassword(MD5Util.encode(user.getPassword()));
+		user.setPassword(MD5Util.getEncryptedPwd(user.getPassword()));
 		userDao.save(user);
 	}
 

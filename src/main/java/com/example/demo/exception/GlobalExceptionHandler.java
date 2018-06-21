@@ -26,14 +26,14 @@ import com.example.demo.common.util.ResponseUtil;
 import com.example.demo.response.ResponseData;
 
 /**
- * 异常统一处理
- * @author liuqitian	
- * @date 2018年6月12日 
+ * 异常统一捕获处理
+ * @author liuqitian
+ * @date 2018年6月12日
  *
  */
 @ControllerAdvice
 public class GlobalExceptionHandler {
-	
+
 	/**
 	 * 项目自定义异常处理
 	 * @param 	req		HttpServletRequest对象
@@ -47,7 +47,7 @@ public class GlobalExceptionHandler {
 		ResponseData res = new ResponseData();
 		int statusCode = 500;
 		String message = ex.getMessage();
-		
+
 		if ("重复".equals(ex.getMessage())) {
 			message = "数据重复，有无效数据存在";
 		} else if ("重复的登录名".equals(ex.getMessage())) {
@@ -55,11 +55,11 @@ public class GlobalExceptionHandler {
 		} else if ("系统管理员".equals(ex.getMessage())) {
 			message = "不可对系统管理员角色进行新增，修改或删除操作";
 		}
-	    
+
 	    res = ResponseUtil.createResponseData(false, message, null, statusCode);
 		return res;
 	}
-	
+
 	/**
 	 * 默认的异常处理
 	 * @param 	req		HttpServletRequest对象
@@ -114,7 +114,7 @@ public class GlobalExceptionHandler {
         	//非已判断出的异常，需要跟进
         	statusCode = 0;
         }
-	    
+
 	    res = ResponseUtil.createResponseData(false, ex.getMessage(), null, statusCode);
 		return res;
 	}

@@ -1,15 +1,5 @@
 package com.example.demo.test;
 
-import java.io.IOException;
-import java.net.InetAddress;
-import java.net.UnknownHostException;
-import java.util.Date;
-import java.util.List;
-
-import org.elasticsearch.action.search.SearchRequestBuilder;
-import org.elasticsearch.search.aggregations.bucket.filters.FiltersAggregator;
-import org.elasticsearch.search.aggregations.bucket.global.Global;
-import org.elasticsearch.search.aggregations.bucket.global.InternalGlobal;
 import org.elasticsearch.action.index.IndexResponse;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.client.transport.TransportClient;
@@ -20,23 +10,25 @@ import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.SearchHits;
-import org.elasticsearch.search.aggregations.AggregationBuilder;
 import org.elasticsearch.search.aggregations.AggregationBuilders;
-import org.elasticsearch.search.aggregations.Aggregations;
 import org.elasticsearch.search.aggregations.bucket.filters.Filters;
-import org.elasticsearch.search.aggregations.bucket.global.GlobalAggregationBuilder;
+import org.elasticsearch.search.aggregations.bucket.filters.FiltersAggregator;
 import org.elasticsearch.search.aggregations.bucket.terms.Terms;
-import org.elasticsearch.search.aggregations.bucket.terms.TermsAggregationBuilder;
+import org.elasticsearch.search.aggregations.metrics.avg.Avg;
+import org.elasticsearch.search.aggregations.metrics.max.Max;
 import org.elasticsearch.search.aggregations.metrics.tophits.TopHits;
-import org.elasticsearch.search.aggregations.metrics.valuecount.ValueCountAggregationBuilder;
 import org.elasticsearch.transport.client.PreBuiltTransportClient;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilder;
-import org.springframework.data.elasticsearch.core.query.SearchQuery;
+
+import java.io.IOException;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+import java.util.Date;
+import java.util.List;
 
 /**
  * Elasticsearch的基本测试
@@ -86,7 +78,6 @@ public class TestElasticsearch {
     @SuppressWarnings({ "resource", "unchecked" })
     @Before
     public void getConnect() throws UnknownHostException {
-        System.out.print("asasassaasaaaaaa");
         client = new PreBuiltTransportClient(Settings.EMPTY).addTransportAddresses(
                 new InetSocketTransportAddress(InetAddress.getByName(HOST),PORT));
         logger.info("连接信息:" + client.toString());
@@ -154,6 +145,14 @@ public class TestElasticsearch {
         }
     }
 
+    /**
+     * @Auther: liuqitian
+     * @Date: 2018/6/21 14:43
+     * @Version: V1.0
+     * @Param: []
+     * @return: void
+     * @Description: 带aggs查询尝试
+     */
     @Test
     public void searchIndex2() {
         //matchAll Query
@@ -195,17 +194,24 @@ public class TestElasticsearch {
         }
     }
 
+    /**
+     * @Auther: liuqitian
+     * @Date: 2018/6/21 14:42
+     * @Version: V1.0
+     * @Param: []
+     * @return: void
+     * @Description: 分组查询尝试
+     */
     @Test
     public void searchIndex3() {
         //matchAll Query
         QueryBuilder qb = QueryBuilders.boolQuery().must(QueryBuilders.matchAllQuery());
 
-
         //create query response
         SearchResponse response = client.prepareSearch("user_article").setQuery(qb).addAggregation(
                 AggregationBuilders
                         .terms("articles")
-                        .field("articleId")
+                        .field("article.name.keyword")
                         .subAggregation(AggregationBuilders.topHits("infos"))
                         .order(Terms.Order.count(false))
         ).execute().actionGet();
@@ -225,54 +231,84 @@ public class TestElasticsearch {
     }
 
     /**
-     * player测试类
-     * @throws IOException
+     * @Auther: liuqitian
+     * @Date: 2018/6/21 14:41
+     * @Version: V1.0
+     * @Param: []
+     * @return: void
+     * @Description: 分组聚合查询，不带源信息
      */
-    @Test
-    public void addIndex2() throws IOException {
-        IndexResponse response = client.prepareIndex("player_count", "9").setSource(XContentFactory.jsonBuilder()
-                .startObject()
-                    .field("name", "wigins")
-                    .field("age", 20)
-                    .field("salary", 500)
-                    .field("team", "tim")
-                    .field("positon", "sf")
-                .endObject()).get();
-
-        logger.info("\n索引名称:" + response.getIndex() + "\n类型:" + response.getType()
-                + "\n文档ID:" + response.getId() + "\n当前实例状态:" + response.status());
-    }
-
-    @Test
-    public void searchPlayer1() {
-        SearchRequestBuilder sbuilder = client.prepareSearch("player_count");
-//        AggregationBuilder teamAgg= AggregationBuilders.terms("player_counting").field("team");
-//        sbuilder.addAggregation(teamAgg);
-//        SearchResponse response = sbuilder.execute().actionGet();
-        AggregationBuilder teamAgg= AggregationBuilders.terms("player_count ").field("team");
-        AggregationBuilder posAgg= AggregationBuilders.terms("pos_count").field("position");
-        sbuilder.addAggregation(teamAgg.subAggregation(posAgg));
-        SearchResponse response = sbuilder.execute().actionGet();
-        System.out.println("1111");
-    }
-
     @Test
     public void searchTest1() {
         SearchResponse searchResponse = client.prepareSearch("player_count")
                 .setQuery(QueryBuilders.matchAllQuery())
 //                .setSearchType(SearchType.QUERY_THEN_FETCH)
-                .addAggregation(AggregationBuilders.terms("group_age")
-                        .field("team"))//根据age分组，默认返回10，size(0)也是10
+                .addAggregation(AggregationBuilders
+                        .terms("group").field("age").field("salary").field("team")
+                        .subAggregation(AggregationBuilders.max("max_age").field("age"))
+                        .subAggregation(AggregationBuilders.avg("avg_age").field("age"))
+                )//根据age分组，默认返回10，size(0)也是10
                 .get();
 
-        Terms terms = searchResponse.getAggregations().get("group_age");
+        Terms terms = searchResponse.getAggregations().get("group");
         List<? extends Terms.Bucket> buckets = terms.getBuckets();
-        System.out.println("1111111");
         for(Terms.Bucket bt : buckets)
         {
-            System.out.println("key: " + bt.getKey() + ", count: " + bt.getDocCount());
+            Max max = bt.getAggregations().get("max_age");
+            Avg avg = bt.getAggregations().get("avg_age");
+            System.out.println("key: " + bt.getKey() + ", count: " + bt.getDocCount()
+                    + ", max: " + max.getValue() + ", avg: " + avg.getValue());
         }
     }
 
+    /**
+     * 分组聚合查询Demo，同时获得聚合信息和源信息
+     * 本次查询的场景类似于如下SQL
+     *  SELECT team Key, count(age) count, Max(age) max, AVG(age) avg
+     *      FROM player_count
+     *      WHERE team = 'war' AND salary > 500
+     *      GROUP BY team
+     *      ORDER BY count DESC
+     *
+     * 有所不同的是，bucket中除了搜索到的聚合信息外，还可以同时获得符合条件的源信息(分组状态)
+     * @Title: searchTest2
+     * @author sunt
+     * @date 2018年6月20日
+     * @return void
+     */
+    @Test
+    public void searchTest2() {
+        SearchResponse searchResponse = client.prepareSearch("player_count")
+                .setQuery(QueryBuilders.boolQuery()
+                        .must(QueryBuilders.matchQuery("team", "war"))
+                        .must(QueryBuilders.rangeQuery("salary").gt(500)))
+                .addAggregation(AggregationBuilders
+                        .terms("group").field("salary")
+                        .subAggregation(AggregationBuilders.max("max_age").field("age"))
+                        .subAggregation(AggregationBuilders.avg("avg_age").field("age"))
+                        .subAggregation(AggregationBuilders.topHits("info"))
+                        .order(Terms.Order.count(false))
+                )
+                .get();
+
+        //获得bucket
+        Terms terms = searchResponse.getAggregations().get("group");
+        List<? extends Terms.Bucket> buckets = terms.getBuckets();
+        for(Terms.Bucket bt : buckets)
+        {
+            //获得本组源信息
+            TopHits topHits = bt.getAggregations().get("info");
+            //聚合函数需要逐一赋值给对应的类，否则无法调用对应的.getValue()方法
+            Max max = bt.getAggregations().get("max_age");
+            Avg avg = bt.getAggregations().get("avg_age");
+            //输出聚合信息
+            System.out.println("key: " + bt.getKey() + ", count: " + bt.getDocCount()
+                    + ", max: " + max.getValue() + ", avg: " + avg.getValue());
+            //循环输出源信息
+            for (SearchHit hit : topHits.getHits().getHits()) {
+                logger.info(" -> id [{}], _source [{}]", hit.getId(), hit.getSourceAsString());
+            }
+        }
+    }
 
 }

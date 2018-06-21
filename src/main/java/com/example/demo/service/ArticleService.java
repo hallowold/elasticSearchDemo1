@@ -7,6 +7,7 @@ import org.springframework.data.domain.Page;
 import com.example.demo.entity.Article;
 import com.example.demo.entity.UserInteractionArticle;
 import com.example.demo.exception.Demo1Exception;
+import org.springframework.data.elasticsearch.core.aggregation.AggregatedPage;
 
 /**
  * 文章服务定义接口
@@ -57,11 +58,35 @@ public interface ArticleService {
 	 * @param 	mode		互动模式
 	 */
 	void interaction(Long articleId, Long mode);
-	
-	List<UserInteractionArticle> findByUserId(Long userId); 
-	
+
+	/**
+	 * @Auther: liuqitian
+	 * @Date: 2018/6/21 14:39
+	 * @Version: V1.0
+	 * @Param: [userId]
+	 * @return: java.util.List<com.example.demo.entity.UserInteractionArticle>
+	 * @Description: 通过用户id获取相关信息
+	 */
+	List<UserInteractionArticle> findByUserId(Long userId);
+
+	/**
+	 * @Auther: liuqitian
+	 * @Date: 2018/6/21 14:39
+	 * @Version: V1.0
+	 * @Param: [articleId]
+	 * @return: java.util.List<com.example.demo.entity.UserInteractionArticle>
+	 * @Description: 通过文章id获取相关信息
+	 */
 	List<UserInteractionArticle> findByArticleId(Long articleId);
-	
-	Object findTest(Long mode);
+
+	/**
+	 * @Auther: liuqitian
+	 * @Date: 2018/6/21 11:38
+	 * @Version: V1.0
+	 * @Param: [mode]
+	 * @return: org.springframework.data.elasticsearch.core.aggregation.AggregatedPage<com.example.demo.entity.UserInteractionArticle>
+	 * @Description: 通过行为模式，记录所有文章的点/踩数量
+	 */
+	AggregatedPage<UserInteractionArticle> findByMode(Long mode);
 
 }
