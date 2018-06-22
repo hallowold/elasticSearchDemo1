@@ -47,7 +47,6 @@ public class GlobalExceptionHandler {
 		ResponseData res = new ResponseData();
 		int statusCode = 500;
 		String message = ex.getMessage();
-
 		if ("重复".equals(ex.getMessage())) {
 			message = "数据重复，有无效数据存在";
 		} else if ("重复的登录名".equals(ex.getMessage())) {
@@ -55,7 +54,6 @@ public class GlobalExceptionHandler {
 		} else if ("系统管理员".equals(ex.getMessage())) {
 			message = "不可对系统管理员角色进行新增，修改或删除操作";
 		}
-
 	    res = ResponseUtil.createResponseData(false, message, null, statusCode);
 		return res;
 	}

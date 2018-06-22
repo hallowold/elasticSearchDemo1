@@ -1,4 +1,4 @@
-package com.example.demo.test;
+package com.example.demo;
 
 import org.elasticsearch.action.index.IndexResponse;
 import org.elasticsearch.action.search.SearchResponse;
@@ -263,6 +263,10 @@ public class TestElasticsearch {
 
     /**
      * 分组聚合查询Demo，同时获得聚合信息和源信息
+     * 使用的数据表结构如下，数据请自行录入，使用client.prepareIndex()方法录入，或者使用kibana等工具直接操作
+     * player   球员表
+     *      主键    姓名        年龄     薪水        球队        位置
+     *      id      name        age     salary      team        position
      * 本次查询的场景类似于如下SQL
      *  SELECT team Key, count(age) count, Max(age) max, AVG(age) avg
      *      FROM player_count

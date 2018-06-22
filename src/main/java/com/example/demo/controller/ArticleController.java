@@ -42,7 +42,7 @@ import io.swagger.annotations.ApiParam;
 public class ArticleController extends BaseController{
 
     private static final Log LOGGER = LogFactory.getLog(ArticleController.class);
-	
+
 	/*
 	 * 注入文章服务类
 	 */
