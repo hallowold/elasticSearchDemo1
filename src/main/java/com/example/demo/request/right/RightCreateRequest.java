@@ -7,20 +7,9 @@ package com.example.demo.request.right;
  *
  */
 public class RightCreateRequest {
-	
-	//用户id，暂用，解决主键问题后应去除
-	private Long id;
-	
+
 	//模块名
 	private String moduleName;
-
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
 
 	public String getModuleName() {
 		return moduleName;

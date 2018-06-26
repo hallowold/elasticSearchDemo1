@@ -28,10 +28,6 @@ public class UserRequestUtil {
 		if(request == null) {
 			return null;
 		} else {
-			//用户id，暂用，解决主键问题后应去除
-			if(request.getId() != null) {
-				info.setId(request.getId());
-			}
 			if(request.getLoginName() != null) {
 				info.setLoginName(request.getLoginName());
 			}

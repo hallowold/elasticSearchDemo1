@@ -2,6 +2,7 @@ package com.example.demo.service.impl;
 
 import java.util.List;
 
+import com.example.demo.common.util.KeyNumberUtil;
 import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.SearchHit;
@@ -57,6 +58,7 @@ public class ArticleServiceImpl implements ArticleService {
 	 */
 	@Transactional
 	public void addArticle(Article article) {
+		article.setId(KeyNumberUtil.nextId());
 		articleDao.save(article);
 	}
 

@@ -2,8 +2,11 @@ package com.example.demo.service.impl;
 
 import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
+import java.util.Date;
 import java.util.List;
 
+import com.example.demo.common.util.KeyNumberUtil;
+import com.example.demo.entity.Role;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -38,7 +41,6 @@ public class UserServiceImpl implements UserService {
 	public boolean addUser(User user) {
 		boolean ifSuccess = false;
 		try {
-			Long l = userDao.findMaxId();
 			this.findByLoginName(user.getLoginName());
 		} catch (Demo1Exception ex) {
 			//捕获到查不到值的异常才是期望结果，此时继续新增逻辑，并在成功后将返回值改为true
@@ -49,11 +51,37 @@ public class UserServiceImpl implements UserService {
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
+				user.setId(KeyNumberUtil.nextId());
 				userDao.save(user);
 				ifSuccess = true;
 			}
 		}
 		return ifSuccess;
+	}
+
+	/**
+	 * @Auther: liuqitian
+	 * @Date: 2018/6/26 15:29
+	 * @Version: V1.0
+	 * @Param: [role]
+	 * @return: void
+	 * @Description: 用于初始化admin用户
+	 */
+	public void addAdmin(Role role) {
+		User user = new User();
+		user.setId(1l);
+		user.setLoginName("admin");
+		user.setCreateDate(new Date());
+		user.setRole(role);
+		user.setUserName("系统管理员");
+		try {
+			user.setPassword(MD5Util.getEncryptedPwd("112233"));
+		} catch (NoSuchAlgorithmException e) {
+			e.printStackTrace();
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
+		userDao.save(user);
 	}
 
 	/**

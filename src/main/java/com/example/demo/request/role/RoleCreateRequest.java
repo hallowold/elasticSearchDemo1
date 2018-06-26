@@ -9,10 +9,7 @@ import java.util.Date;
  *
  */
 public class RoleCreateRequest {
-	
-	//用户id，暂用，解决主键问题后应去除
-	private Long id;
-	
+
 	//角色名称
 	private String name;
 	
@@ -21,14 +18,6 @@ public class RoleCreateRequest {
 	
 	//权限id数组
 	private Long[] rightIds;
-	
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
 
 	public String getName() {
 		return name;

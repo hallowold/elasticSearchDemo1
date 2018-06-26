@@ -1,8 +1,10 @@
 package com.example.demo.service.impl;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import com.example.demo.common.util.KeyNumberUtil;
 import com.example.demo.dao.RightDAO;
 import com.example.demo.entity.Right;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,20 +49,38 @@ public class RoleServiceImpl implements RoleService {
 		Role role = (Role) data.get("role");
 		Long[] ids = (Long[]) data.get("rightIds");
 		//若系统管理员角色已经存在，则不允许继续创建系统管理员角色
-		if(role.getId() == 1l || "系统管理员".equals(role.getName()) &&
+		if("系统管理员".equals(role.getName()) &&
 				roleDao.findById(1l).get() != null) {
 			throw new Demo1Exception("admin");
 		}
 		//存储角色
+		role.setId(KeyNumberUtil.nextId());
 		roleDao.save(role);
-        //计算roleright的总数来生成id，该方法不好，暂用
-        Long newRoleRightCount = roleRightDao.count();
 		//存储roleright关系
 		if(ids != null && ids.length != 0) {
 			for(int num = 0; num < ids.length; num++) {
-                newRoleRightCount ++ ;
-                roleRightDao.save(new RoleRight(newRoleRightCount, role, rightDao.findById(ids[num]).get()));
+                roleRightDao.save(new RoleRight(KeyNumberUtil.nextId(), role, rightDao.findById(ids[num]).get()));
 			}
+		}
+	}
+
+	/**
+	 * @Auther: liuqitian
+	 * @Date: 2018/6/26 15:14
+	 * @Version: V1.0
+	 * @Param: []
+	 * @return: void
+	 * @Description: 初始化时添加系统管理员角色
+	 */
+	public void addAdmin() {
+		Role role = new Role();
+		role.setId(1l);
+		role.setName("系统管理员");
+		role.setCreateDate(new Date());
+		roleDao.save(role);
+		Iterable<Right> rightIterable = rightDao.findAll();
+		for (Right right : rightIterable) {
+			roleRightDao.save(new RoleRight(KeyNumberUtil.nextId(), role, right));
 		}
 	}
 
@@ -82,12 +102,9 @@ public class RoleServiceImpl implements RoleService {
 		roleDao.save(role);
 		//删除该角色的所有roleright关系并重新记录
 		roleRightDao.deleteByRoleIdIn(new Long[] {role.getId()});
-        //计算roleright的总数来生成id，该方法不好，暂用
-        Long newRoleRightCount = roleRightDao.count();
 		if(ids != null && ids.length != 0) {
 			for(int num = 0; num < ids.length; num++) {
-                newRoleRightCount ++ ;
-				roleRightDao.save(new RoleRight(newRoleRightCount, role, rightDao.findById(ids[num]).get()));
+				roleRightDao.save(new RoleRight(KeyNumberUtil.nextId(), role, rightDao.findById(ids[num]).get()));
 			}
 		}
 	}

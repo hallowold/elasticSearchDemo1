@@ -83,5 +83,16 @@ public class Role implements Serializable {
 	public void setExInt(Long exLong) {
 		this.exLong = exLong;
 	}
-	
+
+	@Override
+	public String toString() {
+		return "Role{" +
+				"id=" + id +
+				", name='" + name + '\'' +
+				", createDate=" + createDate +
+				", lastChangeDate=" + lastChangeDate +
+				", exString='" + exString + '\'' +
+				", exLong=" + exLong +
+				'}';
+	}
 }

@@ -28,10 +28,6 @@ public class RightRequestUtil {
 		if(request == null) {
 			return null;
 		} else {
-			//用户id，暂用，解决主键问题后应去除
-			if(request.getId() != null) {
-				info.setId(request.getId());
-			}
 			if(request.getModuleName() != null) {
 				info.setModuleName(request.getModuleName());
 			}

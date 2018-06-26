@@ -11,10 +11,7 @@ import java.util.Date;
  *
  */
 public class UserCreateRequest {
-	
-	//用户id，暂用，解决主键问题后应去除
-	private Long id;
-	
+
 	//登录名
 	private String loginName;
 
@@ -36,14 +33,6 @@ public class UserCreateRequest {
 	//角色
 	private Role role;
 	
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
-
 	public String getLoginName() {
 		return loginName;
 	}

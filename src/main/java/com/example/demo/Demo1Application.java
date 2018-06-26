@@ -13,7 +13,11 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class Demo1Application {
 
 	public static void main(String[] args) {
-		SpringApplication.run(Demo1Application.class, args);
-		System.out.println("\n" + "lets do this" + "\n");
+		SpringApplication springApplication = new SpringApplication(Demo1Application.class);
+		springApplication.addListeners(new ApplicationStartUp());
+		springApplication.run(args);
+
+//		SpringApplication.run(Demo1Application.class, args);
+//		System.out.println("\n" + "lets do this" + "\n");
 	}
 }

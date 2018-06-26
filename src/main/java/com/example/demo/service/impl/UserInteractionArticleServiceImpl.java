@@ -1,5 +1,6 @@
 package com.example.demo.service.impl;
 
+import com.example.demo.common.util.KeyNumberUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,6 +32,7 @@ public class UserInteractionArticleServiceImpl implements UserInteractionArticle
 	 */
 	@Transactional
 	public void addUserInteractionArticle(UserInteractionArticle userInteractionArticle) {
+		userInteractionArticle.setId(KeyNumberUtil.nextId());
 		userInteractionArticleDao.save(userInteractionArticle);
 	}
 

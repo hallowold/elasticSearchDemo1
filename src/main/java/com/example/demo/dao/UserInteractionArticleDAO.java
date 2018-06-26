@@ -83,5 +83,5 @@ public interface UserInteractionArticleDAO extends ElasticsearchRepository<UserI
 
 	@Query("{\"match\": { \"mode\": 1 } }, \"aggs\": { \"all_tags\": { \"terms\": { \"field\": \"articleId\"}}}")
 	Object findEntitys(Long mode);
-	
+
 }
