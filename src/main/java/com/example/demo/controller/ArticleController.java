@@ -54,15 +54,16 @@ public class ArticleController extends BaseController{
      * @param 	article
      */
     @ApiOperation(value="添加文章信息", notes = "添加文章信息")
-    @RequestMapping(value = "/article",method = RequestMethod.POST)  
+    @RequestMapping(value = "/articles",method = RequestMethod.POST)
     public ResponseData addArticle(@RequestBody ArticleCreateRequest article) throws Exception {
-    	if(!this.checkIfHasBackgroundUser()) {
-    		return ResponseUtil.createResponseDataNeedLogIn();
-    	}
-    	if(!this.checkIfHasRight(ModuleNameEnum.ARTICLE)) {
-    		return ResponseUtil.createResponseDataHasNoRight();
-    	}
-    	articleService.addArticle(ArticleRequestUtil.createArticleByCreateRequest(article));
+//    	if(!this.checkIfHasBackgroundUser()) {
+//    		return ResponseUtil.createResponseDataNeedLogIn();
+//    	}
+//    	if(!this.checkIfHasRight(ModuleNameEnum.ARTICLE)) {
+//    		return ResponseUtil.createResponseDataHasNoRight();
+//    	}
+		System.out.println("in adding article!");
+//    	articleService.addArticle(ArticleRequestUtil.createArticleByCreateRequest(article));
         LOGGER.info("执行新增文章信息操作，操作用户为[" + UserSessionInfo.getBackgroundUserInfo().getLoginName()
                 + "],系统时间为[" + DateUtil.getCurrentDateStr() + "]");
         return ResponseUtil.createResponseData(true, "新增成功", null, 200);
@@ -72,15 +73,16 @@ public class ArticleController extends BaseController{
      * 删除接口
      */
     @ApiOperation(value="批量删除文章信息", notes = "批量删除文章信息")
-    @RequestMapping(value = "/articles/ids",method = RequestMethod.DELETE)  
+    @RequestMapping(value = "/articles",method = RequestMethod.DELETE)
     public ResponseData deleteArticle(@RequestBody Long[] ids) throws Exception {
-    	if(!this.checkIfHasBackgroundUser()) {
-    		return ResponseUtil.createResponseDataNeedLogIn();
-    	}
-    	if(!this.checkIfHasRight(ModuleNameEnum.ARTICLE)) {
-    		return ResponseUtil.createResponseDataHasNoRight();
-    	}
-    	articleService.deleteArticle(ids);
+//    	if(!this.checkIfHasBackgroundUser()) {
+//    		return ResponseUtil.createResponseDataNeedLogIn();
+//    	}
+//    	if(!this.checkIfHasRight(ModuleNameEnum.ARTICLE)) {
+//    		return ResponseUtil.createResponseDataHasNoRight();
+//    	}
+		System.out.println("in deleting article!");
+//    	articleService.deleteArticle(ids);
         LOGGER.info("执行删除文章信息操作，操作用户为[" + UserSessionInfo.getBackgroundUserInfo().getLoginName()
                 + "],系统时间为[" + DateUtil.getCurrentDateStr() + "]");
     	return ResponseUtil.createResponseData(true, "删除成功", null, 200);
@@ -93,15 +95,16 @@ public class ArticleController extends BaseController{
     @ApiOperation(value="修改文章信息", notes = "修改文章信息")
     @RequestMapping(value = "/article",method = RequestMethod.PUT)  
     public ResponseData updateArticle(@RequestBody ArticleUpdateRequest article) throws Exception {
-    	if(!this.checkIfHasBackgroundUser()){
-    		return ResponseUtil.createResponseDataNeedLogIn();
-    	}
-    	if(!this.checkIfHasRight(ModuleNameEnum.ARTICLE)) {
-    		return ResponseUtil.createResponseDataHasNoRight();
-    	}
-    	articleService.updateArticle(ArticleRequestUtil.createArticleByUpdateRequest(article));
+//    	if(!this.checkIfHasBackgroundUser()){
+//    		return ResponseUtil.createResponseDataNeedLogIn();
+//    	}
+//    	if(!this.checkIfHasRight(ModuleNameEnum.ARTICLE)) {
+//    		return ResponseUtil.createResponseDataHasNoRight();
+//    	}
+//    	articleService.updateArticle(ArticleRequestUtil.createArticleByUpdateRequest(article));
         LOGGER.info("执行修改文章信息操作，操作用户为[" + UserSessionInfo.getBackgroundUserInfo().getLoginName()
                 + "],系统时间为[" + DateUtil.getCurrentDateStr() + "]");
+        System.out.println("in updating article!");
     	return ResponseUtil.createResponseData(true, "修改成功", null, 200);
     }
     
@@ -111,9 +114,10 @@ public class ArticleController extends BaseController{
     @ApiOperation(value="获取所有文章信息", notes = "获取所有文章信息")
     @RequestMapping(value = "/articles",method = RequestMethod.GET)  
     public ResponseData searchAllArticles(){
-    	if(!this.checkIfHasBackgroundUser()) {
-    		return ResponseUtil.createResponseDataNeedLogIn();
-    	}
+//    	if(!this.checkIfHasBackgroundUser()) {
+//    		return ResponseUtil.createResponseDataNeedLogIn();
+//    	}
+		System.out.println("in articles!");
     	Iterable<Article> results = articleService.findAllArticle();
         LOGGER.info("执行获取所有文章信息操作，操作用户为[" + UserSessionInfo.getBackgroundUserInfo().getLoginName()
                 + "],系统时间为[" + DateUtil.getCurrentDateStr() + "]");
