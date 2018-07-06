@@ -61,10 +61,10 @@ public class RightController{
     @ApiOperation(value="批量删除权限信息", notes = "批量删除权限信息")
     @RequestMapping(value = "/rights",method = RequestMethod.DELETE)
     public ResponseData deleteRight(@RequestBody Integer[] ids) throws Exception{
-    	rightService.deleteRight(ids);
+        Integer num = rightService.deleteRight(ids);
         LOGGER.info("执行删除权限信息操作，操作用户为[" + SecurityContextHolder.getContext().getAuthentication().getName()
                 + "],系统时间为[" + DateUtil.getCurrentDateStr() + "]");
-    	return ResponseUtil.createResponseData(true, "删除成功", null, 200);
+    	return ResponseUtil.createResponseData(true, "删除成功", num, 200);
     }
     
     /**

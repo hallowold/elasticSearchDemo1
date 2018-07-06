@@ -66,10 +66,10 @@ public class ArticleController{
     @ApiOperation(value="批量删除文章信息", notes = "批量删除文章信息")
     @RequestMapping(value = "/articles",method = RequestMethod.DELETE)
     public ResponseData deleteArticle(@RequestBody String[] ids) throws Exception {
-    	articleService.deleteArticle(ids);
+        Long num = articleService.deleteArticle(ids);
         LOGGER.info("执行删除文章信息操作，操作用户为[" + SecurityContextHolder.getContext().getAuthentication().getName()
                 + "],系统时间为[" + DateUtil.getCurrentDateStr() + "]");
-    	return ResponseUtil.createResponseData(true, "删除成功", null, 200);
+    	return ResponseUtil.createResponseData(true, "删除成功", num, 200);
     }
     
     /**

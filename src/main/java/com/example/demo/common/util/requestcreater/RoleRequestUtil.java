@@ -37,7 +37,7 @@ public class RoleRequestUtil {
 			if(request.getName() != null) {
 				info.setName(request.getName());
 			}
-			resultMap.put("role", info);
+			resultMap.put("entity", info);
 			resultMap.put("rightIds", request.getRightIds());
 		}
 		return resultMap;
@@ -78,7 +78,7 @@ public class RoleRequestUtil {
 			if(request.getName() != null) {
 				info.setName(request.getName());
 			}
-			resultMap.put("role", info);
+			resultMap.put("entity", info);
 			resultMap.put("rightIds", request.getRightIds());
 		}
 

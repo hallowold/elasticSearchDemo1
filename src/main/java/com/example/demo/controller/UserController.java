@@ -71,10 +71,10 @@ public class UserController {
     @ApiOperation(value="批量删除用户信息", notes = "批量删除用户信息")
     @RequestMapping(value = "/users",method = RequestMethod.DELETE)
     public ResponseData deleteUser(@RequestBody Integer[] ids) throws Demo1Exception{
-    	userService.deleteUser(ids);
+    	Integer num = userService.deleteUser(ids);
         LOGGER.info("执行删除用户信息操作，操作用户为[" + SecurityContextHolder.getContext().getAuthentication().getName()
                 + "],系统时间为[" + DateUtil.getCurrentDateStr() + "]");
-    	return ResponseUtil.createResponseData(true, "删除成功", null, 200);
+    	return ResponseUtil.createResponseData(true, "删除成功", num, 200);
     }
     
     /**

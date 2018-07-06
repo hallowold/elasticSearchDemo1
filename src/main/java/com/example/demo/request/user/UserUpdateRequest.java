@@ -36,9 +36,9 @@ public class UserUpdateRequest {
 	private String password;
 
 	/**
-	 * 创建时间
+	 * 角色id数组
 	 */
-	private Date createTime;
+	private Integer[] roleIds;
 
 	public Integer getId() {
 		return id;
@@ -80,11 +80,11 @@ public class UserUpdateRequest {
 		this.password = password;
 	}
 
-	public Date getCreateTime() {
-		return createTime;
+	public Integer[] getRoleIds() {
+		return roleIds;
 	}
 
-	public void setCreateTime(Date createTime) {
-		this.createTime = createTime;
+	public void setRoleIds(Integer[] roleIds) {
+		this.roleIds = roleIds;
 	}
 }

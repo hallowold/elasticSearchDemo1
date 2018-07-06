@@ -57,10 +57,10 @@ public class RoleController{
     @ApiOperation(value="批量删除角色信息", notes = "批量删除角色信息")
     @RequestMapping(value = "/roles",method = RequestMethod.DELETE)
     public ResponseData deleteRole(@RequestBody Integer[] ids) throws Exception{
-    	roleService.deleteRole(ids);
+        Integer num = roleService.deleteRole(ids);
         LOGGER.info("执行删除角色信息操作，操作用户为[" + SecurityContextHolder.getContext().getAuthentication().getName()
                 + "],系统时间为[" + DateUtil.getCurrentDateStr() + "]");
-    	return ResponseUtil.createResponseData(true, "删除成功", null, 200);
+    	return ResponseUtil.createResponseData(true, "删除成功", num, 200);
     }
     
     /**

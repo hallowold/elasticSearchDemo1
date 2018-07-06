@@ -1,7 +1,5 @@
 package com.example.demo.common.config;
 
-import org.springframework.security.web.access.AccessDeniedHandler;
-
 /**
  * 定义一些常量
  * @author liuqitian	
@@ -11,14 +9,19 @@ import org.springframework.security.web.access.AccessDeniedHandler;
 public class StaticValues {
 
 	/**
-	 * 后台管理系统登陆成功后，记录用户实体的session key
-	 */
-	public static final String BACKGROUND_USER = "background_user";
-
-	/**
 	 * 需要使用字符串进行和系统管理员相关操作时使用
 	 */
 	public static final String ADMIN = "ADMIN";
+
+	/**
+	 * 发现当前用户删除自己时使用
+	 */
+	public static final String MYSELF = "不能删除自己";
+
+	/**
+	 * 未找到数据时可使用
+	 */
+	public static final String NODATA = "未找到指定数据";
 
 	/**
 	 * 需要使用字符串进行与查询相关操作时使用

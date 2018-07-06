@@ -44,6 +44,15 @@ public class SysRoleUser {
     @Column(insertable=false, updatable=false)
     private Integer userId;
 
+    public SysRoleUser() {}
+
+    public SysRoleUser(SysRole sRole, Integer roleId, SysUser sUser, Integer userId) {
+        this.sRole = sRole;
+        this.roleId = roleId;
+        this.sUser = sUser;
+        this.userId = userId;
+    }
+
     public int getId() {
         return id;
     }

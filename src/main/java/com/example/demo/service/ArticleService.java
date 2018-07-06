@@ -35,7 +35,7 @@ public interface ArticleService {
 	 * 删除文章
 	 * @param 	ids		文章id数组
 	 */
-	void deleteArticle(String[] ids) throws Demo1Exception;
+	Long deleteArticle(String[] ids) throws Demo1Exception;
 	
 	/**
 	 * 通过标题查找近似文章列表

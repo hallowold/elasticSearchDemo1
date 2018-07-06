@@ -1,7 +1,5 @@
 package com.example.demo.request.user;
 
-import java.util.Date;
-
 /**
  * 创建用户时使用的request对象
  * @author liuqitian
@@ -29,6 +27,11 @@ public class UserCreateRequest {
 	 * 用户密码
 	 */
 	private String password;
+
+	/**
+	 * 角色id数组
+	 */
+	private Integer[] roleIds;
 
 	public String getLoginName() {
 		return loginName;
@@ -60,5 +63,13 @@ public class UserCreateRequest {
 
 	public void setPassword(String password) {
 		this.password = password;
+	}
+
+	public Integer[] getRoleIds() {
+		return roleIds;
+	}
+
+	public void setRoleIds(Integer[] roleIds) {
+		this.roleIds = roleIds;
 	}
 }

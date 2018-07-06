@@ -1,6 +1,8 @@
 package com.example.demo.service.impl;
 
+import com.example.demo.common.config.StaticValues;
 import com.example.demo.common.util.KeyNumberUtil;
+import com.example.demo.common.util.StringUtil;
 import com.example.demo.dao.ArticleDAO;
 import com.example.demo.dao.UserInteractionArticleDAO;
 import com.example.demo.entity.Article;
@@ -77,7 +79,7 @@ public class ArticleServiceImpl implements ArticleService {
 	 * @return 	无返回值或自定义异常，异常表示当前用户不是作者，无权限操作
 	 */
 	@Override
-	public void deleteArticle(String[] ids) throws Demo1Exception {
+	public Long deleteArticle(String[] ids) throws Demo1Exception {
 		for(int num = 0; num < ids.length; num++) {
 			if(!this.isAuthor(ids[num]) && ids.length > 1) {
 				throw new Demo1Exception("作者，批量删除");
@@ -85,8 +87,12 @@ public class ArticleServiceImpl implements ArticleService {
 				throw new Demo1Exception("作者");
 			}
 		}
-		articleDao.deleteByIdIn(ids);
+		Long result = articleDao.deleteByIdIn(ids);
 		userInteractionArticleservice.deleteByArticleIds(ids);
+		if(result.longValue() == 0L) {
+			throw new Demo1Exception(StaticValues.NODATA);
+		}
+		return result;
 	}
 
 	/**
@@ -97,7 +103,7 @@ public class ArticleServiceImpl implements ArticleService {
 	 */
 	@Override
 	public List<Article> fuzzyFindByName(String name){
-		List<Article> list = articleDao.findArticleByName("*" + name + "*");
+		List<Article> list = articleDao.findArticleByName("*" + StringUtil.changeSpecialCharacter(name) + "*");
 		return list;
 	}
 	

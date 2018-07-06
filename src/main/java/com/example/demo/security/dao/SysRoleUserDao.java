@@ -19,4 +19,18 @@ public interface SysRoleUserDao extends JpaRepository<SysRoleUser, Integer> {
      * @return  List<SysRoleUser> 查询结果集
      */
     List<SysRoleUser> findByUserId(int userId);
+
+    /**
+     * 通过角色id批量删除
+     * @param ids 角色id数组
+     * @return Integer 删除信息条数
+     */
+    Integer deleteByRoleIdIn(Integer[] ids);
+
+    /**
+     * 通过用户id批量删除
+     * @param ids 用户id数组
+     * @return Integer 删除信息条数
+     */
+    Integer deleteByUserIdIn(Integer[] ids);
 }

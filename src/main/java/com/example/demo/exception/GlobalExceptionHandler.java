@@ -41,7 +41,7 @@ public class GlobalExceptionHandler {
 	 * @param 	req		HttpServletRequest对象
 	 * @param 	ex		Demo1Exception异常对象
 	 * @return	ResponseData
-	 * @throws 	Exception
+	 * @throws Exception 任何异常
 	 */
 	@ExceptionHandler(value = Demo1Exception.class)
 	@ResponseBody
@@ -49,11 +49,7 @@ public class GlobalExceptionHandler {
 		ResponseData res = new ResponseData();
 		int statusCode = 500;
 		String message = ex.getMessage();
-		if ("重复".equals(ex.getMessage())) {
-			message = "数据重复，有无效数据存在";
-		} else if ("重复的登录名".equals(ex.getMessage())) {
-			message = "该登录名已被占用，请修改";
-		} else if (StaticValues.ADMIN.equals(ex.getMessage())) {
+		if (StaticValues.ADMIN.equals(ex.getMessage())) {
 			message = "不可对系统管理员角色进行新增，修改或删除操作";
 		} else if (StaticValues.ACCESSDENIED.equals(ex.getMessage())) {
 			message = "当前用户无权限";
@@ -67,7 +63,7 @@ public class GlobalExceptionHandler {
 	 * @param 	req		HttpServletRequest对象
 	 * @param 	ex		异常对象
 	 * @return	responseData
-	 * @throws 	Exception
+	 * @throws Exception 任何异常
 	 */
 	@ExceptionHandler(value = Exception.class)
 	@ResponseBody

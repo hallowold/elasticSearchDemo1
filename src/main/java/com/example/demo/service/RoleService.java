@@ -33,7 +33,7 @@ public interface RoleService {
 	 * @param 	ids		角色id数组
 	 * @throws Exception 任何异常，特殊的，当发现用户试图操作系统管理员角色时，抛出Demo1Exception(StaticValues.ADMIN)
 	 */
-	void deleteRole(Integer[] ids) throws Exception;
+	Integer deleteRole(Integer[] ids) throws Exception;
 	
 	/**
 	 * 通过id查找角色

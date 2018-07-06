@@ -47,7 +47,7 @@ public class RoleServiceImpl implements RoleService {
 	 */
 	@Override
 	public void addRole(Map<String, Object> data) throws Exception{
-		SysRole role = (SysRole) data.get("role");
+		SysRole role = (SysRole) data.get("entity");
 		Integer[] ids = (Integer[]) data.get("rightIds");
 		//若系统管理员角色已经存在，则不允许继续创建系统管理员角色
 		if(StaticValues.ADMIN.equals(role.getName()) &&
@@ -63,26 +63,6 @@ public class RoleServiceImpl implements RoleService {
 		}
 	}
 
-//	/**
-//	 * @Auther: liuqitian
-//	 * @Date: 2018/6/26 15:14
-//	 * @Version: V1.0
-//	 * @Param: []
-//	 * @return: void
-//	 * @Description: 初始化时添加系统管理员角色
-//	 */
-//	public void addAdmin() {
-//		Role role = new Role();
-//		role.setId(1L);
-//		role.setName("系统管理员");
-//		role.setCreateDate(new Date());
-//		roleDao.save(role);
-//		Iterable<Right> rightIterable = rightDao.findAll();
-//		for (Right right : rightIterable) {
-//			roleRightDao.save(new RoleRight(KeyNumberUtil.nextId(), role, right));
-//		}
-//	}
-
 	/**
 	 * 修改角色
 	 * 
@@ -91,7 +71,7 @@ public class RoleServiceImpl implements RoleService {
 	 */
 	@Override
 	public void updateRole(Map<String, Object> data) throws Exception{
-		SysRole role = (SysRole) data.get("role");
+		SysRole role = (SysRole) data.get("entity");
 		Integer[] ids = (Integer[]) data.get("rightIds");
 		//不允许对系统管理员角色进行任何修改
 		if(role.getId() == 1L || StaticValues.ADMIN.equals(role.getName())) {
@@ -114,15 +94,19 @@ public class RoleServiceImpl implements RoleService {
 	 * @throws Exception 任何异常，特殊的，当发现用户试图操作系统管理员角色时，抛出Demo1Exception(StaticValues.ADMIN)
 	 */
 	@Override
-	public void deleteRole(Integer[] ids) throws Exception{
+	public Integer deleteRole(Integer[] ids) throws Exception{
 		for(int num = 0; num < ids.length; num++) {
 			if(ids[num] == 1) {
 				throw new Demo1Exception(StaticValues.ADMIN);
 			}
 		}
 		//删除角色信息，并同步删除该角色的所有roleright关系
+		Integer result = roleDao.deleteByIdIn(ids);
+		if(result == 0) {
+			throw new Demo1Exception(StaticValues.NODATA);
+		}
 		roleRightDao.deleteByRoleIdIn(ids);
-		roleDao.deleteByIdIn(ids);
+		return result;
 	}
 	
 	/**

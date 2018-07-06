@@ -68,23 +68,22 @@ public class SysUser implements java.io.Serializable {
 
     /**
      * @Auther: liuqitian
+     * @Date: 2018/7/4 15:42
+     * @Version: V1.1
+     * @Description: 最后修改时间
+     */
+    @Temporal(TemporalType.DATE)
+    @Column(name = "update_time", length = 10)
+    private Date updateTime;
+
+    /**
+     * @Auther: liuqitian
      * @Date: 2018/7/4 15:50
      * @Version: V1.0
      * @Description: 所对应的角色集合，这个属性不入库
      */
     @Transient
     private Set<SysRole> SysRoles = new HashSet<SysRole>(0);
-
-    public SysUser() {}
-
-    public SysUser(String loginName, String showName, String email, String password, Date createTime, Set<SysRole> SysRoles) {
-        this.loginName = loginName;
-        this.showName = showName;
-        this.email = email;
-        this.password = password;
-        this.createTime = createTime;
-        this.SysRoles = SysRoles;
-    }
 
     public Integer getId() {
         return id;
@@ -142,6 +141,14 @@ public class SysUser implements java.io.Serializable {
         SysRoles = sysRoles;
     }
 
+    public Date getUpdateTime() {
+        return updateTime;
+    }
+
+    public void setUpdateTime(Date updateTime) {
+        this.updateTime = updateTime;
+    }
+
     @Override
     public String toString() {
         return "SysUser{" +
@@ -151,6 +158,7 @@ public class SysUser implements java.io.Serializable {
                 ", password='" + password + '\'' +
                 ", email='" + email + '\'' +
                 ", createTime=" + createTime +
+                ", updateTime=" + updateTime +
                 ", SysRoles=" + SysRoles +
                 '}';
     }
