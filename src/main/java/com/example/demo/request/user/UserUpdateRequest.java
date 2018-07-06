@@ -1,49 +1,50 @@
 package com.example.demo.request.user;
 
-import com.example.demo.entity.Role;
-
 import java.util.Date;
 
 /**
- * 修改用户时使用的request对象
- * @author liuqitian	
- * @date 2018年6月12日 
- *
+ * 创建用户时使用的request对象
+ * @author liuqitian
+ * @version V1.1 因引入spring security统一管理权限，代码重构
+ * @date 2018年7月5日
  */
 public class UserUpdateRequest {
 
-	//用户id
-	private Long id;
-	
-	//登录名
+	/**
+	 * 用户id
+	 */
+	private Integer id;
+
+	/**
+	 * 用户登录名
+	 */
 	private String loginName;
 
-	//登录密码
+	/**
+	 * 用户展示名
+	 */
+	private String showName;
+
+	/**
+	 * 用户邮箱
+	 */
+	private String email;
+
+	/**
+	 * 用户密码
+	 */
 	private String password;
-	
-	//用户昵称
-	private String userName;
-	
-	//电话
-	private String mobile;
-	
-	//性别
-	private String gender;
-	
-	//创建时间
-	private Date createDate;
-	
-	//最后修改日期
-	private Date lastChangeDate;
 
-	//角色
-	private Role role;
+	/**
+	 * 创建时间
+	 */
+	private Date createTime;
 
-	public Long getId() {
+	public Integer getId() {
 		return id;
 	}
 
-	public void setId(Long id) {
+	public void setId(Integer id) {
 		this.id = id;
 	}
 
@@ -55,6 +56,22 @@ public class UserUpdateRequest {
 		this.loginName = loginName;
 	}
 
+	public String getShowName() {
+		return showName;
+	}
+
+	public void setShowName(String showName) {
+		this.showName = showName;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
 	public String getPassword() {
 		return password;
 	}
@@ -63,51 +80,11 @@ public class UserUpdateRequest {
 		this.password = password;
 	}
 
-	public String getUserName() {
-		return userName;
+	public Date getCreateTime() {
+		return createTime;
 	}
 
-	public void setUserName(String userName) {
-		this.userName = userName;
-	}
-
-	public String getMobile() {
-		return mobile;
-	}
-
-	public void setMobile(String mobile) {
-		this.mobile = mobile;
-	}
-
-	public String getGender() {
-		return gender;
-	}
-
-	public void setGender(String gender) {
-		this.gender = gender;
-	}
-
-	public Date getCreateDate() {
-		return createDate;
-	}
-
-	public void setCreateDate(Date createDate) {
-		this.createDate = createDate;
-	}
-
-	public Date getLastChangeDate() {
-		return lastChangeDate;
-	}
-
-	public void setLastChangeDate(Date lastChangeDate) {
-		this.lastChangeDate = lastChangeDate;
-	}
-
-	public Role getRole() {
-		return role;
-	}
-
-	public void setRole(Role role) {
-		this.role = role;
+	public void setCreateTime(Date createTime) {
+		this.createTime = createTime;
 	}
 }

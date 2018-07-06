@@ -1,57 +1,53 @@
 package com.example.demo.service.impl;
 
-import java.security.Key;
-import java.util.List;
-
-import com.example.demo.common.util.KeyNumberUtil;
+import com.example.demo.common.config.StaticValues;
+import com.example.demo.common.util.StringUtil;
+import com.example.demo.exception.Demo1Exception;
+import com.example.demo.security.dao.SysRightDao;
+import com.example.demo.security.dao.SysRoleRightDao;
+import com.example.demo.security.entity.SysRight;
+import com.example.demo.security.entity.SysRoleRight;
+import com.example.demo.service.RightService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.example.demo.common.config.ModuleNameEnum;
-import com.example.demo.dao.RightDAO;
-import com.example.demo.dao.RoleRightDAO;
-import com.example.demo.entity.Right;
-import com.example.demo.entity.RoleRight;
-import com.example.demo.exception.Demo1Exception;
-import com.example.demo.service.RightService;
+import java.util.List;
 
 /**
  * 权限服务实现类
- * 
  * @author liuqitian
+ * @version V1.1 因使用spring security同一管理权限，代码重构
  * @date 2018年6月11日
  *
  */
 @Service
+@Transactional(rollbackFor=Exception.class)
 public class RightServiceImpl implements RightService {
 
 	@Autowired
-	private RightDAO rightDao;
+	private SysRightDao rightDao;
 	
 	@Autowired
-	private RoleRightDAO roleRightDao;
+	private SysRoleRightDao roleRightDao;
 
 	/**
 	 * 新增权限
-	 * 
-	 * @param 	right 	权限实体
-	 * @return 	boolean
+	 * @param 	right	权限实体
+	 * @throws Exception 任何执行时的异常
 	 */
-	@Transactional
-	public void addRight(Right right) throws Exception{
-		right.setId(KeyNumberUtil.nextId());
+	@Override
+	public void addRight(SysRight right) throws Exception{
 		rightDao.save(right);
 	}
 
 	/**
 	 * 修改权限
-	 * 
-	 * @param 	right 	权限实体
-	 * @return 	boolean
+	 * @param 	right	权限实体
+	 * @throws Exception 任何执行时的异常，特殊的，若权限仍然被其他角色使用，抛出Demo1Exception("依赖")
 	 */
-	@Transactional
-	public void updateRight(Right right) throws Exception{
+	@Override
+	public void updateRight(SysRight right) throws Exception{
 		//若该权限被任何角色使用，则不允许进行修改或删除操作
 		if(this.ifHasRelationWithRole(right.getId())) {
 			throw new Demo1Exception("依赖");
@@ -62,10 +58,10 @@ public class RightServiceImpl implements RightService {
 	/**
 	 * 删除权限
 	 * @param 	ids		权限id数组
-	 * @return	boolean
+	 * @throws Exception 任何执行时的异常，特殊的，若权限仍然被其他角色使用，抛出Demo1Exception("依赖")
 	 */
-	@Transactional
-	public void deleteRight(Long[] ids) throws Exception{
+	@Override
+	public void deleteRight(Integer[] ids) throws Exception{
 		for(int num = 0; num < ids.length; num++) {
 			//若该权限被任何角色使用，则不允许进行修改或删除操作
 			if(this.ifHasRelationWithRole(ids[num])) {
@@ -76,106 +72,59 @@ public class RightServiceImpl implements RightService {
 	}
 
 	/**
-	 * 通过权限名查找单一权限
-	 * 
-	 * @param 	loginName 	权限名
-	 * @return 	Right 		权限实体
-	 */
-	@Transactional
-	public Right findByName(String rightName){
-		Right tempRight = new Right();
-		List<Right> list = rightDao.findByModuleName(rightName);
-		if(list == null || list.size() < 1) {
-			return null;
-		}
-		tempRight = list.get(0);
-		return tempRight;
-	}
-	
-	/**
-	 * 通过权限名查找近似权限列表
-	 * 
-	 * @param 	rightName 		权限名
+	 * 通过名称模糊查询
+	 *
+	 * @param 	name 		权限名
+	 * @throws Demo1Exception 查出空集合时丢出自定义异常
 	 * @return 	List<Right> 	权限实体列表
 	 */
-	@Transactional
-	public List<Right> fuzzyFindByName(String rightName) throws Demo1Exception{
-		List<Right> list = rightDao.findByModuleName("*" + rightName + "*");
+	@Override
+	public List<SysRight> fuzzyFindByName(String name) throws Demo1Exception{
+		List<SysRight> list = rightDao.findByNameLike(StringUtil.changeSpecialCharacter(name));
 		if(list == null || list.size() < 1) {
-			throw new Demo1Exception("查询");
+			throw new Demo1Exception(StaticValues.SEARCH);
 		}
 		return list;
 	}
-	
+
 	/**
-	 * 通过权限名查找近似权限列表
-	 * 
-	 * @param 	rightName 		权限名
-	 * @return 	List<Right> 	权限实体列表
+	 * 通过id查找权限
+	 * @param 	id 		id
+	 * @throws Demo1Exception    查询时丢出的异常，预计为无数据或链接中断
+	 * @return 	Right	权限实体
 	 */
-	@Transactional
-	public Right findById(Long id) throws Demo1Exception{
-		Right right = new Right();
+	@Override
+	public SysRight findById(Integer id) throws Demo1Exception{
+		SysRight right;
 		try {
 			right = rightDao.findById(id).get();
 		} catch (Exception ex) {
-			throw new Demo1Exception("查询");
+			throw new Demo1Exception(StaticValues.SEARCH);
 		}
 		return right;
 	}
-	
+
 	/**
 	 * 获取所有权限
 	 * @return	rights		权限集合
 	 */
-	@Transactional
-	public Iterable<Right> findAllRight() {
+	@Override
+	public Iterable<SysRight> findAllRight() {
 		return rightDao.findAll();
 	}
-	
+
 	/**
 	 * 判断给定的权限是否与任意角色之间有关联联系
 	 * @param 	id	权限id
 	 * @return	boolean
 	 */
-	@Transactional
-	public boolean ifHasRelationWithRole(Long id) {
+	public boolean ifHasRelationWithRole(Integer id) {
 		boolean ifHas = false;
-		List<RoleRight> list = roleRightDao.findByRightId(id);
+		List<SysRoleRight> list = roleRightDao.findByRightId(id);
 		if(list != null && list.size() > 0) {
 			ifHas = true;
 		}
 		return ifHas;
-	}
-	
-	/**
-	 * 判断当前后台用户是否有某功能模块的权限
-	 * @param 	roleId			角色id，从当前用户获取
-	 * @param 	ModuleNameEnum	模块识别Enum，从config中的ModuleNameEnum选取
-	 * @return
-	 * @throws 	Demo1Exception
-	 */
-	@Transactional
-	public boolean ifHasRight(Long roleId, ModuleNameEnum moduleNameEnum) throws Demo1Exception{
-		boolean ifHasRight = false;
-		//系统管理员用户拥有所有权限，无需判断
-		if (roleId == 1) {
-			return true;
-		}
-		List<RoleRight> relationList = roleRightDao.findByRoleId(roleId);
-		Right temp = this.findByName(moduleNameEnum.getModuleName());
-		if(temp != null && temp.getId() != null) {
-			for(RoleRight rr : relationList) {
-				if(rr.getRight().getId() == temp.getId()) {
-					ifHasRight = true;
-					break;
-				}
-			}
-		} else {
-			//此处实际应为right数据丢失问题导致，但是系统模块不能让客户操作，告知服务人员处理
-			throw new Demo1Exception("逻辑错误");
-		}
-		return ifHasRight;
 	}
 	
 }

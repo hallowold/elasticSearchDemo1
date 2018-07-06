@@ -25,25 +25,6 @@ public class SysRole {
     @Column(name="name",length=100)
     private String name;
 
-    /**
-     * @Auther: liuqitian
-     * @Date: 2018/7/4 15:38
-     * @Version: V1.0
-     * @Description: 角色对应的用户实体
-     */
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "userId",  referencedColumnName = "id")
-    private SysUser SUser;
-
-    /**
-     * @Auther: liuqitian
-     * @Date: 2018/7/4 15:38
-     * @Version: V1.0
-     * @Description: 用户id(外键)
-     */
-    @Column(insertable=false, updatable=false)
-    private Integer userId;
-
     public int getId() {
         return id;
     }
@@ -60,19 +41,4 @@ public class SysRole {
         this.name = name;
     }
 
-    public SysUser getSUser() {
-        return SUser;
-    }
-
-    public void setSUser(SysUser SUser) {
-        this.SUser = SUser;
-    }
-
-    public Integer getUserId() {
-        return userId;
-    }
-
-    public void setUserId(Integer userId) {
-        this.userId = userId;
-    }
 }

@@ -1,5 +1,6 @@
 package com.example.demo.common.util;
 
+import com.example.demo.common.config.StaticValues;
 import com.example.demo.entity.UserInteractionArticle;
 import com.example.demo.response.BucketResponse;
 import com.example.demo.response.ResponseData;
@@ -30,10 +31,10 @@ public class ResponseUtil {
 	public static ResponseData createResponseData(boolean state, String message, Object data, int code) {
 		ResponseData res = new ResponseData();
 	    res.setState(state);
-	    if("查询".equals(message) && data == null) {
+	    if(StaticValues.SEARCH.equals(message) && data == null) {
 	    	res.setMessage("查询完成，未找到指定数据");
 	    	code = 200;
-	    } else if ("查询".equals(message) && data != null) {
+	    } else if (StaticValues.SEARCH.equals(message) && data != null) {
 	    	res.setMessage("查询完成");
 	    	code = 200;
 	    } else if ("依赖".equals(message)) {

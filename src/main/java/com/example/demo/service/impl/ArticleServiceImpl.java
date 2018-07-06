@@ -1,37 +1,27 @@
 package com.example.demo.service.impl;
 
-import java.util.List;
-
 import com.example.demo.common.util.KeyNumberUtil;
-import org.elasticsearch.index.query.QueryBuilder;
-import org.elasticsearch.index.query.QueryBuilders;
-import org.elasticsearch.search.SearchHit;
-import org.elasticsearch.search.aggregations.AbstractAggregationBuilder;
-import org.elasticsearch.search.aggregations.AggregationBuilder;
-import org.elasticsearch.search.aggregations.AggregationBuilders;
-import org.elasticsearch.search.aggregations.bucket.terms.Terms;
-import org.elasticsearch.search.aggregations.bucket.terms.TermsAggregationBuilder;
-import org.elasticsearch.search.aggregations.metrics.avg.Avg;
-import org.elasticsearch.search.aggregations.metrics.max.Max;
-import org.elasticsearch.search.aggregations.metrics.sum.SumAggregationBuilder;
-import org.elasticsearch.search.aggregations.metrics.tophits.TopHits;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.elasticsearch.core.aggregation.AggregatedPage;
-import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilder;
-import org.springframework.data.elasticsearch.core.query.SearchQuery;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import com.example.demo.common.UserSessionInfo;
 import com.example.demo.dao.ArticleDAO;
 import com.example.demo.dao.UserInteractionArticleDAO;
 import com.example.demo.entity.Article;
-import com.example.demo.entity.User;
 import com.example.demo.entity.UserInteractionArticle;
 import com.example.demo.exception.Demo1Exception;
+import com.example.demo.security.entity.SysUser;
 import com.example.demo.service.ArticleService;
 import com.example.demo.service.UserInteractionArticleService;
+import org.elasticsearch.index.query.QueryBuilder;
+import org.elasticsearch.index.query.QueryBuilders;
+import org.elasticsearch.search.aggregations.AggregationBuilders;
+import org.elasticsearch.search.aggregations.bucket.terms.Terms;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.elasticsearch.core.aggregation.AggregatedPage;
+import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilder;
+import org.springframework.data.elasticsearch.core.query.SearchQuery;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 /**
  * 文章服务实现类
@@ -41,6 +31,7 @@ import com.example.demo.service.UserInteractionArticleService;
  *
  */
 @Service
+@Transactional(rollbackFor=Exception.class)
 public class ArticleServiceImpl implements ArticleService {
 	
 	@Autowired
@@ -56,9 +47,10 @@ public class ArticleServiceImpl implements ArticleService {
 	 * 新增文章
 	 * @param 	article 	文章实体
 	 */
-	@Transactional
+	@Override
 	public void addArticle(Article article) {
-		article.setId(KeyNumberUtil.nextId());
+		Long l = (Long) KeyNumberUtil.nextId();
+		article.setId(l + "");
 		articleDao.save(article);
 	}
 
@@ -67,8 +59,12 @@ public class ArticleServiceImpl implements ArticleService {
 	 * @param 	article 	文章实体
 	 * @return 	无返回值或自定义异常，异常表示当前用户不是作者，无权限操作
 	 */
-	@Transactional
+	@Override
 	public void updateArticle(Article article) throws Demo1Exception {
+		if(!articleDao.existsById(article.getId())) {
+			System.out.println("1111111");
+			throw new Demo1Exception("给定的信息无记录");
+		}
 		if(!this.isAuthor(article.getId())) {
 			throw new Demo1Exception("作者");
 		}
@@ -80,8 +76,8 @@ public class ArticleServiceImpl implements ArticleService {
 	 * @param 	ids		文章id数组
 	 * @return 	无返回值或自定义异常，异常表示当前用户不是作者，无权限操作
 	 */
-	@Transactional
-	public void deleteArticle(Long[] ids) throws Demo1Exception {
+	@Override
+	public void deleteArticle(String[] ids) throws Demo1Exception {
 		for(int num = 0; num < ids.length; num++) {
 			if(!this.isAuthor(ids[num]) && ids.length > 1) {
 				throw new Demo1Exception("作者，批量删除");
@@ -99,7 +95,7 @@ public class ArticleServiceImpl implements ArticleService {
 	 * @param 	name	 	标题
 	 * @return 	List<Article> 	文章实体集合
 	 */
-	@Transactional
+	@Override
 	public List<Article> fuzzyFindByName(String name){
 		List<Article> list = articleDao.findArticleByName("*" + name + "*");
 		return list;
@@ -109,25 +105,11 @@ public class ArticleServiceImpl implements ArticleService {
 	 * 获取所有文章
 	 * @return	articles	文章集合
 	 */
-	@Transactional
+	@Override
 	public Iterable<Article> findAllArticle() {
 		return articleDao.findAll();
 	}
 	
-	/**
-	 * 判断当前后台系统用户是否是指定文章的作者
-	 * @param 	articleId	文章id
-	 * @return	boolean
-	 */
-	@Transactional
-	public boolean isAuthor(Long articleId) {
-		boolean isAuthor = false;
-		if(UserSessionInfo.getBackgroundUserInfo().getId() == articleDao.findById(articleId).get().getAuthor().getId()) {
-			isAuthor = true;
-		}
-		return isAuthor;
-	}
-
 	/**
 	 * @Auther: liuqitian
 	 * @Date: 2018/6/21 14:39
@@ -136,7 +118,8 @@ public class ArticleServiceImpl implements ArticleService {
 	 * @return: java.util.List<com.example.demo.entity.UserInteractionArticle>
 	 * @Description: 通过用户id获取相关信息
 	 */
-	public List<UserInteractionArticle> findByUserId(Long userId) {
+	@Override
+	public List<UserInteractionArticle> findByUserId(Integer userId) {
 		return userInteractionArticleDao.findByUserId(userId);
 	}
 
@@ -148,7 +131,8 @@ public class ArticleServiceImpl implements ArticleService {
 	 * @return: java.util.List<com.example.demo.entity.UserInteractionArticle>
 	 * @Description: 通过文章id获取相关信息
 	 */
-	public List<UserInteractionArticle> findByArticleId(Long articleId) {
+	@Override
+	public List<UserInteractionArticle> findByArticleId(String articleId) {
 		return userInteractionArticleDao.findByArticleId(articleId);
 	}
 
@@ -160,6 +144,7 @@ public class ArticleServiceImpl implements ArticleService {
 	 * @return: org.springframework.data.elasticsearch.core.aggregation.AggregatedPage<com.example.demo.entity.UserInteractionArticle>
 	 * @Description: 通过行为模式，记录所有文章的点/踩数量
 	 */
+	@Override
 	public AggregatedPage<UserInteractionArticle> findByMode(Long mode) {
 	    //where条件
 		QueryBuilder qb = QueryBuilders.matchQuery("mode", mode);
@@ -181,15 +166,16 @@ public class ArticleServiceImpl implements ArticleService {
 	 * @param 	articleId	文章id
 	 * @param 	mode		互动模式
 	 */
-	public void interaction(Long articleId, Long mode) {
-		User user = UserSessionInfo.getBackgroundUserInfo();
+	@Override
+	public void interaction(String articleId, Long mode) {
+		SysUser user = (SysUser)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		UserInteractionArticle userInteractionArticle = 
 				userInteractionArticleDao.findByArticleIdAndUserId(articleId, user.getId());
 		//若不存在互动记录，则新增
 		//	若已存在，模式相同则删除，不同则更新
 		if(userInteractionArticle == null || userInteractionArticle.getId() == null) {
 			userInteractionArticleservice.addUserInteractionArticle(
-				new UserInteractionArticle(userInteractionArticleDao.count() + 1, user, articleDao.findById(articleId).get(), mode));
+				new UserInteractionArticle(KeyNumberUtil.nextId(), user, articleDao.findById(articleId).get(), mode));
 		} else {
 			if(userInteractionArticle.getMode() != mode) {
 				userInteractionArticleservice.updateUserInteractionArticle(
@@ -198,7 +184,21 @@ public class ArticleServiceImpl implements ArticleService {
 				userInteractionArticleservice.deleteUserInteractionArticle(new Long[] {userInteractionArticle.getId()});
 			}
 		}
-		
+	}
+
+	/**
+	 * 判断当前后台系统用户是否是指定文章的作者
+	 * @param 	articleId	文章id
+	 * @return	boolean
+	 */
+	public boolean isAuthor(String articleId) {
+		boolean isAuthor = false;
+		SysUser currentUser = (SysUser)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		Article article = articleDao.findById(articleId).get();
+		if(currentUser.getId().intValue() == articleDao.findById(articleId).get().getAuthor().getId().intValue()) {
+			isAuthor = true;
+		}
+		return isAuthor;
 	}
 	
 }

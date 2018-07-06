@@ -1,21 +1,16 @@
 package com.example.demo.service.impl;
 
-import java.io.UnsupportedEncodingException;
-import java.security.NoSuchAlgorithmException;
-import java.util.Date;
-import java.util.List;
-
-import com.example.demo.common.util.KeyNumberUtil;
-import com.example.demo.entity.Role;
+import com.example.demo.common.config.StaticValues;
+import com.example.demo.common.util.StringUtil;
+import com.example.demo.exception.Demo1Exception;
+import com.example.demo.security.dao.SysUserDao;
+import com.example.demo.security.entity.SysUser;
+import com.example.demo.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.example.demo.common.util.MD5Util;
-import com.example.demo.dao.UserDAO;
-import com.example.demo.entity.User;
-import com.example.demo.exception.Demo1Exception;
-import com.example.demo.service.UserService;
+import java.util.List;
 
 /**
  * 用户服务实现类
@@ -25,33 +20,31 @@ import com.example.demo.service.UserService;
  *
  */
 @Service
+@Transactional(rollbackFor=Exception.class)
 public class UserServiceImpl implements UserService {
 
 	@Autowired
-	private UserDAO userDao;
+	private SysUserDao userDao;
 
 	/**
 	 * 新增用户
-	 * 
-	 * @param user
-	 *            用户实体
-	 * @return boolean
+	 * @param user 用户实体
+	 * @return boolean 是否成功
 	 */
-	@Transactional
-	public boolean addUser(User user) {
+	@Override
+	public boolean addUser(SysUser user) {
 		boolean ifSuccess = false;
 		try {
 			this.findByLoginName(user.getLoginName());
 		} catch (Demo1Exception ex) {
 			//捕获到查不到值的异常才是期望结果，此时继续新增逻辑，并在成功后将返回值改为true
-			if ("查询".equals(ex.getMessage())) {
+			if (StaticValues.SEARCH.equals(ex.getMessage())) {
 				//密码需要加密
 				try {
-				user.setPassword(MD5Util.getEncryptedPwd(user.getPassword()));
+					user.setPassword(StringUtil.encode(user.getPassword().trim()));
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
-				user.setId(KeyNumberUtil.nextId());
 				userDao.save(user);
 				ifSuccess = true;
 			}
@@ -60,146 +53,80 @@ public class UserServiceImpl implements UserService {
 	}
 
 	/**
-	 * @Auther: liuqitian
-	 * @Date: 2018/6/26 15:29
-	 * @Version: V1.0
-	 * @Param: [role]
-	 * @return: void
-	 * @Description: 用于初始化admin用户
-	 */
-	public void addAdmin(Role role) {
-		User user = new User();
-		user.setId(1l);
-		user.setLoginName("admin");
-		user.setCreateDate(new Date());
-		user.setRole(role);
-		user.setUserName("系统管理员");
-		try {
-			user.setPassword(MD5Util.getEncryptedPwd("112233"));
-		} catch (NoSuchAlgorithmException e) {
-			e.printStackTrace();
-		} catch (UnsupportedEncodingException e) {
-			e.printStackTrace();
-		}
-		userDao.save(user);
-	}
-
-	/**
 	 * 修改用户
-	 * 
 	 * @param 	user 	用户实体
-	 * @return 	boolean
 	 */
-	@Transactional
-	public void updateUser(User user) throws UnsupportedEncodingException, NoSuchAlgorithmException {
+	@Override
+	public void updateUser(SysUser user) {
 		//密码需要加密
-		user.setPassword(MD5Util.getEncryptedPwd(user.getPassword()));
+		user.setPassword(StringUtil.encode(user.getPassword()));
 		userDao.save(user);
 	}
 
 	/**
 	 * 删除用户
 	 * @param 	ids		用户id数组
-	 * @return	boolean
+	 * @return	Integer	成功删除信息条数
 	 */
-	@Transactional
-	public void deleteUser(Long[] ids) {
-		userDao.deleteByRoleIdIn(ids);
+	@Override
+	public Integer deleteUser(Integer[] ids) {
+		return userDao.deleteByIdIn(ids);
 	}
 	
 	/**
 	 * 通过id查找单一用户
 	 * 
-	 * @param 	loginName 	登录名
-	 * @return 	User 	用户实体
+	 * @param 	id 	    id
+	 * @throws Demo1Exception 查询结果为空时抛出Demo1Exception(StaticValues.SEARCH)
+	 * @return User 	用户实体
 	 */
-	@Transactional
-	public User findById(Long id) throws Demo1Exception{
-		User tempUser = userDao.findById(id).get();
-		if(tempUser == null || tempUser.getId() == null) {
-			throw new Demo1Exception("查询");
+	@Override
+	public SysUser findById(Integer id) throws Demo1Exception{
+		SysUser tempUser = userDao.findById(id).get();
+		if(tempUser.getId() == null) {
+			throw new Demo1Exception(StaticValues.SEARCH);
 		}
 		return tempUser;
 	}
 
 	/**
-	 * 通过登录名查找单一用户(供登录使用)
-	 * 
+	 * 通过登录名查找单一用户
+	 *
 	 * @param 	loginName 	登录名
-	 * @return 	User 	用户实体
+	 * @throws Demo1Exception 查到空值时抛出Demo1Exception(StaticValues.SEARCH)
+	 * @return User 	用户实体
 	 */
-	@Transactional
-	public User findByLoginName(String loginName) throws Demo1Exception{
-		User tempUser = new User();
-		List<User> list = userDao.findByLoginName(loginName);
-		if(list == null || list.size() < 1) {
-			//没查到
-			throw new Demo1Exception("查询");
-		} else if(list.size() > 1) {
-			//数据被污染，有重复数据出现
-			throw new Demo1Exception("重复的登录名");
-		} else {
-			tempUser = list.get(0);
+	@Override
+	public SysUser findByLoginName(String loginName) throws Demo1Exception{
+		SysUser tempUser = userDao.findByLoginName(loginName);
+		if(tempUser == null) {
+			throw new Demo1Exception(StaticValues.SEARCH);
 		}
 		return tempUser;
 	}
 	
 	/**
-	 * 通过登录名查找近似用户列表
+	 * 通过登录名模糊匹配
 	 * 
 	 * @param 	loginName 	登录名
-	 * @return 	List<User> 	用户实体列表
+	 * @return List<User> 	用户实体列表
 	 */
-	@Transactional
-	public List<User> fuzzyFindByLoginName(String loginName) throws Demo1Exception{
-		List<User> list = userDao.findByLoginName("*" + loginName + "*");
+	@Override
+	public List<SysUser> fuzzyFindByLoginName(String loginName) throws Demo1Exception{
+		List<SysUser> list = userDao.findByLoginNameLike("*" + StringUtil.changeSpecialCharacter(loginName) + "*");
 		if(list == null || list.size() < 1) {
-			throw new Demo1Exception("查询");
+			throw new Demo1Exception(StaticValues.SEARCH);
 		}
 		return list;
 	}
 	
 	/**
 	 * 获取所有用户
-	 * @return	users		用户集合
+	 * @return	Iterable<SysUser> 用户集合
 	 */
-	@Transactional
-	public Iterable<User> findAllUser() {
+	@Override
+	public Iterable<SysUser> findAllUser() {
 		return userDao.findAll();
 	}
 	
-	/**
-	 * 通过登录名删除用户，精确匹配
-	 * @param	loginName	登录名
-	 * @return	long		删除条数
-	 */
-	@Transactional
-	public Long deleteByLoginName(String loginName) {
-		return userDao.deleteByLoginName(loginName);
-	}
-	
-	/**
-	 * 校验用户名和密码
-	 * @param 	loginName
-	 * @param 	password
-	 * @return	boolean
-	 */
-	@Transactional
-	public User varifyUser(String loginName, String password) {
-		boolean ifSuccess = false;
-		User user = new User();
-		try {
-			//获取用户，仅当密码匹配成功后，将校验结果的值改为true，其他任何情况都是返回false
-			user = this.findByLoginName(loginName);
-			if(user.getPassword() != null && MD5Util.validPasswd(password, user.getPassword())) {
-				ifSuccess = true;
-			}
-			if (!ifSuccess) {
-				user = null;
-			}
-		} catch (Exception ex) {
-			user = null;
-		}
-		return user;
-	}
 }

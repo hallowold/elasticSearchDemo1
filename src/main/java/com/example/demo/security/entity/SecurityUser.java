@@ -29,7 +29,7 @@ public class SecurityUser extends SysUser implements UserDetails {
             this.setShowName(suser.getShowName());
             this.setEmail(suser.getEmail());
             this.setPassword(suser.getPassword());
-            this.setcreateTime(suser.getcreateTime());
+            this.setCreateTime(suser.getCreateTime());
             this.setSysRoles(suser.getSysRoles());
         }
     }

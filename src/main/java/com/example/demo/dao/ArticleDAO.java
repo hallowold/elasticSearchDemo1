@@ -14,7 +14,7 @@ import com.example.demo.entity.Article;
  *
  */
 @Component
-public interface ArticleDAO extends ElasticsearchRepository<Article, Long> {
+public interface ArticleDAO extends ElasticsearchRepository<Article, String> {
 	
 	/**
 	 * 通过标题来查找符合要求的文章列表
@@ -28,6 +28,6 @@ public interface ArticleDAO extends ElasticsearchRepository<Article, Long> {
 	 * @param 	ids	id数组
 	 * @return	Long	删除信息条数
 	 */
-	Long deleteByIdIn(Long[] ids);
+	Long deleteByIdIn(String[] ids);
 
 }

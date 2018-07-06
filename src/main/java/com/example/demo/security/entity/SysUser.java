@@ -42,15 +42,6 @@ public class SysUser implements java.io.Serializable {
      * @Auther: liuqitian
      * @Date: 2018/7/4 15:42
      * @Version: V1.0
-     * @Description: 用户邮箱
-     */
-    @Column(name = "email", length = 50)
-    private String email;
-
-    /**
-     * @Auther: liuqitian
-     * @Date: 2018/7/4 15:42
-     * @Version: V1.0
      * @Description: 用户密码
      */
     @Column(name = "password", length = 120)
@@ -60,7 +51,16 @@ public class SysUser implements java.io.Serializable {
      * @Auther: liuqitian
      * @Date: 2018/7/4 15:42
      * @Version: V1.0
-     * @Description: 时间
+     * @Description: 用户邮箱
+     */
+    @Column(name = "email", length = 50)
+    private String email;
+
+    /**
+     * @Auther: liuqitian
+     * @Date: 2018/7/4 15:42
+     * @Version: V1.0
+     * @Description: 创建时间
      */
     @Temporal(TemporalType.DATE)
     @Column(name = "create_time", length = 10)
@@ -70,9 +70,9 @@ public class SysUser implements java.io.Serializable {
      * @Auther: liuqitian
      * @Date: 2018/7/4 15:50
      * @Version: V1.0
-     * @Description: 所对应的角色集合
+     * @Description: 所对应的角色集合，这个属性不入库
      */
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "SUser")
+    @Transient
     private Set<SysRole> SysRoles = new HashSet<SysRole>(0);
 
     public SysUser() {}
@@ -87,7 +87,7 @@ public class SysUser implements java.io.Serializable {
     }
 
     public Integer getId() {
-        return this.id;
+        return id;
     }
 
     public void setId(Integer id) {
@@ -110,6 +110,22 @@ public class SysUser implements java.io.Serializable {
         this.showName = showName;
     }
 
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
     public Date getCreateTime() {
         return createTime;
     }
@@ -118,37 +134,12 @@ public class SysUser implements java.io.Serializable {
         this.createTime = createTime;
     }
 
-    public String getEmail() {
-        return this.email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getPassword() {
-        return this.password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public Date getcreateTime() {
-        return this.createTime;
-    }
-
-    public void setcreateTime(Date createTime) {
-        this.createTime = createTime;
-    }
-
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "SUser")
     public Set<SysRole> getSysRoles() {
-        return this.SysRoles;
+        return SysRoles;
     }
 
-    public void setSysRoles(Set<SysRole> SysRoles) {
-        this.SysRoles = SysRoles;
+    public void setSysRoles(Set<SysRole> sysRoles) {
+        SysRoles = sysRoles;
     }
 
     @Override
@@ -157,8 +148,8 @@ public class SysUser implements java.io.Serializable {
                 "id=" + id +
                 ", loginName='" + loginName + '\'' +
                 ", showName='" + showName + '\'' +
-                ", email='" + email + '\'' +
                 ", password='" + password + '\'' +
+                ", email='" + email + '\'' +
                 ", createTime=" + createTime +
                 ", SysRoles=" + SysRoles +
                 '}';

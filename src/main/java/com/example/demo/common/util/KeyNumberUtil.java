@@ -1,10 +1,10 @@
 package com.example.demo.common.util;
 
 /**
- * @Auther: liuqitian
- * @Date: 2018/6/26 11:01
- * @Version: V1.0
- * @Description: 生成主键工具类
+ * @author : liuqitian
+ * @date : 2018/6/26 11:01
+ * @version : V1.0
+ * @deprecated : 生成主键工具类
  * Twitter_Snowflake<br>
  * SnowFlake的结构如下(每部分用-分开):<br>
  * 0 - 0000000000 0000000000 0000000000 0000000000 0 - 00000 - 00000 - 000000000000 <br>
@@ -74,8 +74,8 @@ public class KeyNumberUtil {
         if (datacenterId > maxDatacenterId || datacenterId < 0) {
             throw new IllegalArgumentException(String.format("datacenter Id can't be greater than %d or less than 0", maxDatacenterId));
         }
-        this.workerId = workerId;
-        this.datacenterId = datacenterId;
+        KeyNumberUtil.workerId = workerId;
+        KeyNumberUtil.datacenterId = datacenterId;
     }
 
     // ==============================Methods==========================================

@@ -1,7 +1,5 @@
 package com.example.demo.request.role;
 
-import java.util.Date;
-
 /**
  * 修改角色时使用的request对象
  * @author liuqitian	
@@ -9,27 +7,29 @@ import java.util.Date;
  *
  */
 public class RoleUpdateRequest {
-	
-	//角色id
-	private Long id;
-	
-	//角色名称
-	private String name;
-	
-	//创建日期
-	private Date createDate;
-	
-	//最后修改日期
-	private Date lastChangeDate;
-	
-	//权限id数组
-	private Long[] rightIds;
 
-	public Long getId() {
+	private Integer id;
+
+	/**
+	 * 角色名称
+	 */
+	private String name;
+
+	/**
+	 * 用户id(外键)
+	 */
+	private Integer userId;
+
+	/**
+	 * 权限ids
+	 */
+	private Integer[] rightIds;
+
+	public Integer getId() {
 		return id;
 	}
 
-	public void setId(Long id) {
+	public void setId(Integer id) {
 		this.id = id;
 	}
 
@@ -41,28 +41,19 @@ public class RoleUpdateRequest {
 		this.name = name;
 	}
 
-	public Date getCreateDate() {
-		return createDate;
+	public Integer getUserId() {
+		return userId;
 	}
 
-	public void setCreateDate(Date createDate) {
-		this.createDate = createDate;
+	public void setUserId(Integer userId) {
+		this.userId = userId;
 	}
 
-	public Date getLastChangeDate() {
-		return lastChangeDate;
-	}
-
-	public void setLastChangeDate(Date lastChangeDate) {
-		this.lastChangeDate = lastChangeDate;
-	}
-
-	public Long[] getRightIds() {
+	public Integer[] getRightIds() {
 		return rightIds;
 	}
 
-	public void setRightIds(Long[] rightIds) {
+	public void setRightIds(Integer[] rightIds) {
 		this.rightIds = rightIds;
 	}
-	
 }

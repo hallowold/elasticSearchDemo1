@@ -2,36 +2,42 @@ package com.example.demo.entity;
 
 import java.io.Serializable;
 
+import com.example.demo.security.entity.SysUser;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.elasticsearch.annotations.Document;
 
 /**
  * 用户与文章交互记录实体
  * @author liuqitian	
- * @date 2018年6月12日 
- *
+ * @version V1.1  因引入spring security，代码重构
+ * @date 2018年7月4日
  */
 @Document(indexName = "user_article")
 public class UserInteractionArticle  implements Serializable {
 	
-	//序列化
 	private static final long serialVersionUID = 1L;
 	
 	@Id
 	private Long id;
 	
-	//互动类型，1为赞，0为踩
+	/**
+	 * 互动类型，1为赞，0为踩
+	 */
 	private Long mode;
 
-	//用户
-	private User user;
+	/**
+	 * 用户
+	 */
+	private SysUser user;
 
-	//文章
+	/**
+	 * 文章
+	 */
 	private Article article;
 	
 	public UserInteractionArticle() {}
 
-	public UserInteractionArticle(Long id, User user, Article article, Long mode) {
+	public UserInteractionArticle(Long id, SysUser user, Article article, Long mode) {
 		this.id = id;
 		this.user = user;
 		this.article = article;
@@ -54,11 +60,11 @@ public class UserInteractionArticle  implements Serializable {
 		this.mode = mode;
 	}
 
-	public User getUser() {
+	public SysUser getUser() {
 		return user;
 	}
 
-	public void setUser(User user) {
+	public void setUser(SysUser user) {
 		this.user = user;
 	}
 

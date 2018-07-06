@@ -1,13 +1,17 @@
 package com.example.demo.security.service;
 
-import com.example.demo.security.dao.SysRoleDao;
-import com.example.demo.security.dao.SysRoleRightDao;
+import com.example.demo.security.dao.SysRoleUserDao;
 import com.example.demo.security.entity.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
+
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 /**
  * @author : liuqitian
@@ -20,6 +24,9 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     @Autowired
     private SysUserService userService;
+
+    @Autowired
+    private SysRoleUserDao sysRoleUserDao;
 
     /**
      * @Auther: liuqitian
@@ -35,6 +42,12 @@ public class CustomUserDetailsService implements UserDetailsService {
         //SysUser对应数据库中的用户表，是最终存储用户和密码的表，可自定义
         //本例使用SysUser中的name作为用户名:
         SysUser user = userService.findByLoginName(userName);
+        List<SysRoleUser> sysRoleUsers = sysRoleUserDao.findByUserId(user.getId());
+        Set<SysRole> sysRoles = new HashSet<>();
+        for(SysRoleUser sysRoleUser : sysRoleUsers) {
+            sysRoles.add(sysRoleUser.getsRole());
+        }
+        user.setSysRoles(sysRoles);
         if (user != null) {
             // SecurityUser实现UserDetails并将SysUser的loginName映射为username
             return  new SecurityUser(user);

@@ -2,24 +2,22 @@ package com.example.demo.controller;
 
 import java.util.List;
 
-import com.example.demo.common.UserSessionInfo;
+import com.example.demo.common.config.StaticValues;
 import com.example.demo.common.util.DateUtil;
+import com.example.demo.common.util.requestcreater.ArticleRequestUtil;
 import com.example.demo.response.BucketResponse;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.elasticsearch.search.aggregations.bucket.terms.Terms;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.data.elasticsearch.core.aggregation.AggregatedPage;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.demo.common.config.ModuleNameEnum;
 import com.example.demo.common.util.ResponseUtil;
-import com.example.demo.common.util.createRequestEntityUtil.ArticleRequestUtil;
 import com.example.demo.entity.Article;
 import com.example.demo.entity.UserInteractionArticle;
 import com.example.demo.request.article.ArticleCreateRequest;
@@ -39,7 +37,7 @@ import io.swagger.annotations.ApiParam;
 @Api(value="/testdemo1", tags="文章接口模块")
 @RestController
 @RequestMapping("/article")
-public class ArticleController extends BaseController{
+public class ArticleController{
 
     private static final Log LOGGER = LogFactory.getLog(ArticleController.class);
 
@@ -54,17 +52,10 @@ public class ArticleController extends BaseController{
      * @param 	article
      */
     @ApiOperation(value="添加文章信息", notes = "添加文章信息")
-    @RequestMapping(value = "/articles",method = RequestMethod.POST)
+    @RequestMapping(value = "/article",method = RequestMethod.POST)
     public ResponseData addArticle(@RequestBody ArticleCreateRequest article) throws Exception {
-//    	if(!this.checkIfHasBackgroundUser()) {
-//    		return ResponseUtil.createResponseDataNeedLogIn();
-//    	}
-//    	if(!this.checkIfHasRight(ModuleNameEnum.ARTICLE)) {
-//    		return ResponseUtil.createResponseDataHasNoRight();
-//    	}
-		System.out.println("in adding article!");
-//    	articleService.addArticle(ArticleRequestUtil.createArticleByCreateRequest(article));
-        LOGGER.info("执行新增文章信息操作，操作用户为[" + UserSessionInfo.getBackgroundUserInfo().getLoginName()
+    	articleService.addArticle(ArticleRequestUtil.createArticleByCreateRequest(article));
+        LOGGER.info("执行新增文章信息操作，操作用户为[" + SecurityContextHolder.getContext().getAuthentication().getName()
                 + "],系统时间为[" + DateUtil.getCurrentDateStr() + "]");
         return ResponseUtil.createResponseData(true, "新增成功", null, 200);
     }
@@ -74,16 +65,9 @@ public class ArticleController extends BaseController{
      */
     @ApiOperation(value="批量删除文章信息", notes = "批量删除文章信息")
     @RequestMapping(value = "/articles",method = RequestMethod.DELETE)
-    public ResponseData deleteArticle(@RequestBody Long[] ids) throws Exception {
-//    	if(!this.checkIfHasBackgroundUser()) {
-//    		return ResponseUtil.createResponseDataNeedLogIn();
-//    	}
-//    	if(!this.checkIfHasRight(ModuleNameEnum.ARTICLE)) {
-//    		return ResponseUtil.createResponseDataHasNoRight();
-//    	}
-		System.out.println("in deleting article!");
-//    	articleService.deleteArticle(ids);
-        LOGGER.info("执行删除文章信息操作，操作用户为[" + UserSessionInfo.getBackgroundUserInfo().getLoginName()
+    public ResponseData deleteArticle(@RequestBody String[] ids) throws Exception {
+    	articleService.deleteArticle(ids);
+        LOGGER.info("执行删除文章信息操作，操作用户为[" + SecurityContextHolder.getContext().getAuthentication().getName()
                 + "],系统时间为[" + DateUtil.getCurrentDateStr() + "]");
     	return ResponseUtil.createResponseData(true, "删除成功", null, 200);
     }
@@ -95,14 +79,8 @@ public class ArticleController extends BaseController{
     @ApiOperation(value="修改文章信息", notes = "修改文章信息")
     @RequestMapping(value = "/article",method = RequestMethod.PUT)  
     public ResponseData updateArticle(@RequestBody ArticleUpdateRequest article) throws Exception {
-//    	if(!this.checkIfHasBackgroundUser()){
-//    		return ResponseUtil.createResponseDataNeedLogIn();
-//    	}
-//    	if(!this.checkIfHasRight(ModuleNameEnum.ARTICLE)) {
-//    		return ResponseUtil.createResponseDataHasNoRight();
-//    	}
-//    	articleService.updateArticle(ArticleRequestUtil.createArticleByUpdateRequest(article));
-        LOGGER.info("执行修改文章信息操作，操作用户为[" + UserSessionInfo.getBackgroundUserInfo().getLoginName()
+    	articleService.updateArticle(ArticleRequestUtil.createArticleByUpdateRequest(article));
+        LOGGER.info("执行修改文章信息操作，操作用户为[" + SecurityContextHolder.getContext().getAuthentication().getName()
                 + "],系统时间为[" + DateUtil.getCurrentDateStr() + "]");
         System.out.println("in updating article!");
     	return ResponseUtil.createResponseData(true, "修改成功", null, 200);
@@ -114,14 +92,10 @@ public class ArticleController extends BaseController{
     @ApiOperation(value="获取所有文章信息", notes = "获取所有文章信息")
     @RequestMapping(value = "/articles",method = RequestMethod.GET)  
     public ResponseData searchAllArticles(){
-//    	if(!this.checkIfHasBackgroundUser()) {
-//    		return ResponseUtil.createResponseDataNeedLogIn();
-//    	}
-		System.out.println("in articles!");
     	Iterable<Article> results = articleService.findAllArticle();
-        LOGGER.info("执行获取所有文章信息操作，操作用户为[" + UserSessionInfo.getBackgroundUserInfo().getLoginName()
+        LOGGER.info("执行获取所有文章信息操作，操作用户为[" + SecurityContextHolder.getContext().getAuthentication().getName()
                 + "],系统时间为[" + DateUtil.getCurrentDateStr() + "]");
-    	return ResponseUtil.createResponseData(true, "查询", results, 200);
+    	return ResponseUtil.createResponseData(true, StaticValues.SEARCH, results, 200);
     }
     
     /**
@@ -132,13 +106,10 @@ public class ArticleController extends BaseController{
     public ResponseData searchArticleByName(@ApiParam(value = "需要查询的文章标题", required = true, defaultValue = "1") 
 		@PathVariable("name") String name) {
 
-        if(!this.checkIfHasBackgroundUser()) {
-    		return ResponseUtil.createResponseDataNeedLogIn();
-    	}
     	List<Article> results = articleService.fuzzyFindByName(name);
-        LOGGER.info("执行查询文章信息操作，操作用户为[" + UserSessionInfo.getBackgroundUserInfo().getLoginName()
+        LOGGER.info("执行查询文章信息操作，操作用户为[" + SecurityContextHolder.getContext().getAuthentication().getName()
                 + "],系统时间为[" + DateUtil.getCurrentDateStr() + "]");
-    	return ResponseUtil.createResponseData(true, "查询", results, 200);
+    	return ResponseUtil.createResponseData(true, StaticValues.SEARCH, results, 200);
     }
     
     /**
@@ -147,19 +118,13 @@ public class ArticleController extends BaseController{
      * @param	mode		互动模式
      */
     @ApiOperation(value="记录互动(点赞或踩)", notes = "记录互动(点赞或踩)")
-    @RequestMapping(value = "/interaction/articleId/{articleId}/mode/{mode}",method = RequestMethod.POST)
+    @RequestMapping(value = "/interaction/articleId/{articleId}/mode/{mode}",method = RequestMethod.GET)
     public ResponseData interaction(@ApiParam(value = "文章id", required = true, defaultValue = "1") 
-		@PathVariable("articleId") Long articleId,@ApiParam(value = "互动模式", required = true, defaultValue = "1") 
+		@PathVariable("articleId") String articleId,@ApiParam(value = "互动模式", required = true, defaultValue = "1")
 		@PathVariable("mode") Long mode) throws Exception {
 
-        if(!this.checkIfHasBackgroundUser()) {
-    		return ResponseUtil.createResponseDataNeedLogIn();
-    	}
-    	if(!this.checkIfHasRight(ModuleNameEnum.ARTICLE)) {
-    		return ResponseUtil.createResponseDataHasNoRight();
-    	}
     	articleService.interaction(articleId, mode);
-        LOGGER.info("执行文章互动操作，操作用户为[" + UserSessionInfo.getBackgroundUserInfo().getLoginName()
+        LOGGER.info("执行文章互动操作，操作用户为[" + SecurityContextHolder.getContext().getAuthentication().getName()
                 + "],系统时间为[" + DateUtil.getCurrentDateStr() + "]");
         return ResponseUtil.createResponseData(true, "记录成功", null, 200);
     }
@@ -176,13 +141,7 @@ public class ArticleController extends BaseController{
     @RequestMapping(value = "/interaction/articles/mode/{mode}",method = RequestMethod.GET)
     public ResponseData interaction(@ApiParam(value = "行为模式", required = true, defaultValue = "1")
 		@PathVariable("mode") Long mode) throws Exception {
-    	
-    	if(!this.checkIfHasBackgroundUser()) {
-			return ResponseUtil.createResponseDataNeedLogIn();
-		}
-		if(!this.checkIfHasRight(ModuleNameEnum.ARTICLE)) {
-			return ResponseUtil.createResponseDataHasNoRight();
-		}
+
 		AggregatedPage<UserInteractionArticle> account = articleService.findByMode(mode);
 		BucketResponse br = ResponseUtil.createBucketResponse(account, "articleName");
         return ResponseUtil.createResponseData(true, "记录成功", br, 200);

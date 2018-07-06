@@ -1,5 +1,6 @@
 package com.example.demo.service.impl;
 
+import com.example.demo.common.config.StaticValues;
 import com.example.demo.common.util.KeyNumberUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,58 +19,52 @@ import com.example.demo.service.UserInteractionArticleService;
  *
  */
 @Service
+@Transactional(rollbackFor=Exception.class)
 public class UserInteractionArticleServiceImpl implements UserInteractionArticleService {
 
 	@Autowired
 	private UserInteractionArticleDAO userInteractionArticleDao;
 
 	/**
-	 * 新增用户与文章交互记录
-	 * 
-	 * @param userInteractionArticle
-	 *            用户与文章交互记录实体
-	 * @return boolean
+	 * 新增交互记录
+	 * @param 	userInteractionArticle	交互记录实体
 	 */
-	@Transactional
+	@Override
 	public void addUserInteractionArticle(UserInteractionArticle userInteractionArticle) {
 		userInteractionArticle.setId(KeyNumberUtil.nextId());
 		userInteractionArticleDao.save(userInteractionArticle);
 	}
 
 	/**
-	 * 修改用户与文章交互记录
-	 * 
-	 * @param userInteractionArticle
-	 *            用户与文章交互记录实体
-	 * @return boolean
+	 * 修改交互记录
+	 * @param 	userInteractionArticle	交互记录实体
 	 */
-	@Transactional
+	@Override
 	public void updateUserInteractionArticle(UserInteractionArticle userInteractionArticle) {
 		userInteractionArticleDao.save(userInteractionArticle);
 	}
 
 	/**
-	 * 删除用户与文章交互记录
-	 * @param 	ids		用户与文章交互记录id数组
-	 * @return	boolean
+	 * 删除交互记录
+	 * @param 	ids		交互记录id数组
 	 */
-	@Transactional
+	@Override
 	public void deleteUserInteractionArticle(Long[] ids) {
 		userInteractionArticleDao.deleteByIdIn(ids);
 	}
-	
+
 	/**
 	 * 通过用户id和交互模式查找交互记录
-	 * @param 	userInteractionArticleId		用户id
+	 * @param 	userId		用户id
 	 * @param 	mode		交互模式
 	 * @return	userInteractionArticles		交互记录集合
-	 * @throws 	Demo1Exception
+	 * @throws 	Demo1Exception 查询结果集为空时抛出Demo1Exception(StaticValues.SEARCH)
 	 */
-	@Transactional
-	public Iterable<UserInteractionArticle> findByUserIdAndMode(Long userId, Long mode) throws Demo1Exception {
+	@Override
+	public Iterable<UserInteractionArticle> findByUserIdAndMode(Integer userId, Long mode) throws Demo1Exception {
 		Iterable<UserInteractionArticle> results = userInteractionArticleDao.findByUserIdAndMode(userId, mode);
 		if(!results.iterator().hasNext()) {
-			throw new Demo1Exception("查询");
+			throw new Demo1Exception(StaticValues.SEARCH);
 		} 
 		return results;
 	}
@@ -79,38 +74,34 @@ public class UserInteractionArticleServiceImpl implements UserInteractionArticle
 	 * @param 	articleId	文章id
 	 * @param 	mode		交互模式
 	 * @return	userInteractionArticles		交互记录集合
-	 * @throws 	Demo1Exception
+	 * @throws 	Demo1Exception 查询结果集为空时抛出Demo1Exception(StaticValues.SEARCH)
 	 */
-	@Transactional
-	public Iterable<UserInteractionArticle> findByArticleIdAndMode(Long articleId, Long mode) throws Demo1Exception {
+	@Override
+	public Iterable<UserInteractionArticle> findByArticleIdAndMode(String articleId, Long mode) throws Demo1Exception {
 		Iterable<UserInteractionArticle> results = userInteractionArticleDao.findByArticleIdAndMode(articleId, mode);
 		if(!results.iterator().hasNext()) {
-			throw new Demo1Exception("查询");
+			throw new Demo1Exception(StaticValues.SEARCH);
 		} 
 		return results;
 	}
 
 	/**
-	 * @Auther: liuqitian
-	 * @Date: 2018/6/21 12:06
-	 * @Version: V1.0
-	 * @Param: [ids]
-	 * @return: java.lang.Long  删除信息条数
-	 * @Description: 通过用户ids批量删除
+	 * 通过用户ids批量删除
+	 * @param ids 用户ids
+	 * @return Long 删除信息条数
 	 */
-	public Long deleteByUserIds(Long[] ids) {
+	@Override
+	public Long deleteByUserIds(Integer[] ids) {
 		return userInteractionArticleDao.deleteByUserIdIn(ids);
 	}
 
 	/**
-	 * @Auther: liuqitian
-	 * @Date: 2018/6/21 12:06
-	 * @Version: V1.0
-	 * @Param: [ids]
-	 * @return: java.lang.Long  删除信息条数
-	 * @Description: 通过文章ids批量删除
+	 * 通过文章ids批量删除
+	 * @param ids 文章ids
+	 * @return Long 删除信息条数
 	 */
-	public Long deleteByArticleIds(Long[] ids) {
+	@Override
+	public Long deleteByArticleIds(String[] ids) {
 		return userInteractionArticleDao.deleteByArticleIdIn(ids);
 	}
 	
@@ -118,11 +109,11 @@ public class UserInteractionArticleServiceImpl implements UserInteractionArticle
 	 * 通过文章id和模式，统计符合要求的信息条数
 	 * @param 	articleId	文章id
 	 * @param 	mode		交互模式
-	 * @return	Long
+	 * @return	Long 		统计信息条数
 	 */
-	@Transactional
-	public Long countByArticleIdAndMode(Long articleId, Long mode) {
-		Long count = 0l;
+	@Override
+	public Long countByArticleIdAndMode(String articleId, Long mode) {
+		Long count = 0L;
 		count = userInteractionArticleDao.countByArticleIdAndMode(articleId, mode);
 		return count;
 	}

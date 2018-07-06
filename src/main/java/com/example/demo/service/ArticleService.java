@@ -34,9 +34,8 @@ public interface ArticleService {
 	/**
 	 * 删除文章
 	 * @param 	ids		文章id数组
-	 * @return	boolean
 	 */
-	void deleteArticle(Long[] ids) throws Demo1Exception;
+	void deleteArticle(String[] ids) throws Demo1Exception;
 	
 	/**
 	 * 通过标题查找近似文章列表
@@ -57,7 +56,7 @@ public interface ArticleService {
 	 * @param 	articleId	文章id
 	 * @param 	mode		互动模式
 	 */
-	void interaction(Long articleId, Long mode);
+	void interaction(String articleId, Long mode);
 
 	/**
 	 * @Auther: liuqitian
@@ -67,7 +66,7 @@ public interface ArticleService {
 	 * @return: java.util.List<com.example.demo.entity.UserInteractionArticle>
 	 * @Description: 通过用户id获取相关信息
 	 */
-	List<UserInteractionArticle> findByUserId(Long userId);
+	List<UserInteractionArticle> findByUserId(Integer userId);
 
 	/**
 	 * @Auther: liuqitian
@@ -77,7 +76,7 @@ public interface ArticleService {
 	 * @return: java.util.List<com.example.demo.entity.UserInteractionArticle>
 	 * @Description: 通过文章id获取相关信息
 	 */
-	List<UserInteractionArticle> findByArticleId(Long articleId);
+	List<UserInteractionArticle> findByArticleId(String articleId);
 
 	/**
 	 * @Auther: liuqitian

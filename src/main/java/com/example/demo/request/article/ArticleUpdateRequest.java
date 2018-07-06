@@ -13,7 +13,7 @@ import java.util.Date;
 public class ArticleUpdateRequest {
 	
 	//文章id
-	private Long id;
+	private String id;
 	
 	//文章名
 	private String name;
@@ -21,11 +21,11 @@ public class ArticleUpdateRequest {
 	//创建时间
 	private Date createDate;
 
-	public Long getId() {
+	public String getId() {
 		return id;
 	}
 
-	public void setId(Long id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 

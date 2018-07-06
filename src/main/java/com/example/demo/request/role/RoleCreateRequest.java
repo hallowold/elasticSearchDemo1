@@ -1,5 +1,7 @@
 package com.example.demo.request.role;
 
+import com.example.demo.security.entity.SysUser;
+
 import java.util.Date;
 
 /**
@@ -10,14 +12,20 @@ import java.util.Date;
  */
 public class RoleCreateRequest {
 
-	//角色名称
+	/**
+	 * 角色名称
+	 */
 	private String name;
-	
-	//创建日期
-	private Date createDate;
-	
-	//权限id数组
-	private Long[] rightIds;
+
+	/**
+	 * 用户id(外键)
+	 */
+	private Integer userId;
+
+	/**
+	 * 权限ids
+	 */
+	private Integer[] rightIds;
 
 	public String getName() {
 		return name;
@@ -27,20 +35,19 @@ public class RoleCreateRequest {
 		this.name = name;
 	}
 
-	public Date getCreateDate() {
-		return createDate;
+	public Integer getUserId() {
+		return userId;
 	}
 
-	public void setCreateDate(Date createDate) {
-		this.createDate = createDate;
+	public void setUserId(Integer userId) {
+		this.userId = userId;
 	}
 
-	public Long[] getRightIds() {
+	public Integer[] getRightIds() {
 		return rightIds;
 	}
 
-	public void setRightIds(Long[] rightIds) {
+	public void setRightIds(Integer[] rightIds) {
 		this.rightIds = rightIds;
 	}
-	
 }

@@ -6,10 +6,12 @@ import java.util.NoSuchElementException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.example.demo.common.config.StaticValues;
 import org.springframework.beans.ConversionNotSupportedException;
 import org.springframework.beans.TypeMismatchException;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.http.converter.HttpMessageNotWritableException;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.HttpMediaTypeNotAcceptableException;
 import org.springframework.web.HttpMediaTypeNotSupportedException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
@@ -51,8 +53,10 @@ public class GlobalExceptionHandler {
 			message = "数据重复，有无效数据存在";
 		} else if ("重复的登录名".equals(ex.getMessage())) {
 			message = "该登录名已被占用，请修改";
-		} else if ("系统管理员".equals(ex.getMessage())) {
+		} else if (StaticValues.ADMIN.equals(ex.getMessage())) {
 			message = "不可对系统管理员角色进行新增，修改或删除操作";
+		} else if (StaticValues.ACCESSDENIED.equals(ex.getMessage())) {
+			message = "当前用户无权限";
 		}
 	    res = ResponseUtil.createResponseData(false, message, null, statusCode);
 		return res;

@@ -1,22 +1,22 @@
 package com.example.demo.service.impl;
 
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-
-import com.example.demo.common.util.KeyNumberUtil;
-import com.example.demo.dao.RightDAO;
-import com.example.demo.entity.Right;
+import com.example.demo.common.config.StaticValues;
+import com.example.demo.common.util.StringUtil;
+import com.example.demo.exception.Demo1Exception;
+import com.example.demo.security.dao.SysRightDao;
+import com.example.demo.security.dao.SysRoleDao;
+import com.example.demo.security.dao.SysRoleRightDao;
+import com.example.demo.security.entity.SysRight;
+import com.example.demo.security.entity.SysRole;
+import com.example.demo.security.entity.SysRoleRight;
+import com.example.demo.service.RoleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.example.demo.dao.RoleDAO;
-import com.example.demo.dao.RoleRightDAO;
-import com.example.demo.entity.Role;
-import com.example.demo.entity.RoleRight;
-import com.example.demo.exception.Demo1Exception;
-import com.example.demo.service.RoleService;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
 
 /**
  * 角色服务实现类
@@ -26,85 +26,84 @@ import com.example.demo.service.RoleService;
  *
  */
 @Service
+@Transactional(rollbackFor=Exception.class)
 public class RoleServiceImpl implements RoleService {
 
 	@Autowired
-	private RoleDAO roleDao;
+	private SysRoleDao roleDao;
 
 	@Autowired
-	private RightDAO rightDao;
+	private SysRightDao rightDao;
 	
 	@Autowired
-	private RoleRightDAO roleRightDao;
+	private SysRoleRightDao roleRightDao;
 
 	/**
 	 * 新增角色
      *  此处定义1号角色为系统管理员角色
 	 * 
 	 * @param 	data 	角色实体与权限id数组
-	 * @return 	boolean
+	 * @throws Exception 任何异常，特殊的，当发现用户试图操作系统管理员角色时，抛出Demo1Exception(StaticValues.ADMIN)
 	 */
-	@Transactional
+	@Override
 	public void addRole(Map<String, Object> data) throws Exception{
-		Role role = (Role) data.get("role");
-		Long[] ids = (Long[]) data.get("rightIds");
+		SysRole role = (SysRole) data.get("role");
+		Integer[] ids = (Integer[]) data.get("rightIds");
 		//若系统管理员角色已经存在，则不允许继续创建系统管理员角色
-		if("系统管理员".equals(role.getName()) &&
-				roleDao.findById(1l).get() != null) {
-			throw new Demo1Exception("admin");
+		if(StaticValues.ADMIN.equals(role.getName()) &&
+				roleDao.findById(1).get() != null) {
+			throw new Demo1Exception(StaticValues.ADMIN);
 		}
-		//存储角色
-		role.setId(KeyNumberUtil.nextId());
 		roleDao.save(role);
-		//存储roleright关系
 		if(ids != null && ids.length != 0) {
 			for(int num = 0; num < ids.length; num++) {
-                roleRightDao.save(new RoleRight(KeyNumberUtil.nextId(), role, rightDao.findById(ids[num]).get()));
+				SysRight sysRight = rightDao.findById(ids[num]).get();
+                roleRightDao.save(new SysRoleRight(role.getId(), role, sysRight.getId(), sysRight, new Date() ));
 			}
 		}
 	}
 
-	/**
-	 * @Auther: liuqitian
-	 * @Date: 2018/6/26 15:14
-	 * @Version: V1.0
-	 * @Param: []
-	 * @return: void
-	 * @Description: 初始化时添加系统管理员角色
-	 */
-	public void addAdmin() {
-		Role role = new Role();
-		role.setId(1l);
-		role.setName("系统管理员");
-		role.setCreateDate(new Date());
-		roleDao.save(role);
-		Iterable<Right> rightIterable = rightDao.findAll();
-		for (Right right : rightIterable) {
-			roleRightDao.save(new RoleRight(KeyNumberUtil.nextId(), role, right));
-		}
-	}
+//	/**
+//	 * @Auther: liuqitian
+//	 * @Date: 2018/6/26 15:14
+//	 * @Version: V1.0
+//	 * @Param: []
+//	 * @return: void
+//	 * @Description: 初始化时添加系统管理员角色
+//	 */
+//	public void addAdmin() {
+//		Role role = new Role();
+//		role.setId(1L);
+//		role.setName("系统管理员");
+//		role.setCreateDate(new Date());
+//		roleDao.save(role);
+//		Iterable<Right> rightIterable = rightDao.findAll();
+//		for (Right right : rightIterable) {
+//			roleRightDao.save(new RoleRight(KeyNumberUtil.nextId(), role, right));
+//		}
+//	}
 
 	/**
 	 * 修改角色
 	 * 
 	 * @param 	data 	角色实体与权限id数组
-	 * @return 	boolean
+	 * @throws Exception 任何异常，特殊的，当发现用户试图操作系统管理员角色时，抛出Demo1Exception(StaticValues.ADMIN)
 	 */
-	@Transactional
+	@Override
 	public void updateRole(Map<String, Object> data) throws Exception{
-		Role role = (Role) data.get("role");
-		Long[] ids = (Long[]) data.get("rightIds");
+		SysRole role = (SysRole) data.get("role");
+		Integer[] ids = (Integer[]) data.get("rightIds");
 		//不允许对系统管理员角色进行任何修改
-		if(role.getId() == 1l || "系统管理员".equals(role.getName())) {
-			throw new Demo1Exception("admin");
+		if(role.getId() == 1L || StaticValues.ADMIN.equals(role.getName())) {
+			throw new Demo1Exception(StaticValues.ADMIN);
 		}
-		//存储角色
+		/* 关联表的更新操作会比较麻烦且容易出错，故直接删除原有信息后重建 */
 		roleDao.save(role);
-		//删除该角色的所有roleright关系并重新记录
-		roleRightDao.deleteByRoleIdIn(new Long[] {role.getId()});
+		roleRightDao.deleteByRoleIdIn(new Integer[] {role.getId()});
 		if(ids != null && ids.length != 0) {
 			for(int num = 0; num < ids.length; num++) {
-				roleRightDao.save(new RoleRight(KeyNumberUtil.nextId(), role, rightDao.findById(ids[num]).get()));
+				SysRight sysRight = rightDao.findById(ids[num]).get();
+				roleRightDao.save(new SysRoleRight(role.getId(), role, sysRight.getId(), sysRight, new Date()));
 			}
 		}
 	}
@@ -112,13 +111,13 @@ public class RoleServiceImpl implements RoleService {
 	/**
 	 * 删除角色
 	 * @param 	ids		角色id数组
-	 * @return	boolean
+	 * @throws Exception 任何异常，特殊的，当发现用户试图操作系统管理员角色时，抛出Demo1Exception(StaticValues.ADMIN)
 	 */
-	@Transactional
-	public void deleteRole(Long[] ids) throws Exception{
+	@Override
+	public void deleteRole(Integer[] ids) throws Exception{
 		for(int num = 0; num < ids.length; num++) {
-			if(ids[num] == 1l) {
-				throw new Demo1Exception("admin");
+			if(ids[num] == 1) {
+				throw new Demo1Exception(StaticValues.ADMIN);
 			}
 		}
 		//删除角色信息，并同步删除该角色的所有roleright关系
@@ -127,16 +126,17 @@ public class RoleServiceImpl implements RoleService {
 	}
 	
 	/**
-	 * 通过角色名查找近似角色列表
+	 * 通过角色名模糊查询
 	 * 
-	 * @param 	loginName 	角色名
-	 * @return 	List<Role>	角色实体列表
+	 * @param 	name 	角色名
+	 * @throws Exception 任何异常，特殊的，当查询结果集为空，抛出Demo1Exception(StaticValues.SEARCH)
+	 * @return 	List<SysRole>	角色实体列表
 	 */
-	@Transactional
-	public List<Role> fuzzyFindByName(String roleName) throws Exception{
-		List<Role> list = roleDao.findByName("*" + roleName + "*");
+	@Override
+	public List<SysRole> fuzzyFindByName(String name) throws Exception{
+		List<SysRole> list = roleDao.findByNameLike("%" + StringUtil.changeSpecialCharacter(name) + "%");
 		if(list == null || list.size() < 1) {
-			throw new Demo1Exception("查询");
+			throw new Demo1Exception(StaticValues.SEARCH);
 		}
 		return list;
 	}
@@ -145,13 +145,14 @@ public class RoleServiceImpl implements RoleService {
 	 * 通过id查找角色
 	 * 
 	 * @param 	id 		id
+	 * @throw Exception 任何异常，特殊的，当查询结果为空，抛出Demo1Exception("StaticValues.SEARCH)
 	 * @return 	Role 	角色实体
 	 */
-	@Transactional
-	public Role findById(Long id) throws Exception{
-		Role tempRole = roleDao.findById(id).get();
-		if(tempRole == null || tempRole.getId() == null) {
-			throw new Demo1Exception("查询");
+	@Override
+	public SysRole findById(Integer id) throws Exception{
+		SysRole tempRole = roleDao.findById(id).get();
+		if(tempRole == null) {
+			throw new Demo1Exception(StaticValues.SEARCH);
 		}
 		return tempRole;
 	}
@@ -160,8 +161,8 @@ public class RoleServiceImpl implements RoleService {
 	 * 获取所有角色
 	 * @return	roles		角色集合
 	 */
-	@Transactional
-	public Iterable<Role> findAllRole() {
+	@Override
+	public Iterable<SysRole> findAllRole() {
 		return roleDao.findAll();
 	}
 }

@@ -3,38 +3,44 @@ package com.example.demo.entity;
 import java.io.Serializable;
 import java.util.Date;
 
+import com.example.demo.security.entity.SysUser;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.elasticsearch.annotations.Document;
 
 /**
  * 文章实体类
- *
  * @author liuqitian
- * @date 2018年6月12日
+ * @version V1.1  因引入spring security，代码重构
+ * @date 2018年7月4日
  */
 @Document(indexName = "article")
 public class Article implements Serializable {
 
-    //序列化
     private static final long serialVersionUID = 1L;
 
     @Id
-    private Long id;
+    private String id;
 
-    //文章名
+    /**
+     * 文章名
+     */
     private String name;
 
-    //作者
-    private User author;
+    /**
+     * 作者
+     */
+    private SysUser author;
 
-    //创建时间
+    /**
+     * 创建时间
+     */
     private Date createDate;
 
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -46,11 +52,11 @@ public class Article implements Serializable {
         this.name = name;
     }
 
-    public User getAuthor() {
+    public SysUser getAuthor() {
         return author;
     }
 
-    public void setAuthor(User author) {
+    public void setAuthor(SysUser author) {
         this.author = author;
     }
 

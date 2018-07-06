@@ -65,6 +65,16 @@ public class SysRoleRight {
     @Column(name="updateTime")
     private Date updateTime;
 
+    public SysRoleRight() {}
+
+    public SysRoleRight(Integer roleId, SysRole sysRole, Integer rightId, SysRight sysRight, Date updateTime ) {
+        this.roleId = roleId;
+        this.sRole = sysRole;
+        this.rightId = rightId;
+        this.sRight = sysRight;
+        this.updateTime = updateTime;
+    }
+
     public int getId() {
         return id;
     }
