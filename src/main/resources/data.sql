@@ -24,8 +24,12 @@ INSERT INTO s_right(id, method_name, method_path, name, remark, method_type, rig
 INSERT INTO s_right(id, method_name, method_path, name, remark, method_type, right_url) VALUES(22,'用户','/user','通过名称模糊查询','字符串','GET','/user/users/loginName/{loginName}');
 
 --角色表s_role
-INSERT INTO s_role(id, name, user_id) VALUES(1,'ADMIN',1);
-INSERT INTO s_role(id, name, user_id) VALUES(2,'ADMIN',2);
+INSERT INTO s_role(id, name) VALUES(1,'ADMIN');
+INSERT INTO s_role(id, name) VALUES(2,'TEST');
+
+--用户角色表s_role_user
+INSERT INTO s_role_user(role_id, user_id) VALUES(1, 1);
+INSERT INTO s_role_user(role_id, user_id) VALUES(2, 2);
 
 --用户表s_user
 INSERT INTO s_user(id, login_name, show_name, email, password) VALUES(1,'ADMIN', '系统管理员', 'a@b.c', 'cloversec');
