@@ -23,8 +23,8 @@ public class ApplicationStartUp implements ApplicationListener<ContextRefreshedE
 //        Long count = suserService.count();
 //        for (int num = 0; num < count; num++) {
 //            SysUser sysUser = suserService.findById(num + 1);
-//            if(sysUser.getPassword().equals("cloversec")) {
-//                sysUser.setPassword(encoder.encode("cloversec"));
+//            if(sysUser.getPassword().equals("123456")) {
+//                sysUser.setPassword(encoder.encode("123456"));
 //            }
 //            suserService.update(sysUser);
 //        }

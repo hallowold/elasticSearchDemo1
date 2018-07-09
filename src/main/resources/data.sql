@@ -32,8 +32,8 @@ INSERT INTO s_role_user(role_id, user_id) VALUES(1, 1);
 INSERT INTO s_role_user(role_id, user_id) VALUES(2, 2);
 
 --用户表s_user
-INSERT INTO s_user(id, login_name, show_name, email, password) VALUES(1,'ADMIN', '系统管理员', 'a@b.c', 'cloversec');
-INSERT INTO s_user(id, login_name, show_name, email, password) VALUES(2,'TEST', '测试用户', 'a@b.d', 'cloversec');
+INSERT INTO s_user(id, login_name, show_name, email, password) VALUES(1,'ADMIN', '系统管理员', 'a@b.c', '123456');
+INSERT INTO s_user(id, login_name, show_name, email, password) VALUES(2,'TEST', '测试用户', 'a@b.d', '123456');
 
 --角色权限表s_role_right
 INSERT INTO s_role_right(id, role_id, right_id) VALUES(1,1,1);
