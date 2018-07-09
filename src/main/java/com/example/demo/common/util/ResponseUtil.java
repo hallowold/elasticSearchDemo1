@@ -37,17 +37,11 @@ public class ResponseUtil {
 	    } else if (StaticValues.SEARCH.equals(message) && data != null) {
 	    	res.setMessage("查询完成");
 	    	code = 200;
-	    } else if ("依赖".equals(message)) {
-	    	res.setMessage("指定的数据被其他数据所依赖，无法删除，请检查");
+	    } else if (StaticValues.DEPENDENCE.equals(message)) {
+	    	res.setMessage("指定的数据被其他数据所依赖，无法执行此操作，请检查");
 	    	code = 500;
-	    } else if ("逻辑错误".equals(message)) {
-	    	res.setMessage("使用的功能逻辑错误，请与系统管理员联系");
-	    	code = 500;
-	    } else if ("作者".equals(message)) {
-	    	res.setMessage("您不是文章的作者，无法进行修改或删除操作");
-	    	code = 500;
-	    } else if ("作者，批量删除".equals(message)) {
-	    	res.setMessage("您不是所有选定文章的作者，无法进行批量删除操作");
+	    } else if (StaticValues.AUTHOR.equals(message)) {
+	    	res.setMessage("您的操作中至少有一项操作越权，只有作者本人可以执行该操作，请检查");
 	    	code = 500;
 	    } else {
 			res.setMessage(message);
@@ -73,22 +67,6 @@ public class ResponseUtil {
 		return res;
 	}
 	
-	/**
-	 * 生成responseData对象，操作者未登录时使用
-	 * @return
-	 */
-	public static ResponseData createResponseDataNeedLogIn() {
-		return new ResponseData(false, null, "需要登录", 500);
-	}
-	
-	/**
-	 * 生成responseData对象，操作者无模块权限时使用
-	 * @return
-	 */
-	public static ResponseData createResponseDataHasNoRight() {
-		return new ResponseData(false, null, "您没有此模块的操作权限", 500);
-	}
-
     /**
      * 使用bucket进行查询时，因为格式问题json无法直接进行解析，需要做一次中转处理。
      *  key名对应的为分组标记，docCount对应的为组内信息个数，

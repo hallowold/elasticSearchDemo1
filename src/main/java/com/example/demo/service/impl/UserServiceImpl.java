@@ -6,7 +6,6 @@ import com.example.demo.exception.Demo1Exception;
 import com.example.demo.security.dao.SysRoleDao;
 import com.example.demo.security.dao.SysRoleUserDao;
 import com.example.demo.security.dao.SysUserDao;
-import com.example.demo.security.entity.SysRole;
 import com.example.demo.security.entity.SysRoleUser;
 import com.example.demo.security.entity.SysUser;
 import com.example.demo.service.UserService;
@@ -15,6 +14,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -41,10 +41,11 @@ public class UserServiceImpl implements UserService {
 	/**
 	 * 新增用户
 	 * @param dataMap 用户实体和角色id数组的map
+	 * @throws Exception 除了findByLoginName(name)方法抛出的空值自定义异常外，其他任何异常均抛出统一处理
 	 * @return boolean 是否成功
 	 */
 	@Override
-	public boolean addUser(Map<String, Object> dataMap) {
+	public boolean addUser(Map<String, Object> dataMap){
 		SysUser user = (SysUser) dataMap.get("entity");
 		Integer[] roleIds = (Integer[]) dataMap.get("roleIds");
 		boolean ifSuccess = false;
@@ -58,11 +59,10 @@ public class UserServiceImpl implements UserService {
 					user.setPassword(StringUtil.encode(user.getPassword().trim()));
 				} catch (Exception e) {
 					e.printStackTrace();
+//					throw new Exception();
 				}
 				userDao.save(user);
-				for (int i = 0; i < roleIds.length; i++) {
-					sysRoleUserDao.save(new SysRoleUser(sysRoleDao.findById(roleIds[i]).get(), roleIds[i], user, user.getId()));
-				}
+                Arrays.stream(roleIds).forEach(id ->sysRoleUserDao.save(new SysRoleUser(sysRoleDao.findById(id).get(),id, user, user.getId())));
 				ifSuccess = true;
 			}
 		}
@@ -81,9 +81,7 @@ public class UserServiceImpl implements UserService {
 		user.setPassword(StringUtil.encode(user.getPassword()));
 		/* 中间表的修改操作繁琐且容易出错，故采用全部删除再根据新数据新增的方式 */
 		sysRoleUserDao.deleteByRoleIdIn(roleIds);
-		for (int i = 0; i < roleIds.length; i++) {
-			sysRoleUserDao.save(new SysRoleUser(sysRoleDao.findById(roleIds[i]).get(), roleIds[i], user, user.getId()));
-		}
+        Arrays.stream(roleIds).forEach(id ->sysRoleUserDao.save(new SysRoleUser(sysRoleDao.findById(id).get(),id, user, user.getId())));
 		userDao.save(user);
 
 	}
@@ -97,10 +95,9 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public Integer deleteUser(Integer[] ids) throws Demo1Exception{
         SysUser user = (SysUser)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        for (int i = 0; i < ids.length; i++) {
-            if(ids[i].intValue() == user.getId().intValue() ) {
-                throw new Demo1Exception(StaticValues.MYSELF);
-            }
+        //不能删除自己
+        if(Arrays.stream(ids).anyMatch(id -> id.intValue() == user.getId().intValue())) {
+            throw new Demo1Exception(StaticValues.MYSELF);
         }
 		Integer result = userDao.deleteByIdIn(ids);
         if(result == 0) {

@@ -65,7 +65,7 @@ public class RightServiceImpl implements RightService {
 		for(int num = 0; num < ids.length; num++) {
 			//若该权限被任何角色使用，则不允许进行修改或删除操作
 			if(this.ifHasRelationWithRole(ids[num])) {
-				throw new Demo1Exception("依赖");
+				throw new Demo1Exception(StaticValues.DEPENDENCE);
 			}
 		}
 		Integer result = rightDao.deleteByIdIn(ids);

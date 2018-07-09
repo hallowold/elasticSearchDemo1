@@ -51,8 +51,7 @@ public class ArticleServiceImpl implements ArticleService {
 	 */
 	@Override
 	public void addArticle(Article article) {
-		Long l = (Long) KeyNumberUtil.nextId();
-		article.setId(l + "");
+		article.setId(KeyNumberUtil.nextId() + "");
 		articleDao.save(article);
 	}
 
@@ -64,11 +63,10 @@ public class ArticleServiceImpl implements ArticleService {
 	@Override
 	public void updateArticle(Article article) throws Demo1Exception {
 		if(!articleDao.existsById(article.getId())) {
-			System.out.println("1111111");
-			throw new Demo1Exception("给定的信息无记录");
+			throw new Demo1Exception(StaticValues.NODATA);
 		}
 		if(!this.isAuthor(article.getId())) {
-			throw new Demo1Exception("作者");
+			throw new Demo1Exception(StaticValues.AUTHOR);
 		}
 		articleDao.save(article);
 	}
@@ -82,9 +80,9 @@ public class ArticleServiceImpl implements ArticleService {
 	public Long deleteArticle(String[] ids) throws Demo1Exception {
 		for(int num = 0; num < ids.length; num++) {
 			if(!this.isAuthor(ids[num]) && ids.length > 1) {
-				throw new Demo1Exception("作者，批量删除");
+				throw new Demo1Exception(StaticValues.AUTHOR);
 			} else if (!this.isAuthor(ids[num]) && ids.length == 1) {
-				throw new Demo1Exception("作者");
+				throw new Demo1Exception(StaticValues.AUTHOR);
 			}
 		}
 		Long result = articleDao.deleteByIdIn(ids);

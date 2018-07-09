@@ -51,8 +51,6 @@ public class GlobalExceptionHandler {
 		String message = ex.getMessage();
 		if (StaticValues.ADMIN.equals(ex.getMessage())) {
 			message = "不可对系统管理员角色进行新增，修改或删除操作";
-		} else if (StaticValues.ACCESSDENIED.equals(ex.getMessage())) {
-			message = "当前用户无权限";
 		}
 	    res = ResponseUtil.createResponseData(false, message, null, statusCode);
 		return res;

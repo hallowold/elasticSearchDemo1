@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -80,12 +81,11 @@ public class RoleServiceImpl implements RoleService {
 		/* 关联表的更新操作会比较麻烦且容易出错，故直接删除原有信息后重建 */
 		roleDao.save(role);
 		roleRightDao.deleteByRoleIdIn(new Integer[] {role.getId()});
-		if(ids != null && ids.length != 0) {
-			for(int num = 0; num < ids.length; num++) {
-				SysRight sysRight = rightDao.findById(ids[num]).get();
-				roleRightDao.save(new SysRoleRight(role.getId(), role, sysRight.getId(), sysRight, new Date()));
-			}
-		}
+		Arrays.stream(ids).forEach(id -> {
+			SysRight sysRight = rightDao.findById(id).get();
+			System.out.println(sysRight.getName());
+			roleRightDao.save(new SysRoleRight(role.getId(), role, sysRight.getId(), sysRight, new Date()));
+		});
 	}
 
 	/**

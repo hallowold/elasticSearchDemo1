@@ -16,11 +16,6 @@ public class RoleUpdateRequest {
 	private String name;
 
 	/**
-	 * 用户id(外键)
-	 */
-	private Integer userId;
-
-	/**
 	 * 权限ids
 	 */
 	private Integer[] rightIds;
@@ -39,14 +34,6 @@ public class RoleUpdateRequest {
 
 	public void setName(String name) {
 		this.name = name;
-	}
-
-	public Integer getUserId() {
-		return userId;
-	}
-
-	public void setUserId(Integer userId) {
-		this.userId = userId;
 	}
 
 	public Integer[] getRightIds() {
