@@ -86,4 +86,16 @@ public class RightCreateRequest {
 	public void setMethodPath(String methodPath) {
 		this.methodPath = methodPath;
 	}
+
+	@Override
+	public String toString() {
+		return "RightCreateRequest{" +
+				"name='" + name + '\'' +
+				", rightUrl='" + rightUrl + '\'' +
+				", methodType='" + methodType + '\'' +
+				", remark='" + remark + '\'' +
+				", methodName='" + methodName + '\'' +
+				", methodPath='" + methodPath + '\'' +
+				'}';
+	}
 }

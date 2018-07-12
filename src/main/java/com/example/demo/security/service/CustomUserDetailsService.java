@@ -7,6 +7,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -19,7 +20,7 @@ import java.util.Set;
  * @Version: V1.0
  * @Description: 实现用户信息服务类
  */
-@Component
+@Service
 public class CustomUserDetailsService implements UserDetailsService {
 
     @Autowired

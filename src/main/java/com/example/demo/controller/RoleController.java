@@ -2,6 +2,7 @@ package com.example.demo.controller;
 
 import com.example.demo.common.config.StaticValues;
 import com.example.demo.common.util.DateUtil;
+import com.example.demo.request.MysqlIdsRequest;
 import com.example.demo.security.entity.SysRole;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -56,8 +57,8 @@ public class RoleController{
      */
     @ApiOperation(value="批量删除角色信息", notes = "批量删除角色信息")
     @RequestMapping(value = "/roles",method = RequestMethod.DELETE)
-    public ResponseData deleteRole(@RequestBody Integer[] ids) throws Exception{
-        Integer num = roleService.deleteRole(ids);
+    public ResponseData deleteRole(@RequestBody MysqlIdsRequest request) throws Exception{
+        Integer num = roleService.deleteRole(request.getIds());
         LOGGER.info("执行删除角色信息操作，操作用户为[" + SecurityContextHolder.getContext().getAuthentication().getName()
                 + "],系统时间为[" + DateUtil.getCurrentDateStr() + "]");
     	return ResponseUtil.createResponseData(true, "删除成功", num, 200);

@@ -23,6 +23,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -78,6 +79,7 @@ public class ArticleServiceImpl implements ArticleService {
 	 */
 	@Override
 	public Long deleteArticle(String[] ids) throws Demo1Exception {
+		Arrays.stream(ids).forEach(System.out::println);
 		for(int num = 0; num < ids.length; num++) {
 			if(!this.isAuthor(ids[num]) && ids.length > 1) {
 				throw new Demo1Exception(StaticValues.AUTHOR);
@@ -203,6 +205,11 @@ public class ArticleServiceImpl implements ArticleService {
 			isAuthor = true;
 		}
 		return isAuthor;
+	}
+
+	public List<Article> findByNameAndAuthorLoginName(String name, String loginName) {
+		List<Article> articles = articleDao.findByNameAndAuthorLoginName(name, loginName);
+		return articles;
 	}
 	
 }

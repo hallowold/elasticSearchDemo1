@@ -33,7 +33,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private CustomUserDetailsService customUserDetailsService;
 
-    //http://localhost:8080/login 输入正确的用户名密码 并且选中remember-me 则登陆成功，转到 index页面
     //再次访问index页面无需登录直接访问
     //访问http://localhost:8080/home 不拦截，直接访问，
     //访问http://localhost:8080/hello 需要登录验证后，且具备 “ADMIN”权限hasAuthority("ADMIN")才可以访问
@@ -46,24 +45,20 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .addFilterBefore(mySecurityFilter, FilterSecurityInterceptor.class)
                 .authorizeRequests()
                 //访问：/home 无需登录认证权限
-                .antMatchers("/home").permitAll()
+//                .antMatchers("/home").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .formLogin()
-                .loginPage("/login")
+                .loginPage("/login").defaultSuccessUrl("/swagger.ui-html")
                 .permitAll()
                 //登录成功后可使用loginSuccessHandler()存储用户信息，可选。
                 .successHandler(loginSuccessHandler())
                 .and()
                 .logout()
                 //退出登录后的默认网址是”/home”
-                .logoutSuccessUrl("/home")
+                .logoutSuccessUrl("/login")
                 .permitAll()
-                .invalidateHttpSession(true)
-                .and()
-                //登录后记住用户，下次自动登录,数据库中必须存在名为persistent_logins的表
-                .rememberMe()
-                .tokenValiditySeconds(1209600);
+                .invalidateHttpSession(true);
     }
 
     @Autowired

@@ -5,6 +5,7 @@ import java.util.List;
 import com.example.demo.common.config.StaticValues;
 import com.example.demo.common.util.DateUtil;
 import com.example.demo.common.util.requestcreater.ArticleRequestUtil;
+import com.example.demo.request.EsIdsRequest;
 import com.example.demo.response.BucketResponse;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -41,9 +42,6 @@ public class ArticleController{
 
     private static final Log LOGGER = LogFactory.getLog(ArticleController.class);
 
-	/*
-	 * 注入文章服务类
-	 */
 	@Autowired
 	ArticleService articleService;
 
@@ -65,8 +63,8 @@ public class ArticleController{
      */
     @ApiOperation(value="批量删除文章信息", notes = "批量删除文章信息")
     @RequestMapping(value = "/articles",method = RequestMethod.DELETE)
-    public ResponseData deleteArticle(@RequestBody String[] ids) throws Exception {
-        Long num = articleService.deleteArticle(ids);
+    public ResponseData deleteArticle(@RequestBody EsIdsRequest request) throws Exception {
+        Long num = articleService.deleteArticle(request.getIds());
         LOGGER.info("执行删除文章信息操作，操作用户为[" + SecurityContextHolder.getContext().getAuthentication().getName()
                 + "],系统时间为[" + DateUtil.getCurrentDateStr() + "]");
     	return ResponseUtil.createResponseData(true, "删除成功", num, 200);
@@ -82,7 +80,6 @@ public class ArticleController{
     	articleService.updateArticle(ArticleRequestUtil.createArticleByUpdateRequest(article));
         LOGGER.info("执行修改文章信息操作，操作用户为[" + SecurityContextHolder.getContext().getAuthentication().getName()
                 + "],系统时间为[" + DateUtil.getCurrentDateStr() + "]");
-        System.out.println("in updating article!");
     	return ResponseUtil.createResponseData(true, "修改成功", null, 200);
     }
     
@@ -99,11 +96,11 @@ public class ArticleController{
     }
     
     /**
-     * 根据标题查询近似文章列表接口
+     * 根据标题模糊查询接口
      */
     @ApiOperation(value="根据标题查询近似文章列表", notes = "根据标题查询近似文章列表")
     @RequestMapping(value = "/articles/name/{name}",method = RequestMethod.GET)  
-    public ResponseData searchArticleByName(@ApiParam(value = "需要查询的文章标题", required = true, defaultValue = "1") 
+    public ResponseData searchArticleByNameFuzzy(@ApiParam(value = "需要查询的文章标题", required = true, defaultValue = "1")
 		@PathVariable("name") String name) {
 
     	List<Article> results = articleService.fuzzyFindByName(name);
@@ -119,7 +116,7 @@ public class ArticleController{
      */
     @ApiOperation(value="记录互动(点赞或踩)", notes = "记录互动(点赞或踩)")
     @RequestMapping(value = "/interaction/articleId/{articleId}/mode/{mode}",method = RequestMethod.GET)
-    public ResponseData interaction(@ApiParam(value = "文章id", required = true, defaultValue = "1") 
+    public ResponseData addInteraction(@ApiParam(value = "文章id", required = true, defaultValue = "1")
 		@PathVariable("articleId") String articleId,@ApiParam(value = "互动模式", required = true, defaultValue = "1")
 		@PathVariable("mode") Long mode) throws Exception {
 
@@ -139,7 +136,7 @@ public class ArticleController{
      */
     @ApiOperation(value="根据行为模式统计各文章的赞/踩数量", notes = "根据行为模式统计各文章的赞/踩数量")
     @RequestMapping(value = "/interaction/articles/mode/{mode}",method = RequestMethod.GET)
-    public ResponseData interaction(@ApiParam(value = "行为模式", required = true, defaultValue = "1")
+    public ResponseData queryInteraction(@ApiParam(value = "行为模式", required = true, defaultValue = "1")
 		@PathVariable("mode") Long mode) throws Exception {
 
 		AggregatedPage<UserInteractionArticle> account = articleService.findByMode(mode);

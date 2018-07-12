@@ -68,4 +68,13 @@ public class Article implements Serializable {
         this.createDate = createDate;
     }
 
+    @Override
+    public String toString() {
+        return "Article{" +
+                "id='" + id + '\'' +
+                ", name='" + name + '\'' +
+                ", author=" + author +
+                ", createDate=" + createDate +
+                '}';
+    }
 }

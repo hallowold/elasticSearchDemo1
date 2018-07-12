@@ -125,4 +125,17 @@ public class SysRight {
     public void setMethodType(String mothedType) {
         this.methodType = mothedType;
     }
+
+    @Override
+    public String toString() {
+        return "SysRight{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", rightUrl='" + rightUrl + '\'' +
+                ", remark='" + remark + '\'' +
+                ", methodName='" + methodName + '\'' +
+                ", methodPath='" + methodPath + '\'' +
+                ", methodType='" + methodType + '\'' +
+                '}';
+    }
 }

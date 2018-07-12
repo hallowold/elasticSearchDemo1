@@ -2,6 +2,7 @@ package com.example.demo.controller;
 
 import com.example.demo.common.config.StaticValues;
 import com.example.demo.common.util.DateUtil;
+import com.example.demo.request.MysqlIdsRequest;
 import com.example.demo.security.entity.SysRight;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -47,6 +48,7 @@ public class RightController{
     @ApiOperation(value="添加权限信息", notes = "添加权限信息")
     @RequestMapping(value = "/right",method = RequestMethod.POST)  
     public ResponseData addRight(@RequestBody RightCreateRequest right) throws Exception{
+        System.out.println(right);
     	rightService.addRight(RightRequestUtil.createRightByCreateRequest(right));
         LOGGER.info("执行新增权限信息操作，操作用户为[" + SecurityContextHolder.getContext().getAuthentication().getName()
                 + "],系统时间为[" + DateUtil.getCurrentDateStr() + "]");
@@ -60,8 +62,8 @@ public class RightController{
      */
     @ApiOperation(value="批量删除权限信息", notes = "批量删除权限信息")
     @RequestMapping(value = "/rights",method = RequestMethod.DELETE)
-    public ResponseData deleteRight(@RequestBody Integer[] ids) throws Exception{
-        Integer num = rightService.deleteRight(ids);
+    public ResponseData deleteRight(@RequestBody MysqlIdsRequest request) throws Exception{
+        Integer num = rightService.deleteRight(request.getIds());
         LOGGER.info("执行删除权限信息操作，操作用户为[" + SecurityContextHolder.getContext().getAuthentication().getName()
                 + "],系统时间为[" + DateUtil.getCurrentDateStr() + "]");
     	return ResponseUtil.createResponseData(true, "删除成功", num, 200);

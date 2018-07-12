@@ -30,4 +30,12 @@ public interface ArticleDAO extends ElasticsearchRepository<Article, String> {
 	 */
 	Long deleteByIdIn(String[] ids);
 
+	/**
+	 * 通过文章标题和作者登录名进行查询，默认做精确查询，需要做模糊查询时在两边加'*'
+	 * @param name 文章标题
+	 * @param authorLoginName 作者登录名
+	 * @return 文章集合
+	 */
+	List<Article> findByNameAndAuthorLoginName(String name, String authorLoginName);
+
 }

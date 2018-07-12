@@ -7,6 +7,7 @@ import java.util.List;
 
 import com.example.demo.common.config.StaticValues;
 import com.example.demo.common.util.DateUtil;
+import com.example.demo.request.MysqlIdsRequest;
 import com.example.demo.security.entity.SysUser;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -47,7 +48,7 @@ public class UserController {
 
     /**
      * 新增接口
-     * @param user
+     * @param user user实体
      * @return
      */
     @ApiOperation(value="添加用户信息", notes = "添加用户信息")
@@ -64,14 +65,13 @@ public class UserController {
     
     /**
      * 删除接口
-     * @param user
-     * @return
-     * @throws Demo1Exception 
+     * @param request id数组的存放对象
+     * @throws Demo1Exception
      */
     @ApiOperation(value="批量删除用户信息", notes = "批量删除用户信息")
     @RequestMapping(value = "/users",method = RequestMethod.DELETE)
-    public ResponseData deleteUser(@RequestBody Integer[] ids) throws Demo1Exception{
-    	Integer num = userService.deleteUser(ids);
+    public ResponseData deleteUser(@RequestBody MysqlIdsRequest request) throws Demo1Exception{
+    	Integer num = userService.deleteUser(request.getIds());
         LOGGER.info("执行删除用户信息操作，操作用户为[" + SecurityContextHolder.getContext().getAuthentication().getName()
                 + "],系统时间为[" + DateUtil.getCurrentDateStr() + "]");
     	return ResponseUtil.createResponseData(true, "删除成功", num, 200);

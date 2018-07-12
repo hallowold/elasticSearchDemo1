@@ -83,7 +83,6 @@ public class RoleServiceImpl implements RoleService {
 		roleRightDao.deleteByRoleIdIn(new Integer[] {role.getId()});
 		Arrays.stream(ids).forEach(id -> {
 			SysRight sysRight = rightDao.findById(id).get();
-			System.out.println(sysRight.getName());
 			roleRightDao.save(new SysRoleRight(role.getId(), role, sysRight.getId(), sysRight, new Date()));
 		});
 	}

@@ -38,6 +38,8 @@ public class RightServiceImpl implements RightService {
 	 */
 	@Override
 	public void addRight(SysRight right) throws Exception{
+		System.out.println("----");
+		System.out.println(right);
 		rightDao.save(right);
 	}
 
