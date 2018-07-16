@@ -112,7 +112,7 @@ public class UserServiceImpl implements UserService {
 	 * 
 	 * @param 	id 	    id
 	 * @throws Demo1Exception 查询结果为空时抛出Demo1Exception(StaticValues.SEARCH)
-	 * @return User 	用户实体
+	 * @return SysUser 	用户实体
 	 */
 	@Override
 	public SysUser findById(Integer id) throws Demo1Exception{
@@ -128,7 +128,7 @@ public class UserServiceImpl implements UserService {
 	 *
 	 * @param 	loginName 	登录名
 	 * @throws Demo1Exception 查到空值时抛出Demo1Exception(StaticValues.SEARCH)
-	 * @return User 	用户实体
+	 * @return SysUser 	用户实体
 	 */
 	@Override
 	public SysUser findByLoginName(String loginName) throws Demo1Exception{
@@ -143,7 +143,7 @@ public class UserServiceImpl implements UserService {
 	 * 通过登录名模糊匹配
 	 * 
 	 * @param 	loginName 	登录名
-	 * @return List<User> 	用户实体列表
+	 * @return List<SysUser> 	用户实体列表
 	 */
 	@Override
 	public List<SysUser> fuzzyFindByLoginName(String loginName) throws Demo1Exception{

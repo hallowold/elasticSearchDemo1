@@ -82,7 +82,7 @@ public class RightServiceImpl implements RightService {
 	 *
 	 * @param 	name 		权限名
 	 * @throws Demo1Exception 查出空集合时丢出自定义异常
-	 * @return 	List<Right> 	权限实体列表
+	 * @return 	List<SysRight> 	权限实体列表
 	 */
 	@Override
 	public List<SysRight> fuzzyFindByName(String name) throws Demo1Exception{
@@ -97,7 +97,7 @@ public class RightServiceImpl implements RightService {
 	 * 通过id查找权限
 	 * @param 	id 		id
 	 * @throws Demo1Exception    查询时丢出的异常，预计为无数据或链接中断
-	 * @return 	Right	权限实体
+	 * @return 	SysRight	权限实体
 	 */
 	@Override
 	public SysRight findById(Integer id) throws Demo1Exception{

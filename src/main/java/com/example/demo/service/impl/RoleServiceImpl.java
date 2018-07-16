@@ -129,7 +129,7 @@ public class RoleServiceImpl implements RoleService {
 	 * 
 	 * @param 	id 		id
 	 * @throw Exception 任何异常，特殊的，当查询结果为空，抛出Demo1Exception("StaticValues.SEARCH)
-	 * @return 	Role 	角色实体
+	 * @return 	SysRole 	角色实体
 	 */
 	@Override
 	public SysRole findById(Integer id) throws Exception{

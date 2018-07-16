@@ -3,7 +3,6 @@ package com.example.demo.service;
 import java.util.List;
 import java.util.Map;
 
-import com.example.demo.entity.Role;
 import com.example.demo.security.entity.SysRole;
 
 /**
@@ -39,7 +38,7 @@ public interface RoleService {
 	 * 通过id查找角色
 	 * 
 	 * @param 	id 		id
-	 * @return 	Role 	角色实体
+	 * @return 	SysRole 	角色实体
 	 */
 	SysRole findById(Integer id) throws Exception;
 	
@@ -48,7 +47,7 @@ public interface RoleService {
 	 * 
 	 * @param 	name 	角色名
 	 * @throws Exception 任何异常，特殊的，当查询结果集为空，抛出Demo1Exception(StaticValues.SEARCH)
-	 * @return 	List<Role>	角色实体列表
+	 * @return 	List<SysRole>	角色实体列表
 	 */
 	List<SysRole> fuzzyFindByName(String name) throws Exception;
 	

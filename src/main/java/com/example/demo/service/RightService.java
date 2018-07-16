@@ -48,7 +48,7 @@ public interface RightService {
 	 * 通过id查找权限
 	 * @param 	id 		id
 	 * @throws Demo1Exception    查询时丢出的异常，预计为无数据或链接中断
-	 * @return 	Right	权限实体
+	 * @return 	SysRight	权限实体
 	 */
 	SysRight findById(Integer id) throws Demo1Exception;
 	
