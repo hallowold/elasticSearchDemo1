@@ -4,7 +4,7 @@ package com.example.demo.request;
  * @author : liuqitian
  * @date : 2018/7/11 15:43
  * @version : V1.2
- * @deprecated : 以json格式放置es ids数组参数
+ * 以json格式放置es ids数组参数
  */
 public class EsIdsRequest {
 

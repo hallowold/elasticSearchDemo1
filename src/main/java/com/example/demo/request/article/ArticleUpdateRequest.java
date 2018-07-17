@@ -1,7 +1,5 @@
 package com.example.demo.request.article;
 
-import com.example.demo.entity.User;
-
 import java.util.Date;
 
 /**

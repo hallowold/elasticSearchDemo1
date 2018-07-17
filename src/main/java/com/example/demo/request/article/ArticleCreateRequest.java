@@ -1,9 +1,5 @@
 package com.example.demo.request.article;
 
-import com.example.demo.entity.User;
-
-import java.util.Date;
-
 /**
  * 创建文章时使用的request对象
  * @author liuqitian	

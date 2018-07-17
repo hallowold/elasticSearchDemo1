@@ -27,6 +27,6 @@ public class SwaggerConfig {
 	}
 
 	private ApiInfo apiInfo() {
-		return new ApiInfoBuilder().title("Spring Boot中使用Swagger构建Rest Api").version("1.0").build();
+		return new ApiInfoBuilder().title("Spring Boot中使用Swagger构建Rest Api").version("1.2").build();
 	}
 }

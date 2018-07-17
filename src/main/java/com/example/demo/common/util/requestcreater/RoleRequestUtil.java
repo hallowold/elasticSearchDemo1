@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.example.demo.entity.Role;
 import com.example.demo.request.role.RoleCreateRequest;
 import com.example.demo.request.role.RoleUpdateRequest;
 import com.example.demo.security.entity.SysRole;
@@ -21,7 +20,7 @@ public class RoleRequestUtil {
 	
 	/**
 	 * 将RoleCreateRequest转化为Map<String, Object>
-	 * 		"role"对应角色实体，"rightIds"对应权限id数组
+	 * 		"entity"对应角色实体，"rightIds"对应权限id数组
 	 * @param 	request
 	 * @return	Map<String, Object>
 	 */

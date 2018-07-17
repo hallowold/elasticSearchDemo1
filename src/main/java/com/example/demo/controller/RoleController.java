@@ -2,28 +2,22 @@ package com.example.demo.controller;
 
 import com.example.demo.common.config.StaticValues;
 import com.example.demo.common.util.DateUtil;
-import com.example.demo.request.MysqlIdsRequest;
+import com.example.demo.common.util.ResponseUtil;
+import com.example.demo.common.util.requestcreater.RoleRequestUtil;
+import com.example.demo.request.IntegerRequest;
+import com.example.demo.request.role.RoleCreateRequest;
+import com.example.demo.request.role.RoleUpdateRequest;
+import com.example.demo.response.ResponseData;
 import com.example.demo.security.entity.SysRole;
+import com.example.demo.service.RoleService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
-
-import com.example.demo.common.util.ResponseUtil;
-import com.example.demo.common.util.requestcreater.RoleRequestUtil;
-import com.example.demo.request.role.RoleCreateRequest;
-import com.example.demo.request.role.RoleUpdateRequest;
-import com.example.demo.response.ResponseData;
-import com.example.demo.service.RoleService;
-
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * 角色控制器
@@ -57,7 +51,7 @@ public class RoleController{
      */
     @ApiOperation(value="批量删除角色信息", notes = "批量删除角色信息")
     @RequestMapping(value = "/roles",method = RequestMethod.DELETE)
-    public ResponseData deleteRole(@RequestBody MysqlIdsRequest request) throws Exception{
+    public ResponseData deleteRole(@RequestBody IntegerRequest request) throws Exception{
         Integer num = roleService.deleteRole(request.getIds());
         LOGGER.info("执行删除角色信息操作，操作用户为[" + SecurityContextHolder.getContext().getAuthentication().getName()
                 + "],系统时间为[" + DateUtil.getCurrentDateStr() + "]");

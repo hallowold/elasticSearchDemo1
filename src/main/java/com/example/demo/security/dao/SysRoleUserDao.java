@@ -9,7 +9,7 @@ import java.util.List;
  * @author : liuqitian
  * @date : 2018/7/6 10:55
  * @version : V1.1
- * @deprecated : 用户角色关系dao
+ * 用户角色关系dao
  */
 public interface SysRoleUserDao extends JpaRepository<SysRoleUser, Integer> {
 

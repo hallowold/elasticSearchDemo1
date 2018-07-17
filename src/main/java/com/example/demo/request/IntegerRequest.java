@@ -4,11 +4,21 @@ package com.example.demo.request;
  * @author : liuqitian
  * @date : 2018/7/11 15:43
  * @version : V1.2
- * @deprecated : 以json格式放置mysql ids数组参数
+ * 以json格式放置Integer格式和Integer[]格式的信息
  */
-public class MysqlIdsRequest {
+public class IntegerRequest {
+
+    private Integer id;
 
     private Integer[] ids;
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
     public Integer[] getIds() {
         return ids;

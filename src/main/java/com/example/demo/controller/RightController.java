@@ -2,28 +2,22 @@ package com.example.demo.controller;
 
 import com.example.demo.common.config.StaticValues;
 import com.example.demo.common.util.DateUtil;
-import com.example.demo.request.MysqlIdsRequest;
+import com.example.demo.common.util.ResponseUtil;
+import com.example.demo.common.util.requestcreater.RightRequestUtil;
+import com.example.demo.request.IntegerRequest;
+import com.example.demo.request.right.RightCreateRequest;
+import com.example.demo.request.right.RightUpdateRequest;
+import com.example.demo.response.ResponseData;
 import com.example.demo.security.entity.SysRight;
+import com.example.demo.service.RightService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
-
-import com.example.demo.common.util.ResponseUtil;
-import com.example.demo.common.util.requestcreater.RightRequestUtil;
-import com.example.demo.request.right.RightCreateRequest;
-import com.example.demo.request.right.RightUpdateRequest;
-import com.example.demo.response.ResponseData;
-import com.example.demo.service.RightService;
-
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * 权限控制器
@@ -62,7 +56,7 @@ public class RightController{
      */
     @ApiOperation(value="批量删除权限信息", notes = "批量删除权限信息")
     @RequestMapping(value = "/rights",method = RequestMethod.DELETE)
-    public ResponseData deleteRight(@RequestBody MysqlIdsRequest request) throws Exception{
+    public ResponseData deleteRight(@RequestBody IntegerRequest request) throws Exception{
         Integer num = rightService.deleteRight(request.getIds());
         LOGGER.info("执行删除权限信息操作，操作用户为[" + SecurityContextHolder.getContext().getAuthentication().getName()
                 + "],系统时间为[" + DateUtil.getCurrentDateStr() + "]");

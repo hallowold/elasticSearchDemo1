@@ -14,7 +14,7 @@ import java.util.List;
  * @author  liuqitian
  * @date : 2018/7/5 11:44
  * @version  V1.1 因引入spring security统一管理权限，代码重构
- * @deprecated : 本类用于将article相关的request对象转化实体
+ * 本类用于将article相关的request对象转化实体
  */
 public class ArticleRequestUtil {
 	

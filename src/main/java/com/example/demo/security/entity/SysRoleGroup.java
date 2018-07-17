@@ -6,11 +6,11 @@ import javax.persistence.*;
  * @author : liuqitian
  * @date : 2018/7/6 10:52
  * @version : V1.1
- * 系统用户和角色的关系表
+ * 系统用户和机构的关系表
  */
 @Entity
-@Table(name="s_role_user")
-public class SysRoleUser {
+@Table(name="s_role_group")
+public class SysRoleGroup {
 
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
@@ -31,25 +31,25 @@ public class SysRoleUser {
     private Integer roleId;
 
     /**
-     * 用户实体
+     * 机构实体
      */
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "userId", referencedColumnName = "id")
-    private SysUser sUser;
+    @JoinColumn(name = "groupId", referencedColumnName = "id")
+    private SysGroup sysGroup;
 
     /**
-     *  用户id(外键)
+     *  机构id(外键)
      */
     @Column(insertable=false, updatable=false)
-    private Integer userId;
+    private Integer groupId;
 
-    public SysRoleUser() {}
+    public SysRoleGroup() {}
 
-    public SysRoleUser(SysRole sRole, Integer roleId, SysUser sUser, Integer userId) {
+    public SysRoleGroup(SysRole sRole, Integer roleId, SysGroup sysGroup, Integer groupId) {
         this.sRole = sRole;
         this.roleId = roleId;
-        this.sUser = sUser;
-        this.userId = userId;
+        this.sysGroup = sysGroup;
+        this.groupId = groupId;
     }
 
     public int getId() {
@@ -76,19 +76,19 @@ public class SysRoleUser {
         this.roleId = roleId;
     }
 
-    public SysUser getsUser() {
-        return sUser;
+    public SysGroup getSysGroup() {
+        return sysGroup;
     }
 
-    public void setsUser(SysUser sUser) {
-        this.sUser = sUser;
+    public void setSysGroup(SysGroup sysGroup) {
+        this.sysGroup = sysGroup;
     }
 
-    public Integer getUserId() {
-        return userId;
+    public Integer getGroupId() {
+        return groupId;
     }
 
-    public void setUserId(Integer userId) {
-        this.userId = userId;
+    public void setGroupId(Integer groupId) {
+        this.groupId = groupId;
     }
 }

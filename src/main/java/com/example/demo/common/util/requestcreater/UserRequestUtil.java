@@ -2,7 +2,6 @@ package com.example.demo.common.util.requestcreater;
 
 import java.util.*;
 
-import com.example.demo.entity.User;
 import com.example.demo.request.user.UserCreateRequest;
 import com.example.demo.request.user.UserUpdateRequest;
 import com.example.demo.security.entity.SysUser;

@@ -1,35 +1,29 @@
 package com.example.demo.controller;
 
 
-import java.io.UnsupportedEncodingException;
-import java.security.NoSuchAlgorithmException;
-import java.util.List;
-
 import com.example.demo.common.config.StaticValues;
 import com.example.demo.common.util.DateUtil;
-import com.example.demo.request.MysqlIdsRequest;
+import com.example.demo.common.util.ResponseUtil;
+import com.example.demo.common.util.requestcreater.UserRequestUtil;
+import com.example.demo.exception.Demo1Exception;
+import com.example.demo.request.IntegerRequest;
+import com.example.demo.request.user.UserCreateRequest;
+import com.example.demo.request.user.UserUpdateRequest;
+import com.example.demo.response.ResponseData;
 import com.example.demo.security.entity.SysUser;
+import com.example.demo.service.UserService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import com.example.demo.common.util.ResponseUtil;
-import com.example.demo.common.util.requestcreater.UserRequestUtil;
-import com.example.demo.exception.Demo1Exception;
-import com.example.demo.request.user.UserCreateRequest;
-import com.example.demo.request.user.UserUpdateRequest;
-import com.example.demo.response.ResponseData;
-import com.example.demo.service.UserService;
-
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
+import java.io.UnsupportedEncodingException;
+import java.security.NoSuchAlgorithmException;
+import java.util.List;
 
 /**
  * 用户控制器
@@ -70,7 +64,7 @@ public class UserController {
      */
     @ApiOperation(value="批量删除用户信息", notes = "批量删除用户信息")
     @RequestMapping(value = "/users",method = RequestMethod.DELETE)
-    public ResponseData deleteUser(@RequestBody MysqlIdsRequest request) throws Demo1Exception{
+    public ResponseData deleteUser(@RequestBody IntegerRequest request) throws Demo1Exception{
     	Integer num = userService.deleteUser(request.getIds());
         LOGGER.info("执行删除用户信息操作，操作用户为[" + SecurityContextHolder.getContext().getAuthentication().getName()
                 + "],系统时间为[" + DateUtil.getCurrentDateStr() + "]");

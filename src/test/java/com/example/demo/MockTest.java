@@ -2,9 +2,11 @@ package com.example.demo;
 
 import com.example.demo.dao.ArticleDAO;
 import com.example.demo.entity.Article;
+import com.example.demo.security.dao.SysGroupDao;
 import com.example.demo.security.dao.SysRightDao;
 import com.example.demo.security.dao.SysRoleDao;
 import com.example.demo.security.dao.SysUserDao;
+import com.example.demo.security.entity.SysGroup;
 import com.example.demo.security.entity.SysRight;
 import com.example.demo.security.entity.SysRole;
 import com.example.demo.security.entity.SysUser;
@@ -24,8 +26,6 @@ import org.springframework.security.web.authentication.WebAuthenticationDetails;
 import org.springframework.security.web.authentication.preauth.PreAuthenticatedAuthenticationToken;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.request.RequestContextHolder;
@@ -38,13 +38,13 @@ import java.util.List;
 import java.util.Map;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 /**
  * @author : liuqitian
  * @date : 2018/7/10 17:37
  * @version : V1.2
- * @deprecated : 自动化测试用例，执行文件即可
+ * 自动化测试用例，执行文件即可
  * 注意执行顺序是以方法名排序，统一使用testAB_C()的形式
  *  A是模块编号按顺序排即可，B是模块内方法的执行顺序，C用来指示方法名,不引起歧义即可，使用驼峰规则。
  *  AB均为0-1-a-z-A-Z的顺序
@@ -180,6 +180,9 @@ public class MockTest {
                 .andReturn();// 返回执行请求的结果
     }
 
+
+
+
     /**
      * 新增权限，[POST,/right/right]
      */
@@ -207,7 +210,7 @@ public class MockTest {
         mockMvc.perform(
                 //url传中文要记得指定字符集utf-8
                 get("/right/rights/name/{name}", "自动测试_doNotUseIt_name")
-                    .characterEncoding("UTF-8"))
+                        .characterEncoding("UTF-8"))
                 .andExpect(status().isOk())
                 .andReturn();// 返回执行请求的结果
     }
@@ -285,9 +288,9 @@ public class MockTest {
     @Test
     public void test21_fuzzyFindRolesByName() throws Exception{
         mockMvc.perform(
-                    //url传中文要记得指定字符集utf-8
-                    get("/role/roles/name/{name}", "自动测试_doNotUseIt")
-                    .characterEncoding("UTF-8"))
+                //url传中文要记得指定字符集utf-8
+                get("/role/roles/name/{name}", "自动测试_doNotUseIt")
+                        .characterEncoding("UTF-8"))
                 .andExpect(status().isOk())
                 .andReturn();// 返回执行请求的结果
     }
@@ -344,7 +347,7 @@ public class MockTest {
      * 新增用户，[POST,/user/user]
      */
     @Test
-    public void test30_AdUser() throws Exception{
+    public void test30_AddUser() throws Exception{
         Map<String, Object> map = new HashMap<>();
         map.put("loginName", "自动测试_loginName_doNotUseIt");
         map.put("showName", "自动测试_showName_doNotUseIt");
@@ -363,12 +366,9 @@ public class MockTest {
      */
     @Test
     public void test31_fuzzyFindUsersByLoginName() throws Exception{
-        Map<String, Object> map = new HashMap<>();
-
         mockMvc.perform(
                 //url传中文要记得指定字符集utf-8
                 get("/user/users/loginName/{loginName}", "自动测试_loginName_doNotUseIt")
-                        .contentType(MediaType.APPLICATION_JSON).content(JSONObject.toJSONString(map))
                         .characterEncoding("UTF-8"))
                 .andExpect(status().isOk())
                 .andReturn();// 返回执行请求的结果
@@ -401,7 +401,7 @@ public class MockTest {
      * 删除角色，[DELETE,/user/users]
      */
     @Test
-    public void test24_deleteUsers() throws Exception {
+    public void test33_deleteUsers() throws Exception {
         Map<String, Object> map = new HashMap<>();
         List<SysUser> roles = wac.getBean(SysUserDao.class)
                 .findByLoginNameLike("%自动测试_loginName_doNotUseIt%");
@@ -419,10 +419,103 @@ public class MockTest {
      * 获取所有权限，[GET,/user/users]
      */
     @Test
-    public void test25_getAllUsers() throws Exception {
+    public void test34_getAllUsers() throws Exception {
         mockMvc.perform(get("/user/users"))
                 .andExpect(status().isOk())
                 .andReturn();// 返回执行请求的结果
     }
 
+    /**
+     * 新增机构，[POST,/group/group]
+     */
+    @Test
+    public void test40_AddGroup() throws Exception{
+        Map<String, Object> map = new HashMap<>();
+        map.put("name", "自动测试_name_doNotUseIt");
+        map.put("roleIds", new Integer[]{1,2});
+
+        mockMvc.perform(post("/group/group")
+                .contentType(MediaType.APPLICATION_JSON).content(JSONObject.toJSONString(map)))
+                .andExpect(status().isOk())
+                .andReturn();
+    }
+
+    /**
+     * 根据登录名模糊查询用户，[GET,/group/groups/name/{name}]
+     */
+    @Test
+    public void test41_fuzzyFindGroupByName() throws Exception{
+        mockMvc.perform(
+                //url传中文要记得指定字符集utf-8
+                get("/group/groups/name/{name}", "自动测试_name_doNotUseIt")
+                        .characterEncoding("UTF-8"))
+                .andExpect(status().isOk())
+                .andReturn();// 返回执行请求的结果
+    }
+
+    /**
+     * 获取指定机构默认的角色，[GET,/group/group/id/roles]
+     */
+    @Test
+    public void test42_getDefaultRolesByGroup() throws Exception {
+        Map<String, Object> map = new HashMap<>();
+        List<SysGroup> sysGroups = wac.getBean(SysGroupDao.class)
+                .findByNameLike("自动测试_name_doNotUseIt");
+        SysGroup originEntity = sysGroups.get(0);
+
+        map.put("id", originEntity.getId());
+
+        System.out.println(mockMvc.perform(get("/group/group/id/roles")
+                .contentType(MediaType.APPLICATION_JSON).content(JSONObject.toJSONString(map)))
+                .andExpect(status().isOk())
+                .andReturn().getResponse().getContentAsString());// 返回执行请求的结果
+    }
+
+    /**
+     * 修改机构，[PUT,/group/group]
+     */
+    @Test
+    public void test43_updateGroup() throws Exception {
+        Map<String, Object> map = new HashMap<>();
+        List<SysGroup> sysGroups = wac.getBean(SysGroupDao.class)
+                .findByNameLike("自动测试_name_doNotUseIt");
+        SysGroup originEntity = sysGroups.get(0);
+
+        map.put("id", originEntity.getId());
+        map.put("name", originEntity.getName()+ "_changed");
+        map.put("roleIds", new Integer[] {1});
+
+        mockMvc.perform(put("/group/group")
+                .contentType(MediaType.APPLICATION_JSON).content(JSONObject.toJSONString(map)))
+                .andExpect(status().isOk())
+                .andReturn();// 返回执行请求的结果
+    }
+
+    /**
+     * 删除机构，[DELETE,/group/groups]
+     */
+    @Test
+    public void test44_deleteGroups() throws Exception {
+        Map<String, Object> map = new HashMap<>();
+        List<SysGroup> groups = wac.getBean(SysGroupDao.class)
+                .findByNameLike("%自动测试_name_doNotUseIt%");
+        List<Integer> idsList = new ArrayList<>();
+        groups.forEach(sysRole -> idsList.add(sysRole.getId()));
+        map.put("ids", idsList.toArray(new Integer[]{}));
+
+        mockMvc.perform(delete("/group/groups")
+                .contentType(MediaType.APPLICATION_JSON).content(JSONObject.toJSONString(map)))
+                .andExpect(status().isOk())
+                .andReturn();// 返回执行请求的结果
+    }
+
+    /**
+     * 获取所有机构，[GET,/group/groups]
+     */
+    @Test
+    public void test45_getAllGroups() throws Exception {
+        mockMvc.perform(get("/group/groups"))
+                .andExpect(status().isOk())
+                .andReturn();// 返回执行请求的结果
+    }
 }
