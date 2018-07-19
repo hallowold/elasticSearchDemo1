@@ -1,5 +1,12 @@
 package com.example.demo.request.right;
 
+import com.example.demo.common.config.validator.MethodType;
+import com.example.demo.common.config.ValidationStaticValues;
+
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
+
 /**
  * 创建权限时使用的request对象
  * @author liuqitian
@@ -12,16 +19,25 @@ public class RightCreateRequest {
 	/**
 	 * 权限名称
 	 */
+	@NotNull
+	@Pattern(regexp = ValidationStaticValues.REGULAR_NAME,
+			message = ValidationStaticValues.START_FLAG + ValidationStaticValues.VALID_NAME)
+	@Size(max = 256, message = ValidationStaticValues.START_FLAG + ValidationStaticValues.VALID_NAME)
 	private String name;
 
 	/**
 	 * 权限url
 	 */
+	@NotNull
+	@Pattern(regexp = ValidationStaticValues.REGULAR_REST_URL,
+			message = ValidationStaticValues.START_FLAG + ValidationStaticValues.VALID_REST_URL)
 	private String rightUrl;
 
 	/**
 	 * 对应的请求类型
 	 */
+	@NotNull
+	@MethodType()
 	private String methodType;
 
 	/**
@@ -87,15 +103,4 @@ public class RightCreateRequest {
 		this.methodPath = methodPath;
 	}
 
-	@Override
-	public String toString() {
-		return "RightCreateRequest{" +
-				"name='" + name + '\'' +
-				", rightUrl='" + rightUrl + '\'' +
-				", methodType='" + methodType + '\'' +
-				", remark='" + remark + '\'' +
-				", methodName='" + methodName + '\'' +
-				", methodPath='" + methodPath + '\'' +
-				'}';
-	}
 }

@@ -13,7 +13,7 @@ import javax.persistence.*;
 public class SysRole {
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
-    @Column (name="id",length=10)
+    @Column (name="id",length = 9)
     private int id;
 
     /**
@@ -22,7 +22,7 @@ public class SysRole {
      * @Version: V1.0
      * @Description: 角色名称
      */
-    @Column(name="name",length=100)
+    @Column(name="name",length = 256)
     private String name;
 
     public int getId() {

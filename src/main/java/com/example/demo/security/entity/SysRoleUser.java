@@ -14,7 +14,7 @@ public class SysRoleUser {
 
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
-    @Column (name="id",length=10)
+    @Column (name="id",length = 9)
     private int id;
 
     /**
@@ -27,7 +27,7 @@ public class SysRoleUser {
     /**
      *  角色id(外键)
      */
-    @Column(insertable=false, updatable=false)
+    @Column(length = 9, insertable=false, updatable=false)
     private Integer roleId;
 
     /**
@@ -40,7 +40,7 @@ public class SysRoleUser {
     /**
      *  用户id(外键)
      */
-    @Column(insertable=false, updatable=false)
+    @Column(length = 9, insertable=false, updatable=false)
     private Integer userId;
 
     public SysRoleUser() {}

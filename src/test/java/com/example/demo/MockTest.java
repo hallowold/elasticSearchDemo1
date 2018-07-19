@@ -94,11 +94,11 @@ public class MockTest {
     @Test
     public void test00_AddArticle() throws Exception {
         Map<String, Object> map = new HashMap<>();
-        map.put("name", "articleAutoTest_doNotUseIt");
-        mockMvc.perform(post("/article/article")
+        map.put("name", "articleAutoTest_doNotUseIt>?<,");
+        System.out.println(mockMvc.perform(post("/article/article")
                 .contentType(MediaType.APPLICATION_JSON).content(JSONObject.toJSONString(map)))
                 .andExpect(status().isOk())
-                .andReturn();// 返回执行请求的结果
+                .andReturn().getResponse().getContentAsString());// 返回执行请求的结果
     }
 
     /**
@@ -133,13 +133,13 @@ public class MockTest {
         Map<String, Object> map = new HashMap<>();
         Article article = wac.getBean(ArticleDAO.class)
                 .findByNameAndAuthorLoginName("articleAutoTest_doNotUseIt", "ADMIN").get(0);
-        map.put("id", article.getId());
+        map.put("id", "1234567890123456781");
         map.put("name", "articleAutoTest_doNotUseIt_BeChanged");
         map.put("author", article.getAuthor());
-        mockMvc.perform(put("/article/article")
+        System.out.println(mockMvc.perform(put("/article/article")
                 .contentType(MediaType.APPLICATION_JSON).content(JSONObject.toJSONString(map)))
                 .andExpect(status().isOk())
-                .andReturn();// 返回执行请求的结果
+                .andReturn().getResponse().getContentAsString());// 返回执行请求的结果
     }
 
     /**
@@ -180,9 +180,6 @@ public class MockTest {
                 .andReturn();// 返回执行请求的结果
     }
 
-
-
-
     /**
      * 新增权限，[POST,/right/right]
      */
@@ -194,12 +191,13 @@ public class MockTest {
         map.put("methodType", "POST");
         map.put("name", "自动测试_doNotUseIt_name");
         map.put("remark","参数说明");
+        //a-zA-z{}/
         map.put("rightUrl", "/test/test");
 
-        mockMvc.perform(post("/right/right")
+        System.out.println(mockMvc.perform(post("/right/right")
                 .contentType(MediaType.APPLICATION_JSON).content(JSONObject.toJSONString(map)))
                 .andExpect(status().isOk())
-                .andReturn();// 返回执行请求的结果
+                .andReturn().getResponse().getContentAsString());// 返回执行请求的结果
     }
 
     /**
@@ -276,10 +274,10 @@ public class MockTest {
         map.put("name", "自动测试_doNotUseIt");
         map.put("rightIds", new Integer[]{1,2,3,4,5,6,7});
 
-        mockMvc.perform(post("/role/role")
+        System.out.println(mockMvc.perform(post("/role/role")
                 .contentType(MediaType.APPLICATION_JSON).content(JSONObject.toJSONString(map)))
                 .andExpect(status().isOk())
-                .andReturn();// 返回执行请求的结果
+                .andReturn().getResponse().getContentAsString());// 返回执行请求的结果
     }
 
     /**

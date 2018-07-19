@@ -17,7 +17,11 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 
 /**
  * 权限控制器
@@ -27,6 +31,7 @@ import org.springframework.web.bind.annotation.*;
 @Api(value="/testdemo1", tags="权限接口模块")
 @RestController
 @RequestMapping("/right")
+@Validated
 public class RightController{
 
     private static final Log LOGGER = LogFactory.getLog(RightController.class);
@@ -41,8 +46,7 @@ public class RightController{
      */
     @ApiOperation(value="添加权限信息", notes = "添加权限信息")
     @RequestMapping(value = "/right",method = RequestMethod.POST)  
-    public ResponseData addRight(@RequestBody RightCreateRequest right) throws Exception{
-        System.out.println(right);
+    public ResponseData addRight(@RequestBody @Valid RightCreateRequest right, BindingResult bindResult) throws Exception{
     	rightService.addRight(RightRequestUtil.createRightByCreateRequest(right));
         LOGGER.info("执行新增权限信息操作，操作用户为[" + SecurityContextHolder.getContext().getAuthentication().getName()
                 + "],系统时间为[" + DateUtil.getCurrentDateStr() + "]");

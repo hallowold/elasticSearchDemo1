@@ -1,17 +1,13 @@
 package com.example.demo.exception;
 
-import java.net.BindException;
-import java.util.NoSuchElementException;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import com.example.demo.common.config.StaticValues;
+import com.example.demo.common.config.ValidationStaticValues;
+import com.example.demo.common.util.ResponseUtil;
+import com.example.demo.response.ResponseData;
 import org.springframework.beans.ConversionNotSupportedException;
 import org.springframework.beans.TypeMismatchException;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.http.converter.HttpMessageNotWritableException;
-import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.HttpMediaTypeNotAcceptableException;
 import org.springframework.web.HttpMediaTypeNotSupportedException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
@@ -24,8 +20,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.support.MissingServletRequestPartException;
 import org.springframework.web.servlet.NoHandlerFoundException;
 
-import com.example.demo.common.util.ResponseUtil;
-import com.example.demo.response.ResponseData;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.validation.ConstraintViolationException;
+import java.net.BindException;
+import java.util.NoSuchElementException;
 
 /**
  * 异常统一捕获处理
@@ -67,10 +66,16 @@ public class GlobalExceptionHandler {
 	@ResponseBody
 	public ResponseData defaultErrorHandler(HttpServletRequest req, Exception ex) throws Exception {
 		ResponseData res = new ResponseData();
+		String message = ex.getMessage();
 		int statusCode = 0;
 
 		//判断异常类型
-        if (ex instanceof HttpRequestMethodNotSupportedException) {
+		if (ex instanceof ConstraintViolationException) {
+			//参数校验失败
+			message = message.substring(message.lastIndexOf(ValidationStaticValues.START_FLAG)+ 10);
+		} else if (ex instanceof HttpMessageNotReadableException) {
+			message = "数据格式异常，请检查";
+		} else if (ex instanceof HttpRequestMethodNotSupportedException) {
         	//405
             statusCode = HttpServletResponse.SC_METHOD_NOT_ALLOWED;
         } else if (ex instanceof HttpMediaTypeNotSupportedException) {
@@ -106,12 +111,12 @@ public class GlobalExceptionHandler {
         	//500
             statusCode = HttpServletResponse.SC_INTERNAL_SERVER_ERROR;
             return ResponseUtil.createResponseData(false, "未找到指定数据", null, statusCode);
-        }else {
+        } else {
         	//非已判断出的异常，需要跟进
         	statusCode = 0;
         }
 
-	    res = ResponseUtil.createResponseData(false, ex.getMessage(), null, statusCode);
+	    res = ResponseUtil.createResponseData(false, message, null, statusCode);
 		return res;
 	}
 

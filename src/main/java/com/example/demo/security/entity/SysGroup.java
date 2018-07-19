@@ -13,13 +13,13 @@ public class SysGroup {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", unique = true, nullable = false)
+    @Column(name = "id", length = 9, unique = true, nullable = false)
     private Integer id;
 
     /**
      * 机构名
      */
-    @Column(name = "name", length = 120)
+    @Column(name = "name", length = 256)
     private String name;
 
     /**
@@ -32,7 +32,7 @@ public class SysGroup {
     /**
      * 父机构id(外键)
      */
-    @Column(insertable=false, updatable=false)
+    @Column(length = 9, insertable=false, updatable=false)
     private Integer pId;
 
     public Integer getId() {

@@ -19,8 +19,11 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
@@ -33,6 +36,7 @@ import java.util.List;
 @Api(value="/testdemo1", tags="用户接口模块")
 @RestController
 @RequestMapping("/user")
+@Validated
 public class UserController {
 
     private static final Log LOGGER = LogFactory.getLog(UserController.class);
@@ -47,7 +51,7 @@ public class UserController {
      */
     @ApiOperation(value="添加用户信息", notes = "添加用户信息")
     @RequestMapping(value = "/user",method = RequestMethod.POST)  
-    public ResponseData addUser(@RequestBody UserCreateRequest user) throws Demo1Exception {
+    public ResponseData addUser(@RequestBody @Valid UserCreateRequest user, BindingResult bindResult) throws Demo1Exception {
     	ResponseData res = new ResponseData();
     	boolean ifSuccess = false;
     	ifSuccess = userService.addUser(UserRequestUtil.createUserByCreateRequest(user));
@@ -79,7 +83,7 @@ public class UserController {
      */
     @ApiOperation(value="修改用户信息", notes = "修改用户信息")
     @RequestMapping(value = "/user",method = RequestMethod.PUT)  
-    public ResponseData updateUser(@RequestBody UserUpdateRequest user) throws Demo1Exception, UnsupportedEncodingException, NoSuchAlgorithmException {
+    public ResponseData updateUser(@RequestBody @Valid UserUpdateRequest user, BindingResult bindResult){
     	userService.updateUser(UserRequestUtil.createUserByUpdateRequest(user));
         LOGGER.info("执行修改用户信息操作，操作用户为[" + SecurityContextHolder.getContext().getAuthentication().getName()
                 + "],系统时间为[" + DateUtil.getCurrentDateStr() + "]");

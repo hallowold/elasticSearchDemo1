@@ -1,6 +1,7 @@
 package com.example.demo.security.entity;
 
 import javax.persistence.*;
+import javax.validation.constraints.Size;
 
 /**
  * @Auther: liuqitian
@@ -13,7 +14,7 @@ import javax.persistence.*;
 public class SysRight {
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
-    @Column (name="id",length=10)
+    @Column (name="id",length = 9)
     private int id;
 
     /**
@@ -22,7 +23,7 @@ public class SysRight {
      * @Version: V1.0
      * @Description: 权限名称
      */
-    @Column(name="name",length=400)
+    @Column(name="name",length=256)
     private String name;
 
     /**
@@ -31,7 +32,7 @@ public class SysRight {
      * @Version: V1.0
      * @Description: 权限url
      */
-    @Column(name="rightUrl",length=1000)
+    @Column(name="rightUrl",length = 256)
     private String rightUrl;
 
     /**
@@ -40,7 +41,7 @@ public class SysRight {
      * @Version: V1.0
      * @Description: 备注信息
      */
-    @Column(name="remark",length=500)
+    @Column(name="remark",length = 500)
     private String remark;
 
     /**
@@ -49,7 +50,7 @@ public class SysRight {
      * @Version: V1.0
      * @Description: 所对应的方法名
      */
-    @Column(name="methodName",length=400)
+    @Column(name="methodName",length = 256)
     private String methodName;
 
     /**
@@ -58,7 +59,7 @@ public class SysRight {
      * @Version: V1.0
      * @Description: 所对应的包路径
      */
-    @Column(name="methodPath",length=1000)
+    @Column(name="methodPath",length = 256)
     private String methodPath;
 
     /**
@@ -67,7 +68,7 @@ public class SysRight {
      * @Version: V1.0
      * @Description: 对应的请求类型
      */
-    @Column(name="methodType", length = 50)
+    @Column(name="methodType", length = 256)
     private String methodType;
 
     public int getId() {

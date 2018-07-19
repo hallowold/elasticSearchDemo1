@@ -12,6 +12,8 @@ import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.elasticsearch.core.aggregation.AggregatedPage;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -30,6 +32,8 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 
+import javax.validation.Valid;
+
 /**
  * 文章控制器
  * @author liuqitian
@@ -38,6 +42,7 @@ import io.swagger.annotations.ApiParam;
 @Api(value="/testdemo1", tags="文章接口模块")
 @RestController
 @RequestMapping("/article")
+@Validated
 public class ArticleController{
 
     private static final Log LOGGER = LogFactory.getLog(ArticleController.class);
@@ -51,7 +56,7 @@ public class ArticleController{
      */
     @ApiOperation(value="添加文章信息", notes = "添加文章信息")
     @RequestMapping(value = "/article",method = RequestMethod.POST)
-    public ResponseData addArticle(@RequestBody ArticleCreateRequest article) throws Exception {
+    public ResponseData addArticle(@RequestBody @Valid ArticleCreateRequest article, BindingResult bindResult) throws Exception {
     	articleService.addArticle(ArticleRequestUtil.createArticleByCreateRequest(article));
         LOGGER.info("执行新增文章信息操作，操作用户为[" + SecurityContextHolder.getContext().getAuthentication().getName()
                 + "],系统时间为[" + DateUtil.getCurrentDateStr() + "]");
@@ -76,7 +81,8 @@ public class ArticleController{
      */
     @ApiOperation(value="修改文章信息", notes = "修改文章信息")
     @RequestMapping(value = "/article",method = RequestMethod.PUT)  
-    public ResponseData updateArticle(@RequestBody ArticleUpdateRequest article) throws Exception {
+    public ResponseData updateArticle(@RequestBody @Valid ArticleUpdateRequest article, BindingResult bindResult) throws Exception {
+        System.out.println(article.getId());
     	articleService.updateArticle(ArticleRequestUtil.createArticleByUpdateRequest(article));
         LOGGER.info("执行修改文章信息操作，操作用户为[" + SecurityContextHolder.getContext().getAuthentication().getName()
                 + "],系统时间为[" + DateUtil.getCurrentDateStr() + "]");

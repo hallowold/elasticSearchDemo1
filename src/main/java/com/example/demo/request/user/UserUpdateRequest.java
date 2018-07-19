@@ -1,5 +1,7 @@
 package com.example.demo.request.user;
 
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.util.Date;
 
 /**
@@ -13,16 +15,19 @@ public class UserUpdateRequest {
 	/**
 	 * 用户id
 	 */
+	@NotNull
 	private Integer id;
 
 	/**
 	 * 用户登录名
 	 */
+	@NotNull
 	private String loginName;
 
 	/**
 	 * 用户展示名
 	 */
+	@NotNull
 	private String showName;
 
 	/**
@@ -33,6 +38,8 @@ public class UserUpdateRequest {
 	/**
 	 * 用户密码
 	 */
+	@NotNull
+	@Size(min = 6, max = 20, message = "密码长度请设定在6~20位")
 	private String password;
 
 	/**

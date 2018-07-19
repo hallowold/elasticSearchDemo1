@@ -1,5 +1,12 @@
 package com.example.demo.request.user;
 
+import com.example.demo.common.config.ValidationStaticValues;
+import com.example.demo.common.config.validator.IntegerArray;
+
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
+
 /**
  * 创建用户时使用的request对象
  * @author liuqitian
@@ -11,11 +18,19 @@ public class UserCreateRequest {
 	/**
 	 * 用户登录名
 	 */
+	@NotNull
+	@Pattern(regexp = ValidationStaticValues.REGULAR_LOGINNAME,
+			message = ValidationStaticValues.START_FLAG + ValidationStaticValues.VALID_LOGINNAME)
+	@Size(min = 4, max = 256, message = ValidationStaticValues.START_FLAG + ValidationStaticValues.VALID_LOGINNAME)
 	private String loginName;
 
 	/**
 	 * 用户展示名
 	 */
+	@NotNull
+	@Pattern(regexp = ValidationStaticValues.REGULAR_NAME,
+			message = ValidationStaticValues.START_FLAG + ValidationStaticValues.VALID_NAME)
+	@Size(max = 256, message = ValidationStaticValues.START_FLAG + ValidationStaticValues.VALID_NAME)
 	private String showName;
 
 	/**
@@ -26,11 +41,16 @@ public class UserCreateRequest {
 	/**
 	 * 用户密码
 	 */
+	@NotNull
+	@Pattern(regexp = ValidationStaticValues.REGULAR_PASSWORD,
+			message = ValidationStaticValues.START_FLAG + ValidationStaticValues.VALID_PASSWORD)
+	@Size(min = 6, max = 20, message = ValidationStaticValues.VALID_PASSWORD)
 	private String password;
 
 	/**
 	 * 角色id数组
 	 */
+	@IntegerArray()
 	private Integer[] roleIds;
 
 	public String getLoginName() {

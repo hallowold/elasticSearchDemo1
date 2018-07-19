@@ -26,7 +26,7 @@ public class SysUser implements java.io.Serializable {
      * @Version: V1.0
      * @Description: 用户登录名
      */
-    @Column(name = "login_name", length = 120)
+    @Column(name = "login_name", length = 256)
     private String loginName;
 
     /**
@@ -35,7 +35,7 @@ public class SysUser implements java.io.Serializable {
      * @Version: V1.0
      * @Description: 用户展示名
      */
-    @Column(name = "show_name")
+    @Column(name = "show_name", length = 256)
     private String showName;
 
     /**
@@ -44,7 +44,7 @@ public class SysUser implements java.io.Serializable {
      * @Version: V1.0
      * @Description: 用户密码
      */
-    @Column(name = "password", length = 120)
+    @Column(name = "password", length = 50)
     private String password;
 
     /**
@@ -53,7 +53,7 @@ public class SysUser implements java.io.Serializable {
      * @Version: V1.0
      * @Description: 用户邮箱
      */
-    @Column(name = "email", length = 50)
+    @Column(name = "email", length = 256)
     private String email;
 
     /**
@@ -62,8 +62,8 @@ public class SysUser implements java.io.Serializable {
      * @Version: V1.0
      * @Description: 创建时间
      */
-    @Temporal(TemporalType.DATE)
-    @Column(name = "create_time", length = 10)
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "create_time")
     private Date createTime;
 
     /**
@@ -72,8 +72,8 @@ public class SysUser implements java.io.Serializable {
      * @Version: V1.1
      * @Description: 最后修改时间
      */
-    @Temporal(TemporalType.DATE)
-    @Column(name = "update_time", length = 10)
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "update_time")
     private Date updateTime;
 
     /**

@@ -19,8 +19,11 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 /**
@@ -31,6 +34,7 @@ import java.util.List;
 @Api(value="/testdemo1", tags="机构接口模块")
 @RestController
 @RequestMapping("/group")
+@Validated
 public class GroupController {
 
     private static final Log LOGGER = LogFactory.getLog(UserController.class);
@@ -44,7 +48,7 @@ public class GroupController {
      */
     @ApiOperation(value="添加文章信息", notes = "添加文章信息")
     @RequestMapping(value = "/group",method = RequestMethod.POST)
-    public ResponseData addArticle(@RequestBody SysGroupCreateRequest request) throws Exception {
+    public ResponseData addArticle(@RequestBody @Valid SysGroupCreateRequest request, BindingResult bindResult) throws Exception {
         sysGroupService.addGroup(GroupRequestUtil.createSysGroupByCreateRequest(request));
         LOGGER.info("执行新增机构信息操作，操作用户为[" + SecurityContextHolder.getContext().getAuthentication().getName()
                 + "],系统时间为[" + DateUtil.getCurrentDateStr() + "]");
@@ -71,7 +75,7 @@ public class GroupController {
      */
     @ApiOperation(value="修改机构信息", notes = "修改机构信息")
     @RequestMapping(value = "/group",method = RequestMethod.PUT)
-    public ResponseData updateRight(@RequestBody SysGroupUpdateRequest request) throws Exception{
+    public ResponseData updateRight(@RequestBody @Valid SysGroupUpdateRequest request, BindingResult bindResult) throws Exception{
         sysGroupService.updateGroup(GroupRequestUtil.createSysGroupByUpdateRequest(request));
         LOGGER.info("执行修改机构信息操作，操作用户为[" + SecurityContextHolder.getContext().getAuthentication().getName()
                 + "],系统时间为[" + DateUtil.getCurrentDateStr() + "]");

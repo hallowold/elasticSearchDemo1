@@ -1,7 +1,12 @@
 package com.example.demo.request.role;
 
+import com.example.demo.common.config.ValidationStaticValues;
+import com.example.demo.common.config.validator.IntegerArray;
 import com.example.demo.security.entity.SysUser;
 
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 import java.util.Date;
 
 /**
@@ -15,11 +20,16 @@ public class RoleCreateRequest {
 	/**
 	 * 角色名称
 	 */
+	@NotNull
+	@Pattern(regexp = ValidationStaticValues.REGULAR_NAME,
+			message = ValidationStaticValues.START_FLAG + ValidationStaticValues.VALID_NAME)
+	@Size(max = 256, message = ValidationStaticValues.START_FLAG + ValidationStaticValues.VALID_NAME)
 	private String name;
 
 	/**
 	 * 权限ids
 	 */
+	@IntegerArray()
 	private Integer[] rightIds;
 
 	public String getName() {

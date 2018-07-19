@@ -88,10 +88,11 @@ public class ResponseUtil {
 			Map<String, Aggregation> map =  bt.getAggregations().getAsMap();
 
 			tempMap.putAll(map);
-			if(bt.isFragment())
-			tempMap.put("docCount", bt.getDocCount());
-            tempMap.put(key, bt.getKey());
-			br.getAggs().add(tempMap);
+			if(bt.isFragment()) {
+				tempMap.put("docCount", bt.getDocCount());
+				tempMap.put(key, bt.getKey());
+				br.getAggs().add(tempMap);
+			}
 		}
 
 		return br;

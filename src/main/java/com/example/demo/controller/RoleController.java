@@ -17,7 +17,11 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 
 /**
  * 角色控制器
@@ -27,6 +31,7 @@ import org.springframework.web.bind.annotation.*;
 @Api(value="/testdemo1", tags="角色接口模块")
 @RestController
 @RequestMapping("/role")
+@Validated
 public class RoleController{
 
     private static final Log LOGGER = LogFactory.getLog(RoleController.class);
@@ -39,7 +44,7 @@ public class RoleController{
      */
     @ApiOperation(value="添加角色信息", notes = "添加角色信息")
     @RequestMapping(value = "/role",method = RequestMethod.POST)  
-    public ResponseData addRole(@RequestBody RoleCreateRequest role) throws Exception{
+    public ResponseData addRole(@RequestBody @Valid RoleCreateRequest role, BindingResult bindResult) throws Exception{
     	roleService.addRole(RoleRequestUtil.createRoleByCreateRequest(role));
         LOGGER.info("执行新增角色信息操作，操作用户为[" + SecurityContextHolder.getContext().getAuthentication().getName()
                 + "],系统时间为[" + DateUtil.getCurrentDateStr() + "]");
@@ -63,7 +68,7 @@ public class RoleController{
      */
     @ApiOperation(value="修改角色信息", notes = "修改角色信息")
     @RequestMapping(value = "/role",method = RequestMethod.PUT)  
-    public ResponseData updateRole(@RequestBody RoleUpdateRequest role) throws Exception{
+    public ResponseData updateRole(@RequestBody @Valid RoleUpdateRequest role, BindingResult bindResult) throws Exception{
     	roleService.updateRole(RoleRequestUtil.createRoleByUpdateRequest(role));
         LOGGER.info("执行修改角色信息操作，操作用户为[" + SecurityContextHolder.getContext().getAuthentication().getName()
                 + "],系统时间为[" + DateUtil.getCurrentDateStr() + "]");

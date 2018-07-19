@@ -183,7 +183,7 @@ public class ArticleServiceImpl implements ArticleService {
 			userInteractionArticleservice.addUserInteractionArticle(
 				new UserInteractionArticle(KeyNumberUtil.nextId(), user, articleDao.findById(articleId).get(), mode));
 		} else {
-			if(userInteractionArticle.getMode() != mode) {
+			if(userInteractionArticle.getMode().longValue() != mode) {
 				userInteractionArticleservice.updateUserInteractionArticle(
 					new UserInteractionArticle(userInteractionArticle.getId(), user, articleDao.findById(articleId).get(), mode));
 			} else {
@@ -200,7 +200,6 @@ public class ArticleServiceImpl implements ArticleService {
 	public boolean isAuthor(String articleId) {
 		boolean isAuthor = false;
 		SysUser currentUser = (SysUser)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		Article article = articleDao.findById(articleId).get();
 		if(currentUser.getId().intValue() == articleDao.findById(articleId).get().getAuthor().getId().intValue()) {
 			isAuthor = true;
 		}
