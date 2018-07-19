@@ -17,18 +17,12 @@ import java.util.Date;
  */
 public class RoleCreateRequest {
 
-	/**
-	 * 角色名称
-	 */
 	@NotNull
 	@Pattern(regexp = ValidationStaticValues.REGULAR_NAME,
 			message = ValidationStaticValues.START_FLAG + ValidationStaticValues.VALID_NAME)
 	@Size(max = 256, message = ValidationStaticValues.START_FLAG + ValidationStaticValues.VALID_NAME)
 	private String name;
 
-	/**
-	 * 权限ids
-	 */
 	@IntegerArray()
 	private Integer[] rightIds;
 

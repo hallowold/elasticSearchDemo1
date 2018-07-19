@@ -2,6 +2,7 @@ package com.example.demo;
 
 import com.example.demo.dao.ArticleDAO;
 import com.example.demo.entity.Article;
+import com.example.demo.security.config.LoginSuccessHandler;
 import com.example.demo.security.dao.SysGroupDao;
 import com.example.demo.security.dao.SysRightDao;
 import com.example.demo.security.dao.SysRoleDao;
@@ -84,8 +85,6 @@ public class MockTest {
         authentication.setDetails(new WebAuthenticationDetails(request));
         //存放authentication到SecurityContextHolder
         SecurityContextHolder.getContext().setAuthentication(authentication);
-//        //在session中存放security context,方便同一个session中控制用户的其他操作
-//        HttpSession session = request.getSession(true);
     }
 
     /**
@@ -95,10 +94,10 @@ public class MockTest {
     public void test00_AddArticle() throws Exception {
         Map<String, Object> map = new HashMap<>();
         map.put("name", "articleAutoTest_doNotUseIt>?<,");
-        System.out.println(mockMvc.perform(post("/article/article")
+        mockMvc.perform(post("/article/article")
                 .contentType(MediaType.APPLICATION_JSON).content(JSONObject.toJSONString(map)))
                 .andExpect(status().isOk())
-                .andReturn().getResponse().getContentAsString());// 返回执行请求的结果
+                .andReturn();
     }
 
     /**
@@ -111,7 +110,7 @@ public class MockTest {
         mockMvc.perform(
                 get("/article/interaction/articleId/{articleId}/mode/{mode}", article.getId(), 1))
                 .andExpect(status().isOk())
-                .andReturn();// 返回执行请求的结果
+                .andReturn();
     }
 
     /**
@@ -122,7 +121,7 @@ public class MockTest {
         mockMvc.perform(
                 get("/article/interaction/articles/mode/{mode}",1))
                 .andExpect(status().isOk())
-                .andReturn();// 返回执行请求的结果
+                .andReturn();
     }
 
     /**
@@ -139,7 +138,7 @@ public class MockTest {
         System.out.println(mockMvc.perform(put("/article/article")
                 .contentType(MediaType.APPLICATION_JSON).content(JSONObject.toJSONString(map)))
                 .andExpect(status().isOk())
-                .andReturn().getResponse().getContentAsString());// 返回执行请求的结果
+                .andReturn().getResponse().getContentAsString());
     }
 
     /**
@@ -149,7 +148,7 @@ public class MockTest {
     public void test04_FuzzyFindArticlesByName() throws Exception {
         mockMvc.perform(get("/article/articles/name/{name}", "*articleAutoTest_doNotUseIt*"))
                 .andExpect(status().isOk())
-                .andReturn();// 返回执行请求的结果
+                .andReturn();
     }
 
     /**
@@ -167,7 +166,7 @@ public class MockTest {
         mockMvc.perform(delete("/article/articles")
                 .contentType(MediaType.APPLICATION_JSON).content(JSONObject.toJSONString(map)) )
                 .andExpect(status().isOk())
-                .andReturn();// 返回执行请求的结果
+                .andReturn();
     }
 
     /**
@@ -177,7 +176,7 @@ public class MockTest {
     public void test06_GetAllArticles() throws Exception {
         mockMvc.perform(get("/article/articles"))
                 .andExpect(status().isOk())
-                .andReturn();// 返回执行请求的结果
+                .andReturn();
     }
 
     /**
@@ -191,13 +190,12 @@ public class MockTest {
         map.put("methodType", "POST");
         map.put("name", "自动测试_doNotUseIt_name");
         map.put("remark","参数说明");
-        //a-zA-z{}/
         map.put("rightUrl", "/test/test");
 
-        System.out.println(mockMvc.perform(post("/right/right")
+        mockMvc.perform(post("/right/right")
                 .contentType(MediaType.APPLICATION_JSON).content(JSONObject.toJSONString(map)))
                 .andExpect(status().isOk())
-                .andReturn().getResponse().getContentAsString());// 返回执行请求的结果
+                .andReturn();
     }
 
     /**
@@ -210,7 +208,7 @@ public class MockTest {
                 get("/right/rights/name/{name}", "自动测试_doNotUseIt_name")
                         .characterEncoding("UTF-8"))
                 .andExpect(status().isOk())
-                .andReturn();// 返回执行请求的结果
+                .andReturn();
     }
 
     /**
@@ -234,7 +232,7 @@ public class MockTest {
         mockMvc.perform(put("/right/right")
                 .contentType(MediaType.APPLICATION_JSON).content(JSONObject.toJSONString(map)))
                 .andExpect(status().isOk())
-                .andReturn();// 返回执行请求的结果
+                .andReturn();
     }
 
     /**
@@ -252,7 +250,7 @@ public class MockTest {
         mockMvc.perform(delete("/right/rights")
                 .contentType(MediaType.APPLICATION_JSON).content(JSONObject.toJSONString(map)))
                 .andExpect(status().isOk())
-                .andReturn();// 返回执行请求的结果
+                .andReturn();
     }
 
     /**
@@ -262,7 +260,7 @@ public class MockTest {
     public void test14_getAllRights() throws Exception {
         mockMvc.perform(get("/right/rights"))
                 .andExpect(status().isOk())
-                .andReturn();// 返回执行请求的结果
+                .andReturn();
     }
 
     /**
@@ -274,10 +272,10 @@ public class MockTest {
         map.put("name", "自动测试_doNotUseIt");
         map.put("rightIds", new Integer[]{1,2,3,4,5,6,7});
 
-        System.out.println(mockMvc.perform(post("/role/role")
+        mockMvc.perform(post("/role/role")
                 .contentType(MediaType.APPLICATION_JSON).content(JSONObject.toJSONString(map)))
                 .andExpect(status().isOk())
-                .andReturn().getResponse().getContentAsString());// 返回执行请求的结果
+                .andReturn();
     }
 
     /**
@@ -290,7 +288,7 @@ public class MockTest {
                 get("/role/roles/name/{name}", "自动测试_doNotUseIt")
                         .characterEncoding("UTF-8"))
                 .andExpect(status().isOk())
-                .andReturn();// 返回执行请求的结果
+                .andReturn();
     }
 
     /**
@@ -310,7 +308,7 @@ public class MockTest {
         mockMvc.perform(put("/role/role")
                 .contentType(MediaType.APPLICATION_JSON).content(JSONObject.toJSONString(map)))
                 .andExpect(status().isOk())
-                .andReturn();// 返回执行请求的结果
+                .andReturn();
     }
 
     /**
@@ -328,7 +326,7 @@ public class MockTest {
         mockMvc.perform(delete("/role/roles")
                 .contentType(MediaType.APPLICATION_JSON).content(JSONObject.toJSONString(map)))
                 .andExpect(status().isOk())
-                .andReturn();// 返回执行请求的结果
+                .andReturn();
     }
 
     /**
@@ -338,7 +336,7 @@ public class MockTest {
     public void test24_getAllRoles() throws Exception {
         mockMvc.perform(get("/role/roles"))
                 .andExpect(status().isOk())
-                .andReturn();// 返回执行请求的结果
+                .andReturn();
     }
 
     /**
@@ -356,7 +354,7 @@ public class MockTest {
         mockMvc.perform(post("/user/user")
                 .contentType(MediaType.APPLICATION_JSON).content(JSONObject.toJSONString(map)))
                 .andExpect(status().isOk())
-                .andReturn();// 返回执行请求的结果
+                .andReturn();
     }
 
     /**
@@ -369,7 +367,7 @@ public class MockTest {
                 get("/user/users/loginName/{loginName}", "自动测试_loginName_doNotUseIt")
                         .characterEncoding("UTF-8"))
                 .andExpect(status().isOk())
-                .andReturn();// 返回执行请求的结果
+                .andReturn();
     }
 
     /**
@@ -392,7 +390,7 @@ public class MockTest {
         mockMvc.perform(put("/user/user")
                 .contentType(MediaType.APPLICATION_JSON).content(JSONObject.toJSONString(map)))
                 .andExpect(status().isOk())
-                .andReturn();// 返回执行请求的结果
+                .andReturn();
     }
 
     /**
@@ -410,7 +408,7 @@ public class MockTest {
         mockMvc.perform(delete("/user/users")
                 .contentType(MediaType.APPLICATION_JSON).content(JSONObject.toJSONString(map)))
                 .andExpect(status().isOk())
-                .andReturn();// 返回执行请求的结果
+                .andReturn();
     }
 
     /**
@@ -420,7 +418,7 @@ public class MockTest {
     public void test34_getAllUsers() throws Exception {
         mockMvc.perform(get("/user/users"))
                 .andExpect(status().isOk())
-                .andReturn();// 返回执行请求的结果
+                .andReturn();
     }
 
     /**
@@ -448,7 +446,7 @@ public class MockTest {
                 get("/group/groups/name/{name}", "自动测试_name_doNotUseIt")
                         .characterEncoding("UTF-8"))
                 .andExpect(status().isOk())
-                .andReturn();// 返回执行请求的结果
+                .andReturn();
     }
 
     /**
@@ -463,10 +461,10 @@ public class MockTest {
 
         map.put("id", originEntity.getId());
 
-        System.out.println(mockMvc.perform(get("/group/group/id/roles")
+        mockMvc.perform(get("/group/group/id/roles")
                 .contentType(MediaType.APPLICATION_JSON).content(JSONObject.toJSONString(map)))
                 .andExpect(status().isOk())
-                .andReturn().getResponse().getContentAsString());// 返回执行请求的结果
+                .andReturn();
     }
 
     /**
@@ -486,7 +484,7 @@ public class MockTest {
         mockMvc.perform(put("/group/group")
                 .contentType(MediaType.APPLICATION_JSON).content(JSONObject.toJSONString(map)))
                 .andExpect(status().isOk())
-                .andReturn();// 返回执行请求的结果
+                .andReturn();
     }
 
     /**
@@ -504,7 +502,7 @@ public class MockTest {
         mockMvc.perform(delete("/group/groups")
                 .contentType(MediaType.APPLICATION_JSON).content(JSONObject.toJSONString(map)))
                 .andExpect(status().isOk())
-                .andReturn();// 返回执行请求的结果
+                .andReturn();
     }
 
     /**
@@ -514,6 +512,6 @@ public class MockTest {
     public void test45_getAllGroups() throws Exception {
         mockMvc.perform(get("/group/groups"))
                 .andExpect(status().isOk())
-                .andReturn();// 返回执行请求的结果
+                .andReturn();
     }
 }

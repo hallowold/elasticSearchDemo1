@@ -1,6 +1,7 @@
 package com.example.demo.request.group;
 
 import com.example.demo.common.config.ValidationStaticValues;
+import com.example.demo.common.config.validator.IntegerArray;
 import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.NotNull;
@@ -21,14 +22,11 @@ public class SysGroupCreateRequest {
     @Size(max = 256, message = ValidationStaticValues.START_FLAG + ValidationStaticValues.VALID_NAME)
     private String name;
 
-    /**
-     * 父机构id
-     */
+    @Pattern(regexp = ValidationStaticValues.REGULAR_ID_MYSQL)
+    @Size(max = 9, message = ValidationStaticValues.START_FLAG + ValidationStaticValues.VALID_ID_MYSQL)
     private Integer pid;
 
-    /**
-     * 角色id数组
-     */
+    @IntegerArray()
     private Integer[] roleIds;
 
     public String getName() {

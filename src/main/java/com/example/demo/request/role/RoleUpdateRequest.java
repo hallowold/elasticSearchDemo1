@@ -1,6 +1,7 @@
 package com.example.demo.request.role;
 
 import com.example.demo.common.config.ValidationStaticValues;
+import com.example.demo.common.config.validator.IntegerArray;
 import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.NotNull;
@@ -20,18 +21,13 @@ public class RoleUpdateRequest {
 	@Size(max = 9, message = ValidationStaticValues.START_FLAG + ValidationStaticValues.VALID_ID_MYSQL)
 	private Integer id;
 
-	/**
-	 * 角色名称
-	 */
 	@NotNull
 	@Pattern(regexp = ValidationStaticValues.REGULAR_NAME,
 			message = ValidationStaticValues.START_FLAG + ValidationStaticValues.VALID_NAME)
 	@Size(max = 256, message = ValidationStaticValues.START_FLAG + ValidationStaticValues.VALID_NAME)
 	private String name;
 
-	/**
-	 * 权限ids
-	 */
+	@IntegerArray()
 	private Integer[] rightIds;
 
 	public Integer getId() {

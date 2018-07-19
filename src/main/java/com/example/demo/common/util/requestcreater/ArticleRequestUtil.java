@@ -3,6 +3,7 @@ package com.example.demo.common.util.requestcreater;
 import com.example.demo.entity.Article;
 import com.example.demo.request.article.ArticleCreateRequest;
 import com.example.demo.request.article.ArticleUpdateRequest;
+import com.example.demo.security.config.LoginSuccessHandler;
 import com.example.demo.security.entity.SysUser;
 import org.springframework.security.core.context.SecurityContextHolder;
 
@@ -18,33 +19,20 @@ import java.util.List;
  */
 public class ArticleRequestUtil {
 	
-	/**
-	 * 将ArticleCreateRequest转化为Article
-	 * @param 	request
-	 * @return	Article
-	 */
 	public static Article createArticleByCreateRequest(ArticleCreateRequest request) {
 		Article info = new Article();
-		/*
-		 * 若request为空则直接返回null，否则将属性值一一对应转化
-		 */
 		if(request == null) {
 			return null;
 		} else {
 			if(request.getName() != null) {
 				info.setName(request.getName());
 			}
-			info.setAuthor((SysUser)SecurityContextHolder.getContext().getAuthentication().getPrincipal());
+			info.setAuthor(LoginSuccessHandler.getCurrentUser());
 			info.setCreateDate(new Date());
 		}
 		return info;
 	}
 	
-	/**
-	 * 将ArticleCreateRequest集合转化为Article集合
-	 * @param 	requests
-	 * @return	List<Article>
-	 */
 	public static List<Article> createArticleByCreateRequests(List<ArticleCreateRequest> requests) {
 		List<Article> resultList = new ArrayList<Article>();
 		for(ArticleCreateRequest request : requests) {
@@ -54,17 +42,9 @@ public class ArticleRequestUtil {
 		}
 		return resultList;
 	}
-	
-	/**
-	 * 将ArticleUpdateRequest转化为Article
-	 * @param 	request
-	 * @return	Article
-	 */
+
 	public static Article createArticleByUpdateRequest(ArticleUpdateRequest request) {
 		Article info = new Article();
-		/*
-		 * 若request为空则直接返回null，否则将属性值一一对应转化
-		 */
 		if(request == null) {
 			return null;
 		} else {
@@ -74,7 +54,7 @@ public class ArticleRequestUtil {
 			if(request.getName() != null) {
 				info.setName(request.getName());
 			}
-			info.setAuthor((SysUser)SecurityContextHolder.getContext().getAuthentication().getPrincipal());
+			info.setAuthor(LoginSuccessHandler.getCurrentUser());
 			if(request.getCreateDate() != null) {
 				info.setCreateDate(request.getCreateDate());
 			}
@@ -82,11 +62,6 @@ public class ArticleRequestUtil {
 		return info;
 	}
 	
-	/**
-	 * 将ArticleUpdateRequest集合转化为Article集合
-	 * @param 	requests
-	 * @return	List<Article>
-	 */
 	public static List<Article> createArticleByUpdateRequests(List<ArticleUpdateRequest> requests) {
 		List<Article> resultList = new ArrayList<>();
 		for(ArticleUpdateRequest request : requests) {

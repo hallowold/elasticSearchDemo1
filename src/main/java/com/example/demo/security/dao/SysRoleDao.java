@@ -8,32 +8,15 @@ import java.util.List;
 
 /**
  * @author : liuqitian
- * @Date: 2018/7/2 12:16
- * @Version: V1.0
- * @Description:
+ * @date  2018/7/2 12:16
+ * @version : V1.0
+ * 角色dao
  */
 @Repository
 public interface SysRoleDao extends JpaRepository<SysRole, Integer> {
 
-    /**
-     * 通过用户id查询
-     * @param userId 用户Id
-     * @return SysRole 角色实体
-     */
-//    SysRole findByUserId(Integer userId);
-
-    /**
-     * 通过ids批量删除
-     * @param ids id数组
-     * @return Integer 成功删除信息条数
-     */
     Integer deleteByIdIn(Integer[] ids);
 
-    /**
-     * 通过name模糊查询
-     * @param name 查询字段
-     * @return  List<SysRole>
-     */
     List<SysRole> findByNameLike(String name);
 
 }

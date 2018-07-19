@@ -8,8 +8,8 @@ import org.springframework.stereotype.Service;
 /**
  * @author liuqitian
  * @date 2018/7/2 10:36
- * @Version: V1.0
- * @Description: 系统用户操作层
+ * @version : V1.0
+ * 系统用户操作层
  */
 @Service
 public class SysUserService {

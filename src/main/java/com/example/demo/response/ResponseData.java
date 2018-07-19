@@ -9,16 +9,12 @@ package com.example.demo.response;
  */
 public class ResponseData {
 
-	// 是否成功
 	private boolean state;
 
-	// 信息
 	private String message;
 
-	// 数据实体
 	private Object data;
 
-	// 返回代码
 	private int code;
 
 	public boolean getState() {

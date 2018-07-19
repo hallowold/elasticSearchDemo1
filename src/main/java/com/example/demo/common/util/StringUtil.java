@@ -6,10 +6,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * @Auther: liuqitian
- * @Date: 2018/7/5 11:15
- * @Version: V1.0
- * @Description:
+ * @author : liuqitian
+ * @date : 2018/7/5 11:15
+ * @version : V1.0
  */
 public class StringUtil {
 
@@ -19,28 +18,23 @@ public class StringUtil {
      * @return  需要转义的字符返回转义结果，否则返回原字符
      */
     public static String changeSpecialCharacter(String oldStr) {
-        List<String> specialCharacters = new ArrayList<>();
-        boolean flag = false;
-        specialCharacters.add("_");
-        specialCharacters.add("%");
-        specialCharacters.add("'");
-        for (String str : specialCharacters) {
-            if(str.equals(oldStr)) {
-                flag = true;
-                break;
-            }
-        }
-        if(flag) {
-            oldStr = "\\" + oldStr;
-        }
+        boolean flag = ifSpecialStrListContainsStr(oldStr);
+        if(flag) { oldStr = "\\" + oldStr; }
         return oldStr;
     }
 
-    /**
-     * 加密，用户密码使用
-     * @param str 待加密字符串
-     * @return String 加密字符串
-     */
+    private static List<String> getSpecialStrList() {
+        List<String> specialStrList = new ArrayList<>();
+        specialStrList.add("_");
+        specialStrList.add("%");
+        return specialStrList;
+    }
+
+    private static boolean ifSpecialStrListContainsStr(String str) {
+        List<String> specialStrList = getSpecialStrList();
+        return specialStrList.contains(str);
+    }
+
     public static String encode(String str) {
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
         return encoder.encode(str);

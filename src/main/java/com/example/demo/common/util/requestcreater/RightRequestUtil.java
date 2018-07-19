@@ -16,16 +16,8 @@ import java.util.List;
  */
 public class RightRequestUtil {
 	
-	/**
-	 * 将RightCreateRequest转化为Right
-	 * @param 	request
-	 * @return	SysRight
-	 */
 	public static SysRight createRightByCreateRequest(RightCreateRequest request) {
 		SysRight info = new SysRight();
-		/*
-		 * 若request为空则直接返回null，否则将属性值一一对应转化
-		 */
 		if(request == null) {
 			return null;
 		} else {
@@ -51,11 +43,6 @@ public class RightRequestUtil {
 		return info;
 	}
 	
-	/**
-	 * 将RightCreateRequest集合转化为Right集合
-	 * @param 	requests
-	 * @return	List<SysRight>
-	 */
 	public static List<SysRight> createRightByCreateRequests(List<RightCreateRequest> requests) {
 		List<SysRight> resultList = new ArrayList<>();
 		for(RightCreateRequest request : requests) {
@@ -66,16 +53,8 @@ public class RightRequestUtil {
 		return resultList;
 	}
 	
-	/**
-	 * 将RightUpdateRequest转化为Right
-	 * @param 	request
-	 * @return	SysRight
-	 */
 	public static SysRight createRightByUpdateRequest(RightUpdateRequest request) {
 		SysRight info = new SysRight();
-		/*
-		 * 若request为空则直接返回null，否则将属性值一一对应转化
-		 */
 		if(request == null) {
 			return null;
 		} else {
@@ -104,11 +83,6 @@ public class RightRequestUtil {
 		return info;
 	}
 	
-	/**
-	 * 将RightUpdateRequest集合转化为Right集合
-	 * @param 	requests
-	 * @return	List<SysRight>
-	 */
 	public static List<SysRight> createRightByUpdateRequests(List<RightUpdateRequest> requests) {
 		List<SysRight> resultList = new ArrayList<>();
 		for(RightUpdateRequest request : requests) {

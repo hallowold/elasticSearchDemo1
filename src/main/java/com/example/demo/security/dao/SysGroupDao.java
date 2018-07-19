@@ -13,17 +13,7 @@ import java.util.List;
  */
 public interface SysGroupDao extends JpaRepository<SysGroup, Integer> {
 
-    /**
-     * 用名称模糊查询
-     * @param name 名称字段
-     * @return List 机构列表
-     */
     List<SysGroup> findByNameLike(String name);
 
-    /**
-     * 用id数组来批量删除
-     * @param ids id数组
-     * @return Integer 成功删除的信息条数
-     */
     Integer deleteByIdIn(Integer[] ids);
 }

@@ -21,19 +21,10 @@ public class Article implements Serializable {
     @Id
     private String id;
 
-    /**
-     * 文章名
-     */
     private String name;
 
-    /**
-     * 作者
-     */
     private SysUser author;
 
-    /**
-     * 创建时间
-     */
     private Date createDate;
 
     public String getId() {

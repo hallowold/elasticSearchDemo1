@@ -43,9 +43,7 @@ public class CustomInvocationSecurityMetadataSourceService implements
     private void loadResourceDefine() {
         // 在Web服务器启动时，提取系统中的所有权限。
         List<SysRole> sysRoles =sysRoleDao.findAll();
-        /*
-         * 应当是资源为key， 权限为value。 资源通常为url， 权限就是那些以ROLE_为前缀的角色。 一个资源可以由多个权限来访问。
-         */
+        //应当是资源为key， 权限为value。 资源通常为url， 权限就是那些以ROLE_为前缀的角色。 一个资源可以由多个权限来访问。
         resourceMap = new HashMap<>();
         for (SysRole sysRole : sysRoles) {
             ConfigAttribute ca = new SecurityConfig(sysRole.getName());
@@ -58,10 +56,8 @@ public class CustomInvocationSecurityMetadataSourceService implements
                         urlList.add(sysRoleRight.getsRight().getRightUrl() + "_" + sysRoleRight.getsRight().getMethodType()));
             }
             for (String url : urlList) {
-                /*
-                 * 判断资源文件和权限的对应关系，
-                 * 如果已经存在相关的资源url，则要通过该url为key提取出权限集合，将权限增加到权限集合中。
-                 */
+                //判断资源文件和权限的对应关系，
+                //  如果已经存在相关的资源url，则要通过该url为key提取出权限集合，将权限增加到权限集合中。
                 if (resourceMap.containsKey(url)) {
                     Collection<ConfigAttribute> value = resourceMap.get(url);
                     value.add(ca);
@@ -93,7 +89,6 @@ public class CustomInvocationSecurityMetadataSourceService implements
         }
         //获取request对象，我们需要使用它来判断请求类型
         HttpServletRequest request = ((FilterInvocation) object).getHttpRequest();
-
         Iterator<String> ite = resourceMap.keySet().iterator();
         while (ite.hasNext()) {
             //这里注意，因为我们使用restful风格接口，所以在生成资源时候将请求类型拼在url后面，故这里取到的resURL是拼接后的结果
@@ -102,6 +97,7 @@ public class CustomInvocationSecurityMetadataSourceService implements
             String matchUrl = resURL.substring(0,resURL.indexOf("_"));
             String matchType = resURL.substring(resURL.indexOf("_") + 1);
             RequestMatcher requestMatcher = new AntPathRequestMatcher(matchUrl);
+            //特殊判断一下ALL，匹配所有类型
             if(requestMatcher.matches(filterInvocation.getHttpRequest()) &&
                     (matchType.equalsIgnoreCase("ALL") || matchType.equals(request.getMethod()))) {
                 return resourceMap.get(resURL);

@@ -12,10 +12,9 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 import java.util.List;
 
 /**
- * @Auther: liuqitian
- * @Date: 2018/7/2 10:51
- * @Version: V1.0
- * @Description:
+ * @author : liuqitian
+ * @date : 2018/7/2 10:51
+ * @version : V1.0
  */
 @Configuration
 public class MvcConfig implements WebMvcConfigurer {

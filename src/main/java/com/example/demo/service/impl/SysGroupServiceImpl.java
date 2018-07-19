@@ -38,11 +38,6 @@ public class SysGroupServiceImpl implements SysGroupService {
     @Autowired
     private SysRoleDao sysRoleDao;
 
-
-    /**
-     * 新增机构
-     * @param sysGroup 机构实体
-     */
     @Override
     public void addGroup(Map<String, Object> dataMap) {
         SysGroup entity = (SysGroup) dataMap.get("entity");
@@ -55,11 +50,6 @@ public class SysGroupServiceImpl implements SysGroupService {
                 new SysRoleGroup(sysRoleDao.findById(roleId).get(), roleId, entity, entity.getId())));
     }
 
-    /**
-     * 批量删除
-     * @param ids 机构id数组
-     * @return Integer 删除信息条数
-     */
     @Override
     public Integer deleteGroups(Integer[] ids) {
         Integer num = 0;
@@ -69,10 +59,6 @@ public class SysGroupServiceImpl implements SysGroupService {
         return num;
     }
 
-    /**
-     * 修改机构
-     * @param dataMap 信息
-     */
     @Override
     public void updateGroup(Map<String, Object> dataMap) {
         SysGroup entity = (SysGroup) dataMap.get("entity");
@@ -87,11 +73,6 @@ public class SysGroupServiceImpl implements SysGroupService {
                 new SysRoleGroup(sysRoleDao.findById(roleId).get(), roleId, entity, entity.getId())));
     }
 
-    /**
-     * 根据名称模糊查询
-     * @param name 名称字段
-     * @return List 机构集合
-     */
     @Override
     public List<SysGroup> fuzzyFindByName(String name) throws Demo1Exception{
         List<SysGroup> list = sysGroupDao.findByNameLike("%" + StringUtil.changeSpecialCharacter(name) + "%");
@@ -101,20 +82,11 @@ public class SysGroupServiceImpl implements SysGroupService {
         return list;
     }
 
-    /**
-     * 获取所有机构实体
-     * @return List 机构集合
-     */
     @Override
     public List<SysGroup> findAllGroups() {
         return sysGroupDao.findAll();
     }
 
-    /**
-     * 根据机构id查找其默认的角色信息
-     * @param id 机构id
-     * @return List 角色数组
-     */
     @Override
     public List<SysRole> findRolesByGroupId(Integer id) {
         List<SysRole> results = new ArrayList<>();

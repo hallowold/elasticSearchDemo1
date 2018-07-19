@@ -13,14 +13,8 @@ public class StaticValues {
 	 */
 	public static final String ADMIN = "ADMIN";
 
-	/**
-	 * 发现当前用户删除自己时使用
-	 */
 	public static final String MYSELF = "不能删除自己";
 
-	/**
-	 * 未找到数据时可使用
-	 */
 	public static final String NODATA = "未找到指定数据";
 
 	/**

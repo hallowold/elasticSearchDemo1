@@ -15,10 +15,7 @@ import java.util.*;
 public class GroupRequestUtil {
 
     /**
-     * 将GroupCreateRequest转化为Map<String, Object>
-     * 		"entity"对应角色实体，"roleIds"对应权限id数组
-     * @param 	request
-     * @return	Map<String, Object>
+ * 		"entity"对应角色实体，"roleIds"对应权限id数组
      */
     public static Map<String, Object> createSysGroupByCreateRequest(SysGroupCreateRequest request) {
         Map<String, Object> resultMap = new HashMap<String, Object>();
@@ -39,11 +36,6 @@ public class GroupRequestUtil {
         return resultMap;
     }
 
-    /**
-     * 将SysGroupCreateRequest集合转化为SysGroup集合
-     * @param 	requests
-     * @return	List<Map<String, Object>>
-     */
     public static List<Map<String, Object>> createSysGroupByCreateRequests(List<SysGroupCreateRequest> requests) {
         List<Map<String, Object>> resultList = new ArrayList<>();
         for(SysGroupCreateRequest request : requests) {
@@ -55,10 +47,7 @@ public class GroupRequestUtil {
     }
 
     /**
-     * 将GroupUpdateRequest转化为Map<String, Object>
-     * 		"entity"对应角色实体，"roleIds"对应权限id数组
-     * @param 	request
-     * @return	Map<String, Object>
+ * 		"entity"对应角色实体，"roleIds"对应权限id数组
      */
     public static Map<String, Object> createSysGroupByUpdateRequest(SysGroupUpdateRequest request) {
         Map<String, Object> resultMap = new HashMap<String, Object>();
@@ -82,11 +71,6 @@ public class GroupRequestUtil {
         return resultMap;
     }
 
-    /**
-     * 将SysGroupCreateRequest集合转化为SysGroup集合
-     * @param 	requests
-     * @return	List<Map<String, Object>>
-     */
     public static List<Map<String, Object>> createSysGroupByUpdateRequests(List<SysGroupUpdateRequest> requests) {
         List<Map<String, Object>> resultList = new ArrayList<>();
         for(SysGroupUpdateRequest request : requests) {

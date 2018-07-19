@@ -17,25 +17,19 @@ import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.access.intercept.FilterSecurityInterceptor;
 
 /**
- * @Auther: liuqitian
- * @Date: 2018/7/2 10:22
- * @Version: V1.0
- * @Description:
+ * @author : liuqitian
+ * @date : 2018/7/2 10:22
+ * @version : V1.0
  */
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
-
 
     @Autowired
     private MyFilterSecurityInterceptor mySecurityFilter;
 
     @Autowired
     private CustomUserDetailsService customUserDetailsService;
-
-    //再次访问index页面无需登录直接访问
-    //访问http://localhost:8080/home 不拦截，直接访问，
-    //访问http://localhost:8080/hello 需要登录验证后，且具备 “ADMIN”权限hasAuthority("ADMIN")才可以访问
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -44,8 +38,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .csrf().disable()
                 .addFilterBefore(mySecurityFilter, FilterSecurityInterceptor.class)
                 .authorizeRequests()
-                //访问：/home 无需登录认证权限
-//                .antMatchers("/home").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .formLogin()
@@ -55,7 +47,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .successHandler(loginSuccessHandler())
                 .and()
                 .logout()
-                //退出登录后的默认网址是”/home”
                 .logoutSuccessUrl("/login")
                 .permitAll()
                 .invalidateHttpSession(true);

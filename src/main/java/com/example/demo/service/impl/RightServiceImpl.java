@@ -31,20 +31,13 @@ public class RightServiceImpl implements RightService {
 	@Autowired
 	private SysRoleRightDao roleRightDao;
 
-	/**
-	 * 新增权限
-	 * @param 	right	权限实体
-	 * @throws Exception 任何执行时的异常
-	 */
 	@Override
 	public void addRight(SysRight right) throws Exception{
 		rightDao.save(right);
 	}
 
 	/**
-	 * 修改权限
-	 * @param 	right	权限实体
-	 * @throws Exception 任何执行时的异常，特殊的，若权限仍然被其他角色使用，抛出Demo1Exception("依赖")
+	 * Demo1Exception异常表示权限仍然被其他角色使用
 	 */
 	@Override
 	public void updateRight(SysRight right) throws Exception{
@@ -56,9 +49,7 @@ public class RightServiceImpl implements RightService {
 	}
 
 	/**
-	 * 删除权限
-	 * @param 	ids		权限id数组
-	 * @throws Exception 任何执行时的异常，特殊的，若权限仍然被其他角色使用，抛出Demo1Exception("依赖")
+	 * Demo1Exception异常表示权限仍然被其他角色使用或指定的数据不存在
 	 */
 	@Override
 	public Integer deleteRight(Integer[] ids) throws Exception{
@@ -75,13 +66,15 @@ public class RightServiceImpl implements RightService {
 		return result;
 	}
 
-	/**
-	 * 通过名称模糊查询
-	 *
-	 * @param 	name 		权限名
-	 * @throws Demo1Exception 查出空集合时丢出自定义异常
-	 * @return 	List<SysRight> 	权限实体列表
-	 */
+	public boolean ifHasRelationWithRole(Integer id) {
+		boolean ifHas = false;
+		List<SysRoleRight> list = roleRightDao.findByRightId(id);
+		if(list != null && list.size() > 0) {
+			ifHas = true;
+		}
+		return ifHas;
+	}
+
 	@Override
 	public List<SysRight> fuzzyFindByName(String name) throws Demo1Exception{
 		List<SysRight> list = rightDao.findByNameLike("%" + StringUtil.changeSpecialCharacter(name) + "%");
@@ -91,12 +84,6 @@ public class RightServiceImpl implements RightService {
 		return list;
 	}
 
-	/**
-	 * 通过id查找权限
-	 * @param 	id 		id
-	 * @throws Demo1Exception    查询时丢出的异常，预计为无数据或链接中断
-	 * @return 	SysRight	权限实体
-	 */
 	@Override
 	public SysRight findById(Integer id) throws Demo1Exception{
 		SysRight right;
@@ -108,27 +95,9 @@ public class RightServiceImpl implements RightService {
 		return right;
 	}
 
-	/**
-	 * 获取所有权限
-	 * @return	rights		权限集合
-	 */
 	@Override
 	public Iterable<SysRight> findAllRight() {
 		return rightDao.findAll();
 	}
 
-	/**
-	 * 判断给定的权限是否与任意角色之间有关联联系
-	 * @param 	id	权限id
-	 * @return	boolean
-	 */
-	public boolean ifHasRelationWithRole(Integer id) {
-		boolean ifHas = false;
-		List<SysRoleRight> list = roleRightDao.findByRightId(id);
-		if(list != null && list.size() > 0) {
-			ifHas = true;
-		}
-		return ifHas;
-	}
-	
 }

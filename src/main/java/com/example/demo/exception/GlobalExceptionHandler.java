@@ -35,13 +35,6 @@ import java.util.NoSuchElementException;
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
-	/**
-	 * 项目自定义异常处理
-	 * @param 	req		HttpServletRequest对象
-	 * @param 	ex		Demo1Exception异常对象
-	 * @return	ResponseData
-	 * @throws Exception 任何异常
-	 */
 	@ExceptionHandler(value = Demo1Exception.class)
 	@ResponseBody
 	public ResponseData Demo1ExceptionErrorHandler(HttpServletRequest req, Demo1Exception ex) throws Exception {
@@ -55,13 +48,6 @@ public class GlobalExceptionHandler {
 		return res;
 	}
 
-	/**
-	 * 默认的异常处理
-	 * @param 	req		HttpServletRequest对象
-	 * @param 	ex		异常对象
-	 * @return	responseData
-	 * @throws Exception 任何异常
-	 */
 	@ExceptionHandler(value = Exception.class)
 	@ResponseBody
 	public ResponseData defaultErrorHandler(HttpServletRequest req, Exception ex) throws Exception {
@@ -74,6 +60,7 @@ public class GlobalExceptionHandler {
 			//参数校验失败
 			message = message.substring(message.lastIndexOf(ValidationStaticValues.START_FLAG)+ 10);
 		} else if (ex instanceof HttpMessageNotReadableException) {
+			//参数校验时，string转integer失败
 			message = "数据格式异常，请检查";
 		} else if (ex instanceof HttpRequestMethodNotSupportedException) {
         	//405

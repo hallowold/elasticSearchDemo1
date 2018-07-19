@@ -3,12 +3,8 @@ package com.example.demo.service.impl;
 import com.example.demo.common.config.StaticValues;
 import com.example.demo.common.util.StringUtil;
 import com.example.demo.exception.Demo1Exception;
-import com.example.demo.security.dao.SysRightDao;
-import com.example.demo.security.dao.SysRoleDao;
-import com.example.demo.security.dao.SysRoleRightDao;
-import com.example.demo.security.entity.SysRight;
-import com.example.demo.security.entity.SysRole;
-import com.example.demo.security.entity.SysRoleRight;
+import com.example.demo.security.dao.*;
+import com.example.demo.security.entity.*;
 import com.example.demo.service.RoleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -31,6 +27,12 @@ import java.util.Map;
 public class RoleServiceImpl implements RoleService {
 
 	@Autowired
+	private SysRoleUserDao roleUserDao;
+
+	@Autowired
+	private SysRoleGroupDao roleGroupDao;
+
+	@Autowired
 	private SysRoleDao roleDao;
 
 	@Autowired
@@ -40,16 +42,13 @@ public class RoleServiceImpl implements RoleService {
 	private SysRoleRightDao roleRightDao;
 
 	/**
-	 * 新增角色
-     *  此处定义1号角色为系统管理员角色
-	 * 
-	 * @param 	data 	角色实体与权限id数组
-	 * @throws Exception 任何异常，特殊的，当发现用户试图操作系统管理员角色时，抛出Demo1Exception(StaticValues.ADMIN)
+     * 抛出Demo1Exception表示发现用户试图操作系统管理员角色
 	 */
 	@Override
 	public void addRole(Map<String, Object> data) throws Exception{
 		SysRole role = (SysRole) data.get("entity");
 		Integer[] ids = (Integer[]) data.get("rightIds");
+		//定义1号角色为系统管理员角色
 		//若系统管理员角色已经存在，则不允许继续创建系统管理员角色
 		if(StaticValues.ADMIN.equals(role.getName()) &&
 				roleDao.findById(1).get() != null) {
@@ -65,10 +64,7 @@ public class RoleServiceImpl implements RoleService {
 	}
 
 	/**
-	 * 修改角色
-	 * 
-	 * @param 	data 	角色实体与权限id数组
-	 * @throws Exception 任何异常，特殊的，当发现用户试图操作系统管理员角色时，抛出Demo1Exception(StaticValues.ADMIN)
+	 * Demo1Exception表示发现用户试图操作系统管理员角色
 	 */
 	@Override
 	public void updateRole(Map<String, Object> data) throws Exception{
@@ -88,15 +84,16 @@ public class RoleServiceImpl implements RoleService {
 	}
 
 	/**
-	 * 删除角色
-	 * @param 	ids		角色id数组
-	 * @throws Exception 任何异常，特殊的，当发现用户试图操作系统管理员角色时，抛出Demo1Exception(StaticValues.ADMIN)
+	 * Demo1Exception表示发现用户试图操作系统管理员角色，被其他用户或机构依赖，或指定的信息不存在
 	 */
 	@Override
 	public Integer deleteRole(Integer[] ids) throws Exception{
 		for(int num = 0; num < ids.length; num++) {
 			if(ids[num] == 1) {
 				throw new Demo1Exception(StaticValues.ADMIN);
+			}
+			if(ifHasRelationWithUser(ids[num]) || ifHasRelationWithGroup(ids[num])) {
+				throw new Demo1Exception(StaticValues.DEPENDENCE);
 			}
 		}
 		//删除角色信息，并同步删除该角色的所有roleright关系
@@ -107,14 +104,25 @@ public class RoleServiceImpl implements RoleService {
 		roleRightDao.deleteByRoleIdIn(ids);
 		return result;
 	}
+
+	public boolean ifHasRelationWithUser(Integer id) {
+		boolean ifHas = false;
+		List<SysRoleUser> list = roleUserDao.findByRoleId(id);
+		if(list != null && list.size() > 0) {
+			ifHas = true;
+		}
+		return ifHas;
+	}
+
+	public boolean ifHasRelationWithGroup(Integer id) {
+		boolean ifHas = false;
+		List<SysRoleGroup> list = roleGroupDao.findByRoleId(id);
+		if(list != null && list.size() > 0) {
+			ifHas = true;
+		}
+		return ifHas;
+	}
 	
-	/**
-	 * 通过角色名模糊查询
-	 * 
-	 * @param 	name 	角色名
-	 * @throws Exception 任何异常，特殊的，当查询结果集为空，抛出Demo1Exception(StaticValues.SEARCH)
-	 * @return 	List<SysRole>	角色实体列表
-	 */
 	@Override
 	public List<SysRole> fuzzyFindByName(String name) throws Exception{
 		List<SysRole> list = roleDao.findByNameLike("%" + StringUtil.changeSpecialCharacter(name) + "%");
@@ -124,13 +132,6 @@ public class RoleServiceImpl implements RoleService {
 		return list;
 	}
 
-	/**
-	 * 通过id查找角色
-	 * 
-	 * @param 	id 		id
-	 * @throw Exception 任何异常，特殊的，当查询结果为空，抛出Demo1Exception("StaticValues.SEARCH)
-	 * @return 	SysRole 	角色实体
-	 */
 	@Override
 	public SysRole findById(Integer id) throws Exception{
 		SysRole tempRole = roleDao.findById(id).get();
@@ -140,10 +141,6 @@ public class RoleServiceImpl implements RoleService {
 		return tempRole;
 	}
 	
-	/**
-	 * 获取所有角色
-	 * @return	roles		角色集合
-	 */
 	@Override
 	public Iterable<SysRole> findAllRole() {
 		return roleDao.findAll();

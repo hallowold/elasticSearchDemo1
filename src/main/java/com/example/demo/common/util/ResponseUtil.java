@@ -26,7 +26,6 @@ public class ResponseUtil {
 	 * @param message	反馈信息
 	 * @param data		数据对象
 	 * @param code		状态码，如200，404，500等
-	 * @return
 	 */
 	public static ResponseData createResponseData(boolean state, String message, Object data, int code) {
 		ResponseData res = new ResponseData();
@@ -55,7 +54,6 @@ public class ResponseUtil {
 	 * 根据给定的参数生成responseData对象，校验唯一性时使用
 	 * @param state		状态
 	 * @param message	填充信息，此处应填入校验字段，如登录名，用户姓名，文章标题等
-	 * @return
 	 */
 	public static ResponseData createResponseDataCheckIfExsit(boolean state, String message) {
 		ResponseData res = new ResponseData();
@@ -71,7 +69,6 @@ public class ResponseUtil {
      * 使用bucket进行查询时，因为格式问题json无法直接进行解析，需要做一次中转处理。
      *  key名对应的为分组标记，docCount对应的为组内信息个数，
      *      剩余字段在其他value中使用key-value形式进行抓取，key为writeableName对应value，value为value对应的value
-     * @Version 1.0
      * @date 20180620
      * @param account   操作类返回结果集
      * @param key       本次操作使用的分组字段标记名(即bucket名)

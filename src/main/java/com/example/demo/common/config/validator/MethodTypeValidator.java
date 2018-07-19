@@ -12,7 +12,7 @@ import javax.validation.ConstraintValidatorContext;
  */
 public class MethodTypeValidator implements ConstraintValidator<MethodType, String> {
 
-    private String[] methods = {"GET", "POST", "DELETE", "PUT"};
+    private String[] methods = {"GET", "POST", "DELETE", "PUT", "TRACE", "HEAD", "OPTIONS", "CONNECT", "ALL"};
 
     @Override
     public void initialize(MethodType constraintAnnotation) {}

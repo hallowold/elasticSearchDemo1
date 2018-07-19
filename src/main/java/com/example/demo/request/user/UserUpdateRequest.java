@@ -1,6 +1,10 @@
 package com.example.demo.request.user;
 
+import com.example.demo.common.config.ValidationStaticValues;
+import com.example.demo.common.config.validator.IntegerArray;
+
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import java.util.Date;
 
@@ -12,9 +16,6 @@ import java.util.Date;
  */
 public class UserUpdateRequest {
 
-	/**
-	 * 用户id
-	 */
 	@NotNull
 	private Integer id;
 
@@ -22,29 +23,27 @@ public class UserUpdateRequest {
 	 * 用户登录名
 	 */
 	@NotNull
+	@Pattern(regexp = ValidationStaticValues.REGULAR_LOGINNAME,
+			message = ValidationStaticValues.START_FLAG + ValidationStaticValues.VALID_LOGINNAME)
+	@Size(min = 4, max = 256, message = ValidationStaticValues.START_FLAG + ValidationStaticValues.VALID_LOGINNAME)
 	private String loginName;
 
 	/**
 	 * 用户展示名
 	 */
 	@NotNull
+	@Pattern(regexp = ValidationStaticValues.REGULAR_NAME,
+			message = ValidationStaticValues.START_FLAG + ValidationStaticValues.VALID_NAME)
+	@Size(max = 256, message = ValidationStaticValues.START_FLAG + ValidationStaticValues.VALID_NAME)
 	private String showName;
 
-	/**
-	 * 用户邮箱
-	 */
 	private String email;
 
-	/**
-	 * 用户密码
-	 */
 	@NotNull
 	@Size(min = 6, max = 20, message = "密码长度请设定在6~20位")
 	private String password;
 
-	/**
-	 * 角色id数组
-	 */
+	@IntegerArray()
 	private Integer[] roleIds;
 
 	public Integer getId() {

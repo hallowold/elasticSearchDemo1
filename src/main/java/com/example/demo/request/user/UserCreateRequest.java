@@ -33,23 +33,14 @@ public class UserCreateRequest {
 	@Size(max = 256, message = ValidationStaticValues.START_FLAG + ValidationStaticValues.VALID_NAME)
 	private String showName;
 
-	/**
-	 * 用户邮箱
-	 */
 	private String email;
 
-	/**
-	 * 用户密码
-	 */
 	@NotNull
 	@Pattern(regexp = ValidationStaticValues.REGULAR_PASSWORD,
 			message = ValidationStaticValues.START_FLAG + ValidationStaticValues.VALID_PASSWORD)
 	@Size(min = 6, max = 20, message = ValidationStaticValues.VALID_PASSWORD)
 	private String password;
 
-	/**
-	 * 角色id数组
-	 */
 	@IntegerArray()
 	private Integer[] roleIds;
 

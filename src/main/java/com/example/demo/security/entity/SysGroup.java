@@ -16,9 +16,6 @@ public class SysGroup {
     @Column(name = "id", length = 9, unique = true, nullable = false)
     private Integer id;
 
-    /**
-     * 机构名
-     */
     @Column(name = "name", length = 256)
     private String name;
 

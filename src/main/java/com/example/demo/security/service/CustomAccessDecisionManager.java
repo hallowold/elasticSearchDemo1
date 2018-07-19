@@ -14,11 +14,9 @@ import java.util.Iterator;
 
 /**
  * @author  liuqitian
- * @Date: 2018/7/4 15:30
- * @Version: V1.0
- * @Param:
- * @return:
- * @Description: 在这个类中进行用户权限的判定
+ * @date : 2018/7/4 15:30
+ * @version : V1.0
+ * 在这个类中进行用户权限的判定
  */
 @Service
 public class CustomAccessDecisionManager implements AccessDecisionManager {
@@ -48,13 +46,11 @@ public class CustomAccessDecisionManager implements AccessDecisionManager {
 
     @Override
     public boolean supports( ConfigAttribute attribute ){
-        //都要设为true
         return true;
     }
 
     @Override
     public boolean supports(Class<?> clazz){
-        //都要设为true
         return true;
     }
 

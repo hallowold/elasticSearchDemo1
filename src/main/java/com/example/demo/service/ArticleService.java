@@ -17,38 +17,20 @@ import org.springframework.data.elasticsearch.core.aggregation.AggregatedPage;
  */
 public interface ArticleService {
 	
-	/**
-	 * 新增文章
-	 * @param 	article	文章实体
-	 * @return	boolean
-	 */
 	void addArticle(Article article);
 	
 	/**
-	 * 修改文章
-	 * @param 	article	文章实体
-	 * @return	boolean
+	 * Demo1Exception异常表示当前用户不是作者，无权限操作
 	 */
 	void updateArticle(Article article) throws Demo1Exception;
 	
 	/**
-	 * 删除文章
-	 * @param 	ids		文章id数组
+	 * Demo1Exception异常表示当前用户不是作者，无权限操作
 	 */
 	Long deleteArticle(String[] ids) throws Demo1Exception;
 	
-	/**
-	 * 通过标题查找近似文章列表
-	 * 
-	 * @param 	name	 	标题
-	 * @return 	Article 	文章实体
-	 */
 	List<Article> fuzzyFindByName(String name);
 	
-	/**
-	 * 获取所有文章
-	 * @return	articles		文章集合
-	 */
 	Iterable<Article> findAllArticle();
 	
 	/**
@@ -58,34 +40,10 @@ public interface ArticleService {
 	 */
 	void interaction(String articleId, Long mode);
 
-	/**
-	 * @Auther: liuqitian
-	 * @Date: 2018/6/21 14:39
-	 * @Version: V1.0
-	 * @Param: [userId]
-	 * @return: java.util.List<com.example.demo.entity.UserInteractionArticle>
-	 * @Description: 通过用户id获取相关信息
-	 */
 	List<UserInteractionArticle> findByUserId(Integer userId);
 
-	/**
-	 * @Auther: liuqitian
-	 * @Date: 2018/6/21 14:39
-	 * @Version: V1.0
-	 * @Param: [articleId]
-	 * @return: java.util.List<com.example.demo.entity.UserInteractionArticle>
-	 * @Description: 通过文章id获取相关信息
-	 */
 	List<UserInteractionArticle> findByArticleId(String articleId);
 
-	/**
-	 * @Auther: liuqitian
-	 * @Date: 2018/6/21 11:38
-	 * @Version: V1.0
-	 * @Param: [mode]
-	 * @return: org.springframework.data.elasticsearch.core.aggregation.AggregatedPage<com.example.demo.entity.UserInteractionArticle>
-	 * @Description: 通过行为模式，记录所有文章的点/踩数量
-	 */
 	AggregatedPage<UserInteractionArticle> findByMode(Long mode);
 
 }

@@ -22,25 +22,19 @@ public class RightUpdateRequest {
 	@Size(max = 9, message = ValidationStaticValues.START_FLAG + ValidationStaticValues.VALID_ID_MYSQL)
 	private Integer id;
 
-	/**
-	 * 权限名称
-	 */
 	@NotNull
 	@Pattern(regexp = ValidationStaticValues.REGULAR_NAME,
 			message = ValidationStaticValues.START_FLAG + ValidationStaticValues.VALID_NAME)
 	@Size(max = 256, message = ValidationStaticValues.START_FLAG + ValidationStaticValues.VALID_NAME)
 	private String name;
 
-	/**
-	 * 权限url
-	 */
 	@NotNull
 	@Pattern(regexp = ValidationStaticValues.REGULAR_REST_URL,
 			message = ValidationStaticValues.START_FLAG + ValidationStaticValues.VALID_REST_URL)
 	private String rightUrl;
 
 	/**
-	 * 对应的请求类型
+	 * 对应的http请求类型
 	 */
 	@NotNull
 	@MethodType()
@@ -49,6 +43,9 @@ public class RightUpdateRequest {
 	/**
 	 * 备注信息
 	 */
+	@Pattern(regexp = ValidationStaticValues.REGULAR_CONTENT + "{0,500}",
+			message = ValidationStaticValues.START_FLAG + "备注不能超过500" + ValidationStaticValues.REGULAR_CONTENT)
+	@Size(max = 500, message = ValidationStaticValues.START_FLAG + "备注不能超过500" + ValidationStaticValues.REGULAR_CONTENT)
 	private String remark;
 
 	/**

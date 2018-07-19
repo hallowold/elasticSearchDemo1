@@ -13,7 +13,7 @@ import java.io.IOException;
  * @author : liuqitian
  * @date : 2018/7/6 15:20
  * @version : V1.1
- * @deprecated : 将403权限异常以近似的格式抛出
+ * 将403权限异常以近似的格式抛出
  */
 public class AccessDeniedServletHandler implements AccessDeniedHandler {
 

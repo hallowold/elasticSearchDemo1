@@ -4,10 +4,10 @@ import javax.persistence.*;
 import java.util.Date;
 
 /**
- * @Auther: liuqitian
- * @Date: 2018/7/2 09:42
- * @Version: V1.0
- * @Description: 系统角色权限
+ * @author : liuqitian
+ * @date : 2018/7/2 09:42
+ * @version : V1.0
+ * 系统角色权限
  */
 @Entity
 @Table(name="s_role_right")
@@ -19,49 +19,31 @@ public class SysRoleRight {
     private int id;
 
     /**
-     * @Auther: liuqitian
-     * @Date: 2018/7/4 15:39
-     * @Version: V1.0
-     * @Description: 角色实体
+     * 角色实体
      */
     @ManyToOne(fetch = FetchType.EAGER)//设置在“一方”pojo的外键字段上
     @JoinColumn(name = "roleId", referencedColumnName = "id")//设置对应数据表的列名和引用的数据表的列名
     private SysRole sRole;
 
     /**
-     * @Auther: liuqitian
-     * @Date: 2018/7/4 15:40
-     * @Version: V1.0
-     * @Description: 角色id(外键)
+     * 角色id(外键)
      */
     @Column(length = 9, insertable=false, updatable=false)
     private Integer roleId;
 
     /**
-     * @Auther: liuqitian
-     * @Date: 2018/7/4 15:40
-     * @Version: V1.0
-     * @Description: 权限实体
+     * 权限实体
      */
     @ManyToOne(fetch = FetchType.EAGER)//设置在“一方”pojo的外键字段上
     @JoinColumn(name = "rightId", referencedColumnName = "id")//设置对应数据表的列名和引用的数据表的列名
     private SysRight sRight;
 
     /**
-     * @Auther: liuqitian
-     * @Date: 2018/7/4 15:40
-     * @Version: V1.0
-     * @Description: 权限id
+     * 权限id
      */
     @Column(length = 9, insertable=false, updatable=false)
     private Integer rightId;
 
-    /**
-     * @Auther: liuqitian
-     * @Date: 2018/7/4 15:40
-     * @Version: V1.0
-     * @Description: 更新时间
-     */
     @Column(name="updateTime")
     private Date updateTime;
 

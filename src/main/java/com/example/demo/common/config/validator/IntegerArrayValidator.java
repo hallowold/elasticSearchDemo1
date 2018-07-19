@@ -7,7 +7,7 @@ import javax.validation.ConstraintValidatorContext;
  * @author : liuqitian
  * @date : 2018/7/18 10:12
  * @version : V1.2
- * 校验指定字段是否是httpMethod
+ * 校验指定字段是否是int数组或空值，若为int数组，则应为空数组，或者每个元素长度都不能超过9位
  *  实现类
  */
 public class IntegerArrayValidator implements ConstraintValidator<IntegerArray, Object> {
@@ -16,7 +16,7 @@ public class IntegerArrayValidator implements ConstraintValidator<IntegerArray, 
     public void initialize(IntegerArray constraintAnnotation) {}
 
     @Override
-    public boolean isValid(Object value, ConstraintValidatorContext context) {   // 实现校验规则
+    public boolean isValid(Object value, ConstraintValidatorContext context) {
         /*正常情况下，传入的数组肯定是输入String数组，然后由String数组转型的Integer数组传递过来，
          *  所以直接判断是否为Integer[]即可，不对的都是异常数据*/
         //注意，因为业务需求，这里规定空值可以通过校验

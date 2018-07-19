@@ -3,6 +3,7 @@ package com.example.demo.service.impl;
 import com.example.demo.common.config.StaticValues;
 import com.example.demo.common.util.StringUtil;
 import com.example.demo.exception.Demo1Exception;
+import com.example.demo.security.config.LoginSuccessHandler;
 import com.example.demo.security.dao.SysRoleDao;
 import com.example.demo.security.dao.SysRoleUserDao;
 import com.example.demo.security.dao.SysUserDao;
@@ -10,7 +11,6 @@ import com.example.demo.security.entity.SysRoleUser;
 import com.example.demo.security.entity.SysUser;
 import com.example.demo.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -38,12 +38,6 @@ public class UserServiceImpl implements UserService {
 	@Autowired
 	private SysRoleDao sysRoleDao;
 
-	/**
-	 * 新增用户
-	 * @param dataMap 用户实体和角色id数组的map
-	 * @throws Exception 除了findByLoginName(name)方法抛出的空值自定义异常外，其他任何异常均抛出统一处理
-	 * @return boolean 是否成功
-	 */
 	@Override
 	public boolean addUser(Map<String, Object> dataMap){
 		SysUser user = (SysUser) dataMap.get("entity");
@@ -59,20 +53,16 @@ public class UserServiceImpl implements UserService {
 					user.setPassword(StringUtil.encode(user.getPassword().trim()));
 				} catch (Exception e) {
 					e.printStackTrace();
-//					throw new Exception();
 				}
 				userDao.save(user);
-                Arrays.stream(roleIds).forEach(id ->sysRoleUserDao.save(new SysRoleUser(sysRoleDao.findById(id).get(),id, user, user.getId())));
+                Arrays.stream(roleIds).forEach(
+                		id ->sysRoleUserDao.save(new SysRoleUser(sysRoleDao.findById(id).get(),id, user, user.getId())));
 				ifSuccess = true;
 			}
 		}
 		return ifSuccess;
 	}
 
-	/**
-	 * 修改用户
-	 * @param 	dataMap 用户实体和角色id数组的map
-	 */
 	@Override
 	public void updateUser(Map<String, Object> dataMap) {
 		SysUser user = (SysUser) dataMap.get("entity");
@@ -87,14 +77,11 @@ public class UserServiceImpl implements UserService {
 	}
 
 	/**
-	 * 删除用户
-	 * @param 	ids		用户id数组
-     * @throws Demo1Exception 发现用户试图删除自己时抛出
-	 * @return	Integer	成功删除信息条数
+	 * Demo1Exception 表示发现用户试图删除自己，或者无指定信息
 	 */
 	@Override
 	public Integer deleteUser(Integer[] ids) throws Demo1Exception{
-        SysUser user = (SysUser)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        SysUser user = LoginSuccessHandler.getCurrentUser();
         //不能删除自己
         if(Arrays.stream(ids).anyMatch(id -> id.intValue() == user.getId().intValue())) {
             throw new Demo1Exception(StaticValues.MYSELF);
@@ -107,13 +94,6 @@ public class UserServiceImpl implements UserService {
 		return result;
 	}
 	
-	/**
-	 * 通过id查找单一用户
-	 * 
-	 * @param 	id 	    id
-	 * @throws Demo1Exception 查询结果为空时抛出Demo1Exception(StaticValues.SEARCH)
-	 * @return SysUser 	用户实体
-	 */
 	@Override
 	public SysUser findById(Integer id) throws Demo1Exception{
 		SysUser tempUser = userDao.findById(id).get();
@@ -123,13 +103,6 @@ public class UserServiceImpl implements UserService {
 		return tempUser;
 	}
 
-	/**
-	 * 通过登录名查找单一用户
-	 *
-	 * @param 	loginName 	登录名
-	 * @throws Demo1Exception 查到空值时抛出Demo1Exception(StaticValues.SEARCH)
-	 * @return SysUser 	用户实体
-	 */
 	@Override
 	public SysUser findByLoginName(String loginName) throws Demo1Exception{
 		SysUser tempUser = userDao.findByLoginName(loginName);
@@ -139,12 +112,6 @@ public class UserServiceImpl implements UserService {
 		return tempUser;
 	}
 	
-	/**
-	 * 通过登录名模糊匹配
-	 * 
-	 * @param 	loginName 	登录名
-	 * @return List<SysUser> 	用户实体列表
-	 */
 	@Override
 	public List<SysUser> fuzzyFindByLoginName(String loginName) throws Demo1Exception{
 		List<SysUser> list = userDao.findByLoginNameLike("%" + StringUtil.changeSpecialCharacter(loginName) + "%");
@@ -154,10 +121,6 @@ public class UserServiceImpl implements UserService {
 		return list;
 	}
 	
-	/**
-	 * 获取所有用户
-	 * @return	Iterable<SysUser> 用户集合
-	 */
 	@Override
 	public Iterable<SysUser> findAllUser() {
 		return userDao.findAll();

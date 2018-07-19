@@ -13,24 +13,11 @@ import java.util.List;
  */
 public interface SysRoleUserDao extends JpaRepository<SysRoleUser, Integer> {
 
-    /**
-     * 通过用户id查询
-     * @param userId 用户id
-     * @return  List<SysRoleUser> 查询结果集
-     */
-    List<SysRoleUser> findByUserId(int userId);
+    List<SysRoleUser> findByUserId(Integer userId);
 
-    /**
-     * 通过角色id批量删除
-     * @param ids 角色id数组
-     * @return Integer 删除信息条数
-     */
+    List<SysRoleUser> findByRoleId(Integer roleId);
+
     Integer deleteByRoleIdIn(Integer[] ids);
 
-    /**
-     * 通过用户id批量删除
-     * @param ids 用户id数组
-     * @return Integer 删除信息条数
-     */
     Integer deleteByUserIdIn(Integer[] ids);
 }

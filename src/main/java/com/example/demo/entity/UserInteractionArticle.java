@@ -25,14 +25,8 @@ public class UserInteractionArticle  implements Serializable {
 	 */
 	private Long mode;
 
-	/**
-	 * 用户
-	 */
 	private SysUser user;
 
-	/**
-	 * 文章
-	 */
 	private Article article;
 	
 	public UserInteractionArticle() {}

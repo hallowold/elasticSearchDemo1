@@ -8,6 +8,7 @@ import com.example.demo.dao.UserInteractionArticleDAO;
 import com.example.demo.entity.Article;
 import com.example.demo.entity.UserInteractionArticle;
 import com.example.demo.exception.Demo1Exception;
+import com.example.demo.security.config.LoginSuccessHandler;
 import com.example.demo.security.entity.SysUser;
 import com.example.demo.service.ArticleService;
 import com.example.demo.service.UserInteractionArticleService;
@@ -19,7 +20,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.elasticsearch.core.aggregation.AggregatedPage;
 import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilder;
 import org.springframework.data.elasticsearch.core.query.SearchQuery;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,10 +28,8 @@ import java.util.List;
 
 /**
  * 文章服务实现类
- * 
  * @author liuqitian
  * @date 2018年6月11日
- *
  */
 @Service
 @Transactional(rollbackFor=Exception.class)
@@ -46,10 +44,6 @@ public class ArticleServiceImpl implements ArticleService {
 	@Autowired
 	UserInteractionArticleDAO userInteractionArticleDao;
 
-	/**
-	 * 新增文章
-	 * @param 	article 	文章实体
-	 */
 	@Override
 	public void addArticle(Article article) {
 		article.setId(KeyNumberUtil.nextId() + "");
@@ -57,9 +51,7 @@ public class ArticleServiceImpl implements ArticleService {
 	}
 
 	/**
-	 * 修改文章
-	 * @param 	article 	文章实体
-	 * @return 	无返回值或自定义异常，异常表示当前用户不是作者，无权限操作
+	 * Demo1Exception异常表示当前用户不是作者，无权限操作
 	 */
 	@Override
 	public void updateArticle(Article article) throws Demo1Exception {
@@ -73,9 +65,7 @@ public class ArticleServiceImpl implements ArticleService {
 	}
 
 	/**
-	 * 删除文章
-	 * @param 	ids		文章id数组
-	 * @return 	无返回值或自定义异常，异常表示当前用户不是作者，无权限操作
+	 * Demo1Exception异常表示当前用户不是作者，无权限操作
 	 */
 	@Override
 	public Long deleteArticle(String[] ids) throws Demo1Exception {
@@ -95,61 +85,27 @@ public class ArticleServiceImpl implements ArticleService {
 		return result;
 	}
 
-	/**
-	 * 通过标题查找近似文章列表
-	 * 
-	 * @param 	name	 	标题
-	 * @return 	List<Article> 	文章实体集合
-	 */
 	@Override
 	public List<Article> fuzzyFindByName(String name){
 		List<Article> list = articleDao.findArticleByName("*" + StringUtil.changeSpecialCharacter(name) + "*");
 		return list;
 	}
 	
-	/**
-	 * 获取所有文章
-	 * @return	articles	文章集合
-	 */
 	@Override
 	public Iterable<Article> findAllArticle() {
 		return articleDao.findAll();
 	}
 	
-	/**
-	 * @Auther: liuqitian
-	 * @Date: 2018/6/21 14:39
-	 * @Version: V1.0
-	 * @Param: [userId]
-	 * @return: java.util.List<com.example.demo.entity.UserInteractionArticle>
-	 * @Description: 通过用户id获取相关信息
-	 */
 	@Override
 	public List<UserInteractionArticle> findByUserId(Integer userId) {
 		return userInteractionArticleDao.findByUserId(userId);
 	}
 
-	/**
-	 * @Auther: liuqitian
-	 * @Date: 2018/6/21 14:39
-	 * @Version: V1.0
-	 * @Param: [articleId]
-	 * @return: java.util.List<com.example.demo.entity.UserInteractionArticle>
-	 * @Description: 通过文章id获取相关信息
-	 */
 	@Override
 	public List<UserInteractionArticle> findByArticleId(String articleId) {
 		return userInteractionArticleDao.findByArticleId(articleId);
 	}
 
-	/**
-	 * @Auther: liuqitian
-	 * @Date: 2018/6/21 11:38
-	 * @Version: V1.0
-	 * @Param: [mode]
-	 * @return: org.springframework.data.elasticsearch.core.aggregation.AggregatedPage<com.example.demo.entity.UserInteractionArticle>
-	 * @Description: 通过行为模式，记录所有文章的点/踩数量
-	 */
 	@Override
 	public AggregatedPage<UserInteractionArticle> findByMode(Long mode) {
 	    //where条件
@@ -174,7 +130,7 @@ public class ArticleServiceImpl implements ArticleService {
 	 */
 	@Override
 	public void interaction(String articleId, Long mode) {
-		SysUser user = (SysUser)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		SysUser user = LoginSuccessHandler.getCurrentUser();
 		UserInteractionArticle userInteractionArticle = 
 				userInteractionArticleDao.findByArticleIdAndUserId(articleId, user.getId());
 		//若不存在互动记录，则新增
@@ -199,16 +155,11 @@ public class ArticleServiceImpl implements ArticleService {
 	 */
 	public boolean isAuthor(String articleId) {
 		boolean isAuthor = false;
-		SysUser currentUser = (SysUser)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		SysUser currentUser = LoginSuccessHandler.getCurrentUser();
 		if(currentUser.getId().intValue() == articleDao.findById(articleId).get().getAuthor().getId().intValue()) {
 			isAuthor = true;
 		}
 		return isAuthor;
 	}
 
-	public List<Article> findByNameAndAuthorLoginName(String name, String loginName) {
-		List<Article> articles = articleDao.findByNameAndAuthorLoginName(name, loginName);
-		return articles;
-	}
-	
 }

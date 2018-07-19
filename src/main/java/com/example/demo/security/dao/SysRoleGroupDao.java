@@ -13,17 +13,9 @@ import java.util.List;
  */
 public interface SysRoleGroupDao extends JpaRepository<SysRoleGroup, Integer> {
 
-    /**
-     * 通过机构id查找
-     * @param id 机构Id
-     * @return List 数据集合
-     */
-    List<SysRoleGroup> findByGroupId(Integer id);
+    List<SysRoleGroup> findByGroupId(Integer groupId);
 
-    /**
-     * 通过机构id进行删除
-     * @param ids 角色ids
-     * @return Integer 成功删除信息条数
-     */
+    List<SysRoleGroup> findByRoleId(Integer roleId);
+
     Integer deleteByGroupIdIn(Integer[] ids);
 }
