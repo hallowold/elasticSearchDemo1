@@ -15,7 +15,7 @@ import java.util.*;
 public class GroupRequestUtil {
 
     /**
- * 		"entity"对应角色实体，"roleIds"对应权限id数组
+     *  "entity"对应角色实体，"roleIds"对应权限id数组
      */
     public static Map<String, Object> createSysGroupByCreateRequest(SysGroupCreateRequest request) {
         Map<String, Object> resultMap = new HashMap<String, Object>();
