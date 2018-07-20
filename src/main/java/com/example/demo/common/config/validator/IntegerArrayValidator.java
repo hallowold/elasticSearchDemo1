@@ -27,6 +27,7 @@ public class IntegerArrayValidator implements ConstraintValidator<IntegerArray, 
                 //这里只应该是1-9位的正整数
                 if(data >= 1000000000 || data < 1) { return false; }
             }
+            flag = true;
         }
         return flag;
     }

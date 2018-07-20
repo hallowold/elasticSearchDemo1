@@ -4,8 +4,6 @@ import com.example.demo.entity.Article;
 import com.example.demo.request.article.ArticleCreateRequest;
 import com.example.demo.request.article.ArticleUpdateRequest;
 import com.example.demo.security.config.LoginSuccessHandler;
-import com.example.demo.security.entity.SysUser;
-import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.util.ArrayList;
 import java.util.Date;

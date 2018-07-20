@@ -2,11 +2,8 @@ package com.example.demo.request.role;
 
 import com.example.demo.common.config.ValidationStaticValues;
 import com.example.demo.common.config.validator.IntegerArray;
-import org.hibernate.validator.constraints.Length;
 
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
-import javax.validation.constraints.Size;
+import javax.validation.constraints.*;
 
 /**
  * 修改角色时使用的request对象
@@ -17,8 +14,8 @@ import javax.validation.constraints.Size;
 public class RoleUpdateRequest {
 
 	@NotNull
-	@Pattern(regexp = ValidationStaticValues.REGULAR_ID_MYSQL)
-	@Size(max = 9, message = ValidationStaticValues.START_FLAG + ValidationStaticValues.VALID_ID_MYSQL)
+	@Max(value = 999999999, message = ValidationStaticValues.START_FLAG + ValidationStaticValues.VALID_ID_MYSQL)
+	@Min(value = 1, message = ValidationStaticValues.START_FLAG + ValidationStaticValues.VALID_ID_MYSQL)
 	private Integer id;
 
 	@NotNull

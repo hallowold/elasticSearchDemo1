@@ -1,12 +1,9 @@
 package com.example.demo.request.right;
 
-import com.example.demo.common.config.validator.MethodType;
 import com.example.demo.common.config.ValidationStaticValues;
-import org.hibernate.validator.constraints.Length;
+import com.example.demo.common.config.validator.MethodType;
 
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
-import javax.validation.constraints.Size;
+import javax.validation.constraints.*;
 
 /**
  * 修改权限时使用的request对象
@@ -18,8 +15,8 @@ import javax.validation.constraints.Size;
 public class RightUpdateRequest {
 
 	@NotNull
-	@Pattern(regexp = ValidationStaticValues.REGULAR_ID_MYSQL)
-	@Size(max = 9, message = ValidationStaticValues.START_FLAG + ValidationStaticValues.VALID_ID_MYSQL)
+	@Max(value = 999999999, message = ValidationStaticValues.START_FLAG + ValidationStaticValues.VALID_ID_MYSQL)
+	@Min(value = 1, message = ValidationStaticValues.START_FLAG + ValidationStaticValues.VALID_ID_MYSQL)
 	private Integer id;
 
 	@NotNull

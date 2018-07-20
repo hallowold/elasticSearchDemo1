@@ -3,9 +3,7 @@ package com.example.demo.request.user;
 import com.example.demo.common.config.ValidationStaticValues;
 import com.example.demo.common.config.validator.IntegerArray;
 
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
-import javax.validation.constraints.Size;
+import javax.validation.constraints.*;
 import java.util.Date;
 
 /**
@@ -17,6 +15,8 @@ import java.util.Date;
 public class UserUpdateRequest {
 
 	@NotNull
+	@Max(value = 999999999, message = ValidationStaticValues.START_FLAG + ValidationStaticValues.VALID_ID_MYSQL)
+	@Min(value = 1, message = ValidationStaticValues.START_FLAG + ValidationStaticValues.VALID_ID_MYSQL)
 	private Integer id;
 
 	/**
@@ -40,7 +40,9 @@ public class UserUpdateRequest {
 	private String email;
 
 	@NotNull
-	@Size(min = 6, max = 20, message = "密码长度请设定在6~20位")
+	@Pattern(regexp = ValidationStaticValues.REGULAR_PASSWORD,
+			message = ValidationStaticValues.START_FLAG + ValidationStaticValues.VALID_PASSWORD)
+	@Size(min = 6, max = 20, message = ValidationStaticValues.VALID_PASSWORD)
 	private String password;
 
 	@IntegerArray()

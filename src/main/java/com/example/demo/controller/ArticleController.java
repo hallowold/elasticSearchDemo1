@@ -1,39 +1,31 @@
 package com.example.demo.controller;
 
-import java.util.List;
-
 import com.example.demo.common.config.StaticValues;
 import com.example.demo.common.util.DateUtil;
+import com.example.demo.common.util.ResponseUtil;
 import com.example.demo.common.util.requestcreater.ArticleRequestUtil;
+import com.example.demo.entity.Article;
+import com.example.demo.entity.UserInteractionArticle;
 import com.example.demo.request.StringIdsRequest;
+import com.example.demo.request.article.ArticleCreateRequest;
+import com.example.demo.request.article.ArticleUpdateRequest;
 import com.example.demo.response.BucketResponse;
+import com.example.demo.response.ResponseData;
 import com.example.demo.security.config.LoginSuccessHandler;
+import com.example.demo.service.ArticleService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.elasticsearch.core.aggregation.AggregatedPage;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
-
-import com.example.demo.common.util.ResponseUtil;
-import com.example.demo.entity.Article;
-import com.example.demo.entity.UserInteractionArticle;
-import com.example.demo.request.article.ArticleCreateRequest;
-import com.example.demo.request.article.ArticleUpdateRequest;
-import com.example.demo.response.ResponseData;
-import com.example.demo.service.ArticleService;
-
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 /**
  * 文章控制器

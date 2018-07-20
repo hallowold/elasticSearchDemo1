@@ -2,11 +2,8 @@ package com.example.demo.request.group;
 
 import com.example.demo.common.config.ValidationStaticValues;
 import com.example.demo.common.config.validator.IntegerArray;
-import org.hibernate.validator.constraints.Length;
 
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
-import javax.validation.constraints.Size;
+import javax.validation.constraints.*;
 
 /**
  * @author : liuqitian
@@ -17,8 +14,8 @@ import javax.validation.constraints.Size;
 public class SysGroupUpdateRequest {
 
     @NotNull
-    @Pattern(regexp = ValidationStaticValues.REGULAR_ID_MYSQL)
-    @Size(max = 9, message = ValidationStaticValues.START_FLAG + ValidationStaticValues.VALID_ID_MYSQL)
+    @Max(value = 999999999, message = ValidationStaticValues.START_FLAG + ValidationStaticValues.VALID_ID_MYSQL)
+    @Min(value = 1, message = ValidationStaticValues.START_FLAG + ValidationStaticValues.VALID_ID_MYSQL)
     private Integer id;
 
     @NotNull
@@ -27,8 +24,8 @@ public class SysGroupUpdateRequest {
     @Size(max = 256, message = ValidationStaticValues.START_FLAG + ValidationStaticValues.VALID_NAME)
     private String name;
 
-    @Pattern(regexp = ValidationStaticValues.REGULAR_ID_MYSQL)
-    @Size(max = 9, message = ValidationStaticValues.START_FLAG + ValidationStaticValues.VALID_ID_MYSQL)
+    @Max(value = 999999999, message = ValidationStaticValues.START_FLAG + ValidationStaticValues.VALID_ID_MYSQL)
+    @Min(value = 1, message = ValidationStaticValues.START_FLAG + ValidationStaticValues.VALID_ID_MYSQL)
     private Integer pid;
 
     @IntegerArray()

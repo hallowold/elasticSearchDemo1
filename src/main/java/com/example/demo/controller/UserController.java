@@ -51,8 +51,7 @@ public class UserController {
         boolean ifSuccess = userService.addUser(UserRequestUtil.createUserByCreateRequest(user));
         LOGGER.info("执行新增用户信息操作，操作用户为[" + LoginSuccessHandler.getCurrentUser().getLoginName()
                 + "],系统时间为[" + DateUtil.getCurrentDateStr() + "]");
-        ResponseData res = ResponseUtil.createResponseDataCheckIfExsit(ifSuccess, "登录名");
-        return res;
+        return ResponseUtil.createResponseDataCheckIfExsit(ifSuccess, "登录名");
     }
 
     /**

@@ -19,7 +19,6 @@ import io.swagger.annotations.ApiParam;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -46,6 +45,7 @@ public class GroupController {
     @ApiOperation(value="添加文章信息", notes = "添加文章信息")
     @RequestMapping(value = "/group",method = RequestMethod.POST)
     public ResponseData addArticle(@RequestBody @Valid SysGroupCreateRequest request, BindingResult bindResult) throws Exception {
+        System.out.println("controller");
         sysGroupService.addGroup(GroupRequestUtil.createSysGroupByCreateRequest(request));
         LOGGER.info("执行新增机构信息操作，操作用户为[" + LoginSuccessHandler.getCurrentUser().getLoginName()
                 + "],系统时间为[" + DateUtil.getCurrentDateStr() + "]");

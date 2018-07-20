@@ -16,11 +16,11 @@ public class ValidationStaticValues {
 
     public static final String VALID_ID_ES = "ID应为由阿拉伯数字拼接而成的18位字符串";
 
-    public static final String REGULAR_ID_ES = "[0-9]{18}";
+    public static final String REGULAR_ID_ES = "[0-9]{0,18}";
 
-    public static final String VALID_ID_MYSQL = "ID应为最大9位的阿拉伯数字";
+    public static final String VALID_ID_MYSQL = "ID应为最大9位的正整数";
 
-    public static final String REGULAR_ID_MYSQL = "[0-9]{9}";
+    public static final String REGULAR_ID_MYSQL = "[0-9]{0,9}";
 
     public static final String VALID_LOGINNAME = "用户登录名只支持使用大小写英文字母，阿拉伯数字，下划线和减号组成，长度应在4-256位";
 
