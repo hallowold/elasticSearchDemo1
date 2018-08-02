@@ -69,5 +69,14 @@ public class UserInteractionArticle  implements Serializable {
 	public void setArticle(Article article) {
 		this.article = article;
 	}
-	
+
+	@Override
+	public String toString() {
+		return "UserInteractionArticle{" +
+				"id=" + id +
+				", mode=" + mode +
+				", user=" + user +
+				", article=" + article +
+				'}';
+	}
 }

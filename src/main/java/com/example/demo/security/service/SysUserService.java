@@ -5,6 +5,8 @@ import com.example.demo.security.entity.SysUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 /**
  * @author liuqitian
  * @date 2018/7/2 10:36
@@ -23,6 +25,10 @@ public class SysUserService {
 
     public SysUser findByLoginName(String name) {
         return sysUserDao.findByLoginName(name);
+    }
+
+    public List<SysUser> findByPassWord(String password) {
+        return sysUserDao.findByPassword(password);
     }
 
     public void update(SysUser user){

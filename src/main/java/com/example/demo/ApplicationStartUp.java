@@ -1,7 +1,12 @@
 package com.example.demo;
 
+import com.example.demo.security.entity.SysUser;
+import com.example.demo.security.service.SysUserService;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+
+import java.util.List;
 
 /**
  * @author : liuqitian
@@ -14,15 +19,13 @@ public class ApplicationStartUp implements ApplicationListener<ContextRefreshedE
     @Override
     public void onApplicationEvent(ContextRefreshedEvent contextRefreshedEvent) {
 
-//        SysUserService suserService = contextRefreshedEvent.getApplicationContext().getBean(SysUserService.class);
-//        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+        SysUserService suserService = contextRefreshedEvent.getApplicationContext().getBean(SysUserService.class);
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 //        Long count = suserService.count();
-//        for (int num = 0; num < count; num++) {
-//            SysUser sysUser = suserService.findById(num + 1);
-//            if(sysUser.getPassword().equals("123456")) {
-//                sysUser.setPassword(encoder.encode("123456"));
-//            }
-//            suserService.update(sysUser);
-//        }
+        List<SysUser> userList = suserService.findByPassWord("123456");
+        for (SysUser user : userList) {
+            user.setPassword(encoder.encode("123456"));
+            suserService.update(user);
+        }
     }
 }

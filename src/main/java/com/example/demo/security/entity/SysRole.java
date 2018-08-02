@@ -35,4 +35,11 @@ public class SysRole {
         this.name = name;
     }
 
+    @Override
+    public String toString() {
+        return "SysRole{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                '}';
+    }
 }

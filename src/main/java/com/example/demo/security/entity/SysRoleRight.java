@@ -104,4 +104,16 @@ public class SysRoleRight {
     public void setUpdateTime(Date updateTime) {
         this.updateTime = updateTime;
     }
+
+    @Override
+    public String toString() {
+        return "SysRoleRight{" +
+                "id=" + id +
+                ", sRole=" + sRole +
+                ", roleId=" + roleId +
+                ", sRight=" + sRight +
+                ", rightId=" + rightId +
+                ", updateTime=" + updateTime +
+                '}';
+    }
 }

@@ -32,7 +32,7 @@ public class SysUser implements java.io.Serializable {
     @Column(name = "show_name", length = 256)
     private String showName;
 
-    @Column(name = "password", length = 50)
+    @Column(name = "password", length = 500)
     private String password;
 
     @Column(name = "email", length = 256)

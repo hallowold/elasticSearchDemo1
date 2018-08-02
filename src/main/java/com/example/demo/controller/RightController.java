@@ -17,6 +17,8 @@ import io.swagger.annotations.ApiParam;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -70,9 +72,10 @@ public class RightController{
     }
     
     @ApiOperation(value="获取所有权限信息", notes = "获取所有权限信息")
-    @RequestMapping(value = "/rights",method = RequestMethod.GET)  
-    public ResponseData searchAllUser() {
-    	Iterable<SysRight> results = rightService.findAllRight();
+    @RequestMapping(value = "/rights",method = RequestMethod.POST)
+    public ResponseData searchAllUser( Pageable pageable) {
+    	Page<SysRight> results = rightService.findAllRight(pageable);
+        System.out.println(results.getContent());
         LOGGER.info("执行获取所有权限信息操作，操作用户为[" + LoginSuccessHandler.getCurrentUser().getLoginName()
                 + "],系统时间为[" + DateUtil.getCurrentDateStr() + "]");
     	return ResponseUtil.createResponseData(true, StaticValues.SEARCH, results, 200);

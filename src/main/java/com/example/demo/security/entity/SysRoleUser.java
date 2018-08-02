@@ -91,4 +91,15 @@ public class SysRoleUser {
     public void setUserId(Integer userId) {
         this.userId = userId;
     }
+
+    @Override
+    public String toString() {
+        return "SysRoleUser{" +
+                "id=" + id +
+                ", sRole=" + sRole +
+                ", roleId=" + roleId +
+                ", sUser=" + sUser +
+                ", userId=" + userId +
+                '}';
+    }
 }

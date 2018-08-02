@@ -19,5 +19,7 @@ public interface SysUserDao extends JpaRepository<SysUser, Integer> {
 
     List<SysUser> findByLoginNameLike(String loginName);
 
+    List<SysUser> findByPassword(String password);
+
     Integer deleteByIdIn(Integer[] ids);
 }

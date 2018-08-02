@@ -39,12 +39,12 @@ public class ServiceArticleTests {
 
     @Test
     public void testSer_00_AddArticle() {
-        Article article = new Article();
-        article.setName("testAdding_doNotUseIt");
-        article.setCreateDate(new Date());
-        article.setAuthor(LoginSuccessHandler.getCurrentUser());
+        Article entity = new Article();
+        entity.setName("testAdding_doNotUseIt");
+        entity.setCreateDate(new Date());
+        entity.setAuthor(LoginSuccessHandler.getCurrentUser());
 
-        articleService.addArticle(article);
+        articleService.addArticle(entity);
     }
 
     @Test
@@ -56,9 +56,9 @@ public class ServiceArticleTests {
     @Test
     public void testSer_02_updateArticle() {
         try {
-            Article article = articleService.fuzzyFindByName("testAdding_doNotUseIt").get(0);
-            article.setName("testUpdating_doNotUseIt");
-            articleService.updateArticle(article);
+            Article entity = articleService.fuzzyFindByName("testAdding_doNotUseIt").get(0);
+            entity.setName(entity.getName() + "_changed");
+            articleService.updateArticle(entity);
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -66,19 +66,19 @@ public class ServiceArticleTests {
 
     @Test
     public void testSer_03_interaction() {
-        articleService.interaction(articleService.fuzzyFindByName("testUpdating_doNotUseIt").get(0).getId(),1L);
+        articleService.interaction(articleService.fuzzyFindByName("testAdding_doNotUseIt").get(0).getId(),1L);
     }
 
     @Test
     public void testSer_04_findByUserId() {
         articleService.findByUserId(LoginSuccessHandler.getCurrentUser().getId())
-                .forEach(interaction-> System.out.println(interaction));
+                .forEach(result-> System.out.println(result));
     }
 
     @Test
     public void testSer_05_findByArticleId() {
         articleService.findByArticleId(
-                articleService.fuzzyFindByName("testUpdating_doNotUseIt").get(0).getId())
+                articleService.fuzzyFindByName("testAdding_doNotUseIt").get(0).getId())
                 .forEach(result -> System.out.println(result));
     }
 
@@ -89,20 +89,20 @@ public class ServiceArticleTests {
 
     @Test
     public void testSer_07_isAuthor() {
-        articleService.isAuthor(articleService.fuzzyFindByName("testUpdating_doNotUseIt").get(0).getId());
+        articleService.isAuthor(articleService.fuzzyFindByName("testAdding_doNotUseIt").get(0).getId());
     }
 
     @Test
     public void testSer_08_FindAll() {
-        Iterable<Article> groupList = articleService.findAllArticle();
-        groupList.forEach(sysGroup -> System.out.println(sysGroup));
+        Iterable<Article> resultList = articleService.findAllArticle();
+        resultList.forEach(result -> System.out.println(result));
     }
 
     @Test
     public void testSer_09_deleteArticle() {
         try{
             List<String> idsList = new ArrayList<>();
-            articleService.fuzzyFindByName("testUpdating_doNotUseIt").forEach(article -> idsList.add(article.getId()));
+            articleService.fuzzyFindByName("testAdding_doNotUseIt").forEach(article -> idsList.add(article.getId()));
             System.out.println(articleService.deleteArticle(idsList.toArray(new String[]{})));
         } catch(Exception ex) {
             ex.printStackTrace();

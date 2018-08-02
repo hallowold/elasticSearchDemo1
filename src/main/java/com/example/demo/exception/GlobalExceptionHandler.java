@@ -38,20 +38,17 @@ public class GlobalExceptionHandler {
 	@ExceptionHandler(value = Demo1Exception.class)
 	@ResponseBody
 	public ResponseData Demo1ExceptionErrorHandler(HttpServletRequest req, Demo1Exception ex) throws Exception {
-		ResponseData res = new ResponseData();
 		int statusCode = 500;
 		String message = ex.getMessage();
 		if (StaticValues.ADMIN.equals(ex.getMessage())) {
 			message = "不可对系统管理员角色进行新增，修改或删除操作";
 		}
-	    res = ResponseUtil.createResponseData(false, message, null, statusCode);
-		return res;
+        return ResponseUtil.createResponseData(false, message, null, statusCode);
 	}
 
 	@ExceptionHandler(value = Exception.class)
 	@ResponseBody
 	public ResponseData defaultErrorHandler(HttpServletRequest req, Exception ex) throws Exception {
-		ResponseData res = new ResponseData();
 		String message = ex.getMessage();
 		int statusCode = 0;
 
@@ -103,8 +100,7 @@ public class GlobalExceptionHandler {
         	statusCode = 0;
         }
 
-	    res = ResponseUtil.createResponseData(false, message, null, statusCode);
-		return res;
+        return ResponseUtil.createResponseData(false, message, null, statusCode);
 	}
 
 }

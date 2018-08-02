@@ -126,8 +126,8 @@ public class ControllerRightTests {
      */
     @Test
     public void testCon_04_getAllRights() throws Exception {
-        mockMvc.perform(get("/right/rights"))
+        System.out.println(mockMvc.perform(post("/right/rights?size=10&page=1"))
                 .andExpect(status().isOk())
-                .andReturn();
+                .andReturn().getResponse().getContentAsString());
     }
 }

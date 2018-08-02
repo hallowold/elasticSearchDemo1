@@ -91,4 +91,15 @@ public class SysRoleGroup {
     public void setGroupId(Integer groupId) {
         this.groupId = groupId;
     }
+
+    @Override
+    public String toString() {
+        return "SysRoleGroup{" +
+                "id=" + id +
+                ", sRole=" + sRole +
+                ", roleId=" + roleId +
+                ", sysGroup=" + sysGroup +
+                ", groupId=" + groupId +
+                '}';
+    }
 }

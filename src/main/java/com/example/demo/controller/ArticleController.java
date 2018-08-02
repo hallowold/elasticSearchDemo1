@@ -2,6 +2,7 @@ package com.example.demo.controller;
 
 import com.example.demo.common.config.StaticValues;
 import com.example.demo.common.util.DateUtil;
+import com.example.demo.common.util.IpUtil;
 import com.example.demo.common.util.ResponseUtil;
 import com.example.demo.common.util.requestcreater.ArticleRequestUtil;
 import com.example.demo.entity.Article;
@@ -18,12 +19,14 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.http.HttpRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.elasticsearch.core.aggregation.AggregatedPage;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.List;
 
@@ -45,7 +48,7 @@ public class ArticleController{
 
     @ApiOperation(value="添加文章信息", notes = "添加文章信息")
     @RequestMapping(value = "/article",method = RequestMethod.POST)
-    public ResponseData addArticle(@RequestBody @Valid ArticleCreateRequest article, BindingResult bindResult) throws Exception {
+    public ResponseData addArticle(@RequestBody @Valid ArticleCreateRequest article, BindingResult bindResult, HttpServletRequest request) throws Exception {
     	articleService.addArticle(ArticleRequestUtil.createArticleByCreateRequest(article));
         LOGGER.info("执行新增文章信息操作，操作用户为[" + LoginSuccessHandler.getCurrentUser().getLoginName()
                 + "],系统时间为[" + DateUtil.getCurrentDateStr() + "]");

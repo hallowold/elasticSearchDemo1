@@ -9,6 +9,8 @@ import com.example.demo.security.entity.SysRight;
 import com.example.demo.security.entity.SysRoleRight;
 import com.example.demo.service.RightService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -96,8 +98,8 @@ public class RightServiceImpl implements RightService {
 	}
 
 	@Override
-	public Iterable<SysRight> findAllRight() {
-		return rightDao.findAll();
+	public Page<SysRight> findAllRight(Pageable pageable) {
+		return rightDao.findAll(pageable);
 	}
 
 }

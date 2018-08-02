@@ -4,6 +4,8 @@ import java.util.List;
 
 import com.example.demo.exception.Demo1Exception;
 import com.example.demo.security.entity.SysRight;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 /**
  * 权限服务定义接口
@@ -29,6 +31,6 @@ public interface RightService {
 	
 	SysRight findById(Integer id) throws Demo1Exception;
 	
-	Iterable<SysRight> findAllRight();
+	Page<SysRight> findAllRight(Pageable pageable);
 
 }

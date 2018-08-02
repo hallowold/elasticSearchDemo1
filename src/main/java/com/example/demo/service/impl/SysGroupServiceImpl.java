@@ -42,6 +42,7 @@ public class SysGroupServiceImpl implements SysGroupService {
     public void addGroup(Map<String, Object> dataMap) {
         SysGroup entity = (SysGroup) dataMap.get("entity");
         Integer[] roleIds = (Integer[]) dataMap.get("roleIds");
+        System.out.println(entity);
         if(entity.getpId() != null && entity.getpId() != 0) {
             entity.setpSysGroup(sysGroupDao.findById(entity.getpId()).get());
         }
