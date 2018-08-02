@@ -1,8 +1,16 @@
 package com.example.demo.serviceTests;
 
+<<<<<<< HEAD
 import com.example.demo.security.entity.SysGroup;
 import com.example.demo.security.entity.SysRole;
 import com.example.demo.service.SysGroupService;
+=======
+import com.example.demo.exception.Demo1Exception;
+import com.example.demo.security.entity.SysGroup;
+import com.example.demo.security.entity.SysRole;
+import com.example.demo.service.SysGroupService;
+import org.junit.Assert;
+>>>>>>> origin/master
 import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runner.RunWith;
