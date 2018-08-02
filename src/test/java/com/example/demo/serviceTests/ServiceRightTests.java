@@ -11,13 +11,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.util.ArrayList;
-<<<<<<< HEAD
 import java.util.List;
-=======
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
->>>>>>> origin/master
 
 /**
  * @version : V1.2
@@ -67,17 +61,10 @@ public class ServiceRightTests {
                 rightService.fuzzyFindByName("testAdding_doNotUseIt").get(0).getId()));
     }
 
-<<<<<<< HEAD
 //    @Test
 //    public void testSer_04_findAllRights() {
 //        rightService.findAllRight().forEach(System.out::println);
 //    }
-=======
-    @Test
-    public void testSer_04_findAllRights() {
-        rightService.findAllRight().forEach(System.out::println);
-    }
->>>>>>> origin/master
 
     @Test
     public void testSer_05_deleteRight() throws Exception{
